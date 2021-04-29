@@ -1,0 +1,50 @@
+---
+title: "P0 Pre-entrega"
+output: html_notebook
+---
+
+Miembros del grupo 8:
+
+-   Luis Alfonso Berrospi Rodriguez (Lider)
+
+-   Nincol
+
+-   Brian
+
+-   Jorge
+
+**Propuesta 1: Python Survey 2020**
+
+\*descripcion\*
+
+Dataset:
+
+1.  ¿De qué manera el estudio es importante para la audiencia?
+
+2.  ¿Qué informacion se desea aportar al final del estudio?
+
+3.  ¿Es posible llegar a la informacion que se propone de manera específica y concreta?
+
+**Propuesta 2: Impacto del COVID-19 en empresas peruanas durante el 2020**
+
+\*descripcion\*
+
+Dataset:
+
+1.  ¿De qué manera el estudio es importante para la audiencia?
+
+2.  ¿Qué informacion se desea aportar al final del estudio?
+
+3.  ¿Es posible llegar a la informacion que se propone de manera específica y concreta?
+
+**Propuesta 3: Primera encuesta virtual para personas LGTBI en el Perú**
+
+\*descripcion\*
+
+Dataset:
+
+1.  ¿De qué manera el estudio es importante para la audiencia?
+
+2.  ¿Qué informacion se desea aportar al final del estudio?
+
+3.  ¿Es posible llegar a la informacion que se propone de manera específica y concreta?
