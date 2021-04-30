@@ -22,17 +22,17 @@ Una encuesta realizada con el objetivo de conocer las preferencias y datos princ
 
     Python es uno de los lenguajes más utilizados por programadores en todo el mundo, por lo que conocer los distintos datos sobre sus usuarios es de mucha ayuda.
 
-2.  *¿Qué informacion se desea aportar al final del estudio?*
+2.  *¿Qué información se desea aportar al final del estudio?*
 
     Una descripción sobre el usuario de python por regiones para poder compararlos y ver las diferencias que existen entre, por ejemplo, un programador en latinoamérica con uno en Europa.
 
-3.  *¿Es posible llegar a la informacion que se propone de manera específica y concreta?*
+3.  *¿Es posible llegar a la información que se propone de manera específica y concreta?*
 
-    Si es posible, pues la encuesta contó con la pregunta clave (país de origen) que nos permitirá dividir los datos y además tambien contó con preguntas para describir cómo utiliazan el lengujae así como cómo es su ambiente de trabajo.
+    Si es posible, pues la encuesta contó con la pregunta clave (país de origen) que nos permitirá dividir los datos y además también contó con preguntas para describir cómo utiliazan el lenguaje así como cómo es su ambiente de trabajo.
 
 **Propuesta 2: Impacto del COVID-19 en empresas peruanas durante el 2020**
 
-\*descripcion\*
+Una encuesta realizada con el objetivo de conocer el impacto económico y financiero de las empresas debido a la pandemia por el COVID-19.
 
 [Dataset](https://drive.google.com/file/d/1b05KRyGtVwAQVlD7q1uly9O9oT4Wu4-X/view?usp=sharing) (906 obs)
 
@@ -40,9 +40,15 @@ Una encuesta realizada con el objetivo de conocer las preferencias y datos princ
 
 1.  *¿De qué manera el estudio es importante para la audiencia?*
 
-2.  *¿Qué informacion se desea aportar al final del estudio?*
+    Una descripción sobre las empresas que a pesar de la pandemia siguen operativas, a que sector económico pertenecen, como cambio sus ventas, que modalidad de ventas emplearon y problemas que enfrentaron por el COVID-19 (proveedores, enfermedad de trabajadores, disminución de demanda, etc.).  
 
-3.  *¿Es posible llegar a la informacion que se propone de manera específica y concreta?*
+2.  *¿Qué información se desea aportar al final del estudio?*
+
+    Una descripción sobre las empresas que a pesar de la pandemia siguen operativas, a que sector económico pertenecen, como cambio sus ventas, que modalidad de ventas emplearon y problemas que enfrentaron por el COVID-19 (proveedores, enfermedad de trabajadores, disminución de demanda, etc.).  
+
+3.  *¿Es posible llegar a la información que se propone de manera específica y concreta?*
+
+     Si es posible, la encuesta usó la pregunta clave acerca del nivel de operatividad de la empresa (operativa/parcialmente operativa/ inoperativa), esto permite dividir los datos. También contó con preguntas para las empresas operativas y parcialmente operativas sobre temáticas de ventas, empleo, finanzas, acceso a programas del gobierno y apreciación y expectativa, además de preguntas para las empresas inoperativas acerca del periodo y motivos de inoperatividad.
 
 **Propuesta 3: Primera encuesta virtual para personas LGTBI en el Perú**
 
