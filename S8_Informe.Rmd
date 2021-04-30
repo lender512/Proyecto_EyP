@@ -14,7 +14,9 @@ Miembros del grupo 8:
 
 Una encuesta realizada con el objetivo de conocer las preferencias y datos principales de developers respecto al uso que le dan lenguaje de programacion Python día a día.
 
-[Dataset](https://drive.google.com/file/d/1_ZN-MC8m13aGO5usPjiJ-7L5Vqht9IXe/view?usp=sharing) (56k obs)
+[Dataset](https://drive.google.com/file/d/1_ZN-MC8m13aGO5usPjiJ-7L5Vqht9IXe/view?usp=sharing) (56k obs) 
+
+[Encuesta](https://drive.google.com/file/d/1lrixRB9dC8_VoHXoL6UA8OYNHMfLyzAh/view?usp=sharing)
 
 1.  *¿De qué manera el estudio es importante para la audiencia?*
 
@@ -32,7 +34,9 @@ Una encuesta realizada con el objetivo de conocer las preferencias y datos princ
 
 \*descripcion\*
 
-Dataset:
+[Dataset](https://drive.google.com/file/d/1b05KRyGtVwAQVlD7q1uly9O9oT4Wu4-X/view?usp=sharing) (906 obs) 
+
+[Encuesta](iinei.inei.gob.pe/microdatos/Detalle_Encuesta.asp?CU=19558&CodEncuesta=729&CodModulo=1586&NombreEncuesta=ENCUESTA+DE+OPINI�N+SOBRE+EL+IMPACTO+DEL+COVID-19+EN+LAS+EMPRESAS&NombreModulo=ENCUESTA+COVID_19)
 
 1.  *¿De qué manera el estudio es importante para la audiencia?*
 
@@ -44,7 +48,9 @@ Dataset:
 
 \*descripcion\*
 
-Dataset:
+[Dataset](https://drive.google.com/file/d/1x37QNp3044JQJk3SODoqji7QXVwzMQom/view?usp=sharing) (12k obs) 
+
+[Encuesta](iinei.inei.gob.pe/microdatos/Detalle_Encuesta.asp?CU=19558&CodEncuesta=602&CodModulo=1287&NombreEncuesta=Primera+Encuesta+Virtual+para+Personas+LGBTI+en+el+Per�&NombreModulo=LGBTI)
 
 1.  *¿De qué manera el estudio es importante para la audiencia?*
 
