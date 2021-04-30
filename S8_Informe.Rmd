@@ -1,7 +1,4 @@
----
-title: "P0 Pre-entrega"
-output: html_notebook
----
+# P0 Pre-entrega
 
 Miembros del grupo 8:
 
@@ -15,15 +12,21 @@ Miembros del grupo 8:
 
 **Propuesta 1: Python Survey 2020**
 
-\*descripcion\*
+Una encuesta realizada con el objetivo de conocer las preferencias y datos principales de developers respecto al uso que le dan lenguaje de programacion Python día a día.
 
-Dataset:
+[Dataset](https://drive.google.com/file/d/1_ZN-MC8m13aGO5usPjiJ-7L5Vqht9IXe/view?usp=sharing) (56k obs)
 
-1.  ¿De qué manera el estudio es importante para la audiencia?
+1.  *¿De qué manera el estudio es importante para la audiencia?*
 
-2.  ¿Qué informacion se desea aportar al final del estudio?
+    Python es uno de los lenguajes más utilizados por programadores en todo el mundo, por lo que conocer los distintos datos sobre sus usuarios es de mucha ayuda.
 
-3.  ¿Es posible llegar a la informacion que se propone de manera específica y concreta?
+2.  *¿Qué informacion se desea aportar al final del estudio?*
+
+    Una descripción sobre el usuario de python por regiones para poder compararlos y ver las diferencias que existen entre, por ejemplo, un programador en latinoamérica con uno en Europa.
+
+3.  *¿Es posible llegar a la informacion que se propone de manera específica y concreta?*
+
+    Si es posible, pues la encuesta contó con la pregunta clave (país de origen) que nos permitirá dividir los datos y además tambien contó con preguntas para describir cómo utiliazan el lengujae así como cómo es su ambiente de trabajo.
 
 **Propuesta 2: Impacto del COVID-19 en empresas peruanas durante el 2020**
 
@@ -31,11 +34,11 @@ Dataset:
 
 Dataset:
 
-1.  ¿De qué manera el estudio es importante para la audiencia?
+1.  *¿De qué manera el estudio es importante para la audiencia?*
 
-2.  ¿Qué informacion se desea aportar al final del estudio?
+2.  *¿Qué informacion se desea aportar al final del estudio?*
 
-3.  ¿Es posible llegar a la informacion que se propone de manera específica y concreta?
+3.  *¿Es posible llegar a la informacion que se propone de manera específica y concreta?*
 
 **Propuesta 3: Primera encuesta virtual para personas LGTBI en el Perú**
 
@@ -43,8 +46,8 @@ Dataset:
 
 Dataset:
 
-1.  ¿De qué manera el estudio es importante para la audiencia?
+1.  *¿De qué manera el estudio es importante para la audiencia?*
 
-2.  ¿Qué informacion se desea aportar al final del estudio?
+2.  *¿Qué informacion se desea aportar al final del estudio?*
 
-3.  ¿Es posible llegar a la informacion que se propone de manera específica y concreta?
+3.  *¿Es posible llegar a la informacion que se propone de manera específica y concreta?*
