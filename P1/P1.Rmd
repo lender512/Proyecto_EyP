@@ -1,9 +1,9 @@
 ---
 title: "R Notebook"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
-
-
 
 ```{r}
 library(readr)
@@ -12,6 +12,7 @@ library(countrycode)
 df <- read_csv("survey_results_public.csv")
 
 ```
+
 ```{r}
 DFF <- select(df, MainBranch, Country,Gender,Age, YearsCode, YearsCodePro ,EdLevel,Employment, JobSat, OrgSize, WorkWeekHrs, NEWOvertime, NEWOnboardGood, JobSeek, NEWLearn, LanguageWorkedWith,PlatformWorkedWith)
 DF_USA <- DFF[DFF$Country == "United States" & !is.na(DFF$Country) & DFF$MainBranch == "I am a developer by profession" & !is.na(DFF$MainBranch), ][3:17]
@@ -19,14 +20,84 @@ DF_LC <- cbind(region = as.character(countrycode(sourcevar = DFF$Country,
                             origin = "country.name",
                             destination = "region")), DFF)
 DF_LC <- DF_LC[DF_LC$region == "Latin America & Caribbean" & !is.na(DF_LC$region) & DFF$MainBranch == "I am a developer by profession" & !is.na(DFF$MainBranch), ][, 4:18]
+DF_MIX <- cbind(region = as.character(countrycode(sourcevar = DFF$Country,
+                            origin = "country.name",
+                            destination = "region")), DFF)
+DF_MIX <- DF_MIX[((DF_MIX$region == "Latin America & Caribbean" & !is.na(DF_MIX$region)) | (DF_MIX$Country == "United States" & !is.na(DF_MIX$Country))) &  DF_MIX$MainBranch == "I am a developer by profession" & !is.na(DF_MIX$MainBranch), ][, 3:18]
+DF_MIX$Country[DF_MIX$Country != "United States"] <- "SA"
+DF_MIX$Country[DF_MIX$Country == "United States"] <- "USA"
+colnames(DF_MIX)[which(names(DF_MIX) == "Country")] <- "Region"
+DF_MIX
 ```
-#Tabla Descriptores
 
+
+## **Tabla Descriptores**
+
++-------------------------------------------------------------------------------------------------------------------------------------------+------------------+------------------+
+| Pregunta                                                                                                                                  | Variable         | Tipo de Variable |
++===========================================================================================================================================+==================+==================+
+| Which of the following describe you, if any? Please check all that apply. If you prefer not to answer, you may leave this question blank. | Genero           | Nominal          |
++-------------------------------------------------------------------------------------------------------------------------------------------+------------------+------------------+
+| What is your age (in years)? If you prefer not to answer, you may leave this question blank.                                              | Edad             | Discreta         |
++-------------------------------------------------------------------------------------------------------------------------------------------+------------------+------------------+
+| Including any education, how many years have you been coding in total?                                                                    | Años codeando    | Discreta         |
++-------------------------------------------------------------------------------------------------------------------------------------------+------------------+------------------+
+|                                                                                                                                           |                  |                  |
++-------------------------------------------------------------------------------------------------------------------------------------------+------------------+------------------+
+|                                                                                                                                           |                  |                  |
++-------------------------------------------------------------------------------------------------------------------------------------------+------------------+------------------+
+|                                                                                                                                           |                  |                  |
++-------------------------------------------------------------------------------------------------------------------------------------------+------------------+------------------+
+|                                                                                                                                           |                  |                  |
++-------------------------------------------------------------------------------------------------------------------------------------------+------------------+------------------+
+|                                                                                                                                           |                  |                  |
++-------------------------------------------------------------------------------------------------------------------------------------------+------------------+------------------+
+|                                                                                                                                           |                  |                  |
++-------------------------------------------------------------------------------------------------------------------------------------------+------------------+------------------+
+|                                                                                                                                           |                  |                  |
++-------------------------------------------------------------------------------------------------------------------------------------------+------------------+------------------+
+|                                                                                                                                           |                  |                  |
++-------------------------------------------------------------------------------------------------------------------------------------------+------------------+------------------+
+|                                                                                                                                           |                  |                  |
++-------------------------------------------------------------------------------------------------------------------------------------------+------------------+------------------+
+|                                                                                                                                           |                  |                  |
++-------------------------------------------------------------------------------------------------------------------------------------------+------------------+------------------+
+|                                                                                                                                           |                  |                  |
++-------------------------------------------------------------------------------------------------------------------------------------------+------------------+------------------+
+|                                                                                                                                           |                  |                  |
++-------------------------------------------------------------------------------------------------------------------------------------------+------------------+------------------+
+|                                                                                                                                           |                  |                  |
++-------------------------------------------------------------------------------------------------------------------------------------------+------------------+------------------+
+
+## Análisis de variables
+
+### Genero
 ```{r}
 
-```
-#Analisis Descriptores
-##Gender
-##Age
-##YearsCode
+#(strsplit(DF_USA$Gender, ";"))
 
+#pie(DF_USA$Gender, na.rm = T)
+```
+
+### Edad
+```{r}
+boxplot(DF_MIX$Age~DF_MIX$Region, na.rm= T, xlab = "Region", ylab = "Edad")
+abline(h=mean(DF_USA$Age, na.rm = TRUE), col = "red")
+abline(h=mean(DF_LC$Age, na.rm = TRUE), col = "blue")
+```
+ 
+ Podemos observar que blablablabla
+
+### Años Codeado
+```{r}
+boxplot(as.numeric(DF_MIX$YearsCode)~DF_MIX$Region, na.rm= T, xlab = "Region", ylab = "Años Codeando")
+abline(h=mean(as.numeric(DF_USA$YearsCode), na.rm = TRUE), col = "red")
+abline(h=mean(as.numeric(DF_LC$YearsCode), na.rm = TRUE), col = "blue")
+```
+### Años codeado profesionalmente
+### Grado educativo
+### Tipo de empleo
+### Satisfacción con empleo
+### Tamaño de organizacion en la que trabaja
+### Horas trabajadas semanalmente
+### Frecuencia de horas extra en el trabajo
