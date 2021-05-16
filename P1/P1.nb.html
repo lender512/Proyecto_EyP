@@ -217,8 +217,10 @@ pre code {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShyZWFkcilcbmRmIDwtIHJlYWRfY3N2KFwic3VydmV5X3Jlc3VsdHNfcHVibGljLmNzdlwiKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShyZWFkcilcbmxpYnJhcnkoZHBseXIpXG5saWJyYXJ5KGNvdW50cnljb2RlKVxuZGYgPC0gcmVhZF9jc3YoXCJzdXJ2ZXlfcmVzdWx0c19wdWJsaWMuY3N2XCIpXG5gYGAifQ== -->
 <pre class="r"><code>library(readr)
+library(dplyr)
+library(countrycode)
 df &lt;- read_csv(&quot;survey_results_public.csv&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-output-begin eyJkYXRhIjoiXG7ilIDilIAgQ29sdW1uIHNwZWNpZmljYXRpb24g4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSAXG5jb2xzKFxuICAuZGVmYXVsdCA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgUmVzcG9uZGVudCA9IGNvbF9kb3VibGUoKSxcbiAgQWdlID0gY29sX2RvdWJsZSgpLFxuICBDb21wVG90YWwgPSBjb2xfZG91YmxlKCksXG4gIENvbnZlcnRlZENvbXAgPSBjb2xfZG91YmxlKCksXG4gIFdvcmtXZWVrSHJzID0gY29sX2RvdWJsZSgpXG4pXG7ihLkgVXNlIGBzcGVjKClgIGZvciB0aGUgZnVsbCBjb2x1bW4gc3BlY2lmaWNhdGlvbnMuXG4ifQ== -->
@@ -234,208 +236,38 @@ cols(
 )
 ℹ Use `spec()` for the full column specifications.</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyKGRmKVxuYGBgIn0= -->
-<pre class="r"><code>str(df)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoic3BlY190YmxfZGZbLDYxXSBbNjQsNDYxIMOXIDYxXSAoUzM6IHNwZWNfdGJsX2RmL3RibF9kZi90YmwvZGF0YS5mcmFtZSlcbiAkIFJlc3BvbmRlbnQgICAgICAgICAgICAgICAgICA6IG51bSBbMTo2NDQ2MV0gMSAyIDMgNCA1IDYgNyA4IDkgMTAgLi4uXG4gJCBNYWluQnJhbmNoICAgICAgICAgICAgICAgICAgOiBjaHIgWzE6NjQ0NjFdIFwiSSBhbSBhIGRldmVsb3BlciBieSBwcm9mZXNzaW9uXCIgXCJJIGFtIGEgZGV2ZWxvcGVyIGJ5IHByb2Zlc3Npb25cIiBcIkkgY29kZSBwcmltYXJpbHkgYXMgYSBob2JieVwiIFwiSSBhbSBhIGRldmVsb3BlciBieSBwcm9mZXNzaW9uXCIgLi4uXG4gJCBIb2JieWlzdCAgICAgICAgICAgICAgICAgICAgOiBjaHIgWzE6NjQ0NjFdIFwiWWVzXCIgXCJOb1wiIFwiWWVzXCIgXCJZZXNcIiAuLi5cbiAkIEFnZSAgICAgICAgICAgICAgICAgICAgICAgICA6IG51bSBbMTo2NDQ2MV0gTkEgTkEgTkEgMjUgMzEgTkEgTkEgMzYgMzAgMjIgLi4uXG4gJCBBZ2Uxc3RDb2RlICAgICAgICAgICAgICAgICAgOiBjaHIgWzE6NjQ0NjFdIFwiMTNcIiBcIjE5XCIgXCIxNVwiIFwiMThcIiAuLi5cbiAkIENvbXBGcmVxICAgICAgICAgICAgICAgICAgICA6IGNociBbMTo2NDQ2MV0gXCJNb250aGx5XCIgTkEgTkEgTkEgLi4uXG4gJCBDb21wVG90YWwgICAgICAgICAgICAgICAgICAgOiBudW0gWzE6NjQ0NjFdIE5BIE5BIE5BIE5BIE5BIE5BIE5BIDExNjAwMCBOQSAyNTAwMCAuLi5cbiAkIENvbnZlcnRlZENvbXAgICAgICAgICAgICAgICA6IG51bSBbMTo2NDQ2MV0gTkEgTkEgTkEgTkEgTkEgLi4uXG4gJCBDb3VudHJ5ICAgICAgICAgICAgICAgICAgICAgOiBjaHIgWzE6NjQ0NjFdIFwiR2VybWFueVwiIFwiVW5pdGVkIEtpbmdkb21cIiBcIlJ1c3NpYW4gRmVkZXJhdGlvblwiIFwiQWxiYW5pYVwiIC4uLlxuICQgQ3VycmVuY3lEZXNjICAgICAgICAgICAgICAgIDogY2hyIFsxOjY0NDYxXSBcIkV1cm9wZWFuIEV1cm9cIiBcIlBvdW5kIHN0ZXJsaW5nXCIgTkEgXCJBbGJhbmlhbiBsZWtcIiAuLi5cbiAkIEN1cnJlbmN5U3ltYm9sICAgICAgICAgICAgICA6IGNociBbMTo2NDQ2MV0gXCJFVVJcIiBcIkdCUFwiIE5BIFwiQUxMXCIgLi4uXG4gJCBEYXRhYmFzZURlc2lyZU5leHRZZWFyICAgICAgOiBjaHIgWzE6NjQ0NjFdIFwiTWljcm9zb2Z0IFNRTCBTZXJ2ZXJcIiBOQSBOQSBOQSAuLi5cbiAkIERhdGFiYXNlV29ya2VkV2l0aCAgICAgICAgICA6IGNociBbMTo2NDQ2MV0gXCJFbGFzdGljc2VhcmNoO01pY3Jvc29mdCBTUUwgU2VydmVyO09yYWNsZVwiIE5BIE5BIE5BIC4uLlxuICQgRGV2VHlwZSAgICAgICAgICAgICAgICAgICAgIDogY2hyIFsxOjY0NDYxXSBcIkRldmVsb3BlciwgZGVza3RvcCBvciBlbnRlcnByaXNlIGFwcGxpY2F0aW9ucztEZXZlbG9wZXIsIGZ1bGwtc3RhY2tcIiBcIkRldmVsb3BlciwgZnVsbC1zdGFjaztEZXZlbG9wZXIsIG1vYmlsZVwiIE5BIE5BIC4uLlxuICQgRWRMZXZlbCAgICAgICAgICAgICAgICAgICAgIDogY2hyIFsxOjY0NDYxXSBcIk1hc3RlcuKAmXMgZGVncmVlIChNLkEuLCBNLlMuLCBNLkVuZy4sIE1CQSwgZXRjLilcIiBcIkJhY2hlbG9y4oCZcyBkZWdyZWUgKEIuQS4sIEIuUy4sIEIuRW5nLiwgZXRjLilcIiBOQSBcIk1hc3RlcuKAmXMgZGVncmVlIChNLkEuLCBNLlMuLCBNLkVuZy4sIE1CQSwgZXRjLilcIiAuLi5cbiAkIEVtcGxveW1lbnQgICAgICAgICAgICAgICAgICA6IGNociBbMTo2NDQ2MV0gXCJJbmRlcGVuZGVudCBjb250cmFjdG9yLCBmcmVlbGFuY2VyLCBvciBzZWxmLWVtcGxveWVkXCIgXCJFbXBsb3llZCBmdWxsLXRpbWVcIiBOQSBOQSAuLi5cbiAkIEV0aG5pY2l0eSAgICAgICAgICAgICAgICAgICA6IGNociBbMTo2NDQ2MV0gXCJXaGl0ZSBvciBvZiBFdXJvcGVhbiBkZXNjZW50XCIgTkEgTkEgXCJXaGl0ZSBvciBvZiBFdXJvcGVhbiBkZXNjZW50XCIgLi4uXG4gJCBHZW5kZXIgICAgICAgICAgICAgICAgICAgICAgOiBjaHIgWzE6NjQ0NjFdIFwiTWFuXCIgTkEgTkEgXCJNYW5cIiAuLi5cbiAkIEpvYkZhY3RvcnMgICAgICAgICAgICAgICAgICA6IGNociBbMTo2NDQ2MV0gXCJMYW5ndWFnZXMsIGZyYW1ld29ya3MsIGFuZCBvdGhlciB0ZWNobm9sb2dpZXMgSeKAmWQgYmUgd29ya2luZyB3aXRoO1JlbW90ZSB3b3JrIG9wdGlvbnM7T3Bwb3J0dW5pdGllcyBmb3IgcHJvZmVzc1wifCBfX3RydW5jYXRlZF9fIE5BIE5BIFwiRmxleCB0aW1lIG9yIGEgZmxleGlibGUgc2NoZWR1bGU7T2ZmaWNlIGVudmlyb25tZW50IG9yIGNvbXBhbnkgY3VsdHVyZTtPcHBvcnR1bml0aWVzIGZvciBwcm9mZXNzaW9uYWwgZGV2ZWxvcG1lbnRcIiAuLi5cbiAkIEpvYlNhdCAgICAgICAgICAgICAgICAgICAgICA6IGNociBbMTo2NDQ2MV0gXCJTbGlnaHRseSBzYXRpc2ZpZWRcIiBcIlZlcnkgZGlzc2F0aXNmaWVkXCIgTkEgXCJTbGlnaHRseSBkaXNzYXRpc2ZpZWRcIiAuLi5cbiAkIEpvYlNlZWsgICAgICAgICAgICAgICAgICAgICA6IGNociBbMTo2NDQ2MV0gXCJJIGFtIG5vdCBpbnRlcmVzdGVkIGluIG5ldyBqb2Igb3Bwb3J0dW5pdGllc1wiIFwiSSBhbSBub3QgaW50ZXJlc3RlZCBpbiBuZXcgam9iIG9wcG9ydHVuaXRpZXNcIiBOQSBcIknigJltIG5vdCBhY3RpdmVseSBsb29raW5nLCBidXQgSSBhbSBvcGVuIHRvIG5ldyBvcHBvcnR1bml0aWVzXCIgLi4uXG4gJCBMYW5ndWFnZURlc2lyZU5leHRZZWFyICAgICAgOiBjaHIgWzE6NjQ0NjFdIFwiQyM7SFRNTC9DU1M7SmF2YVNjcmlwdFwiIFwiUHl0aG9uO1N3aWZ0XCIgXCJPYmplY3RpdmUtQztQeXRob247U3dpZnRcIiBOQSAuLi5cbiAkIExhbmd1YWdlV29ya2VkV2l0aCAgICAgICAgICA6IGNociBbMTo2NDQ2MV0gXCJDIztIVE1ML0NTUztKYXZhU2NyaXB0XCIgXCJKYXZhU2NyaXB0O1N3aWZ0XCIgXCJPYmplY3RpdmUtQztQeXRob247U3dpZnRcIiBOQSAuLi5cbiAkIE1pc2NUZWNoRGVzaXJlTmV4dFllYXIgICAgICA6IGNociBbMTo2NDQ2MV0gXCIuTkVUIENvcmU7WGFtYXJpblwiIFwiUmVhY3QgTmF0aXZlO1RlbnNvckZsb3c7VW5pdHkgM0RcIiBOQSBOQSAuLi5cbiAkIE1pc2NUZWNoV29ya2VkV2l0aCAgICAgICAgICA6IGNociBbMTo2NDQ2MV0gXCIuTkVUOy5ORVQgQ29yZVwiIFwiUmVhY3QgTmF0aXZlXCIgTkEgTkEgLi4uXG4gJCBORVdDb2xsYWJUb29sc0Rlc2lyZU5leHRZZWFyOiBjaHIgWzE6NjQ0NjFdIFwiTWljcm9zb2Z0IFRlYW1zO01pY3Jvc29mdCBBenVyZTtUcmVsbG9cIiBcIkdpdGh1YjtTbGFja1wiIE5BIE5BIC4uLlxuICQgTkVXQ29sbGFiVG9vbHNXb3JrZWRXaXRoICAgIDogY2hyIFsxOjY0NDYxXSBcIkNvbmZsdWVuY2U7SmlyYTtTbGFjaztNaWNyb3NvZnQgQXp1cmU7VHJlbGxvXCIgXCJDb25mbHVlbmNlO0ppcmE7R2l0aHViO0dpdGxhYjtTbGFja1wiIE5BIE5BIC4uLlxuICQgTkVXRGV2T3BzICAgICAgICAgICAgICAgICAgIDogY2hyIFsxOjY0NDYxXSBcIk5vXCIgTkEgTkEgXCJOb1wiIC4uLlxuICQgTkVXRGV2T3BzSW1wdCAgICAgICAgICAgICAgIDogY2hyIFsxOjY0NDYxXSBcIlNvbWV3aGF0IGltcG9ydGFudFwiIE5BIE5BIE5BIC4uLlxuICQgTkVXRWRJbXB0ICAgICAgICAgICAgICAgICAgIDogY2hyIFsxOjY0NDYxXSBcIkZhaXJseSBpbXBvcnRhbnRcIiBcIkZhaXJseSBpbXBvcnRhbnRcIiBOQSBcIk5vdCBhdCBhbGwgaW1wb3J0YW50L25vdCBuZWNlc3NhcnlcIiAuLi5cbiAkIE5FV0pvYkh1bnQgICAgICAgICAgICAgICAgICA6IGNociBbMTo2NDQ2MV0gTkEgTkEgTkEgXCJDdXJpb3VzIGFib3V0IG90aGVyIG9wcG9ydHVuaXRpZXM7V2FudGluZyB0byB3b3JrIHdpdGggbmV3IHRlY2hub2xvZ2llc1wiIC4uLlxuICQgTkVXSm9iSHVudFJlc2VhcmNoICAgICAgICAgIDogY2hyIFsxOjY0NDYxXSBOQSBOQSBOQSBOQSAuLi5cbiAkIE5FV0xlYXJuICAgICAgICAgICAgICAgICAgICA6IGNociBbMTo2NDQ2MV0gXCJPbmNlIGEgeWVhclwiIFwiT25jZSBhIHllYXJcIiBcIk9uY2UgYSBkZWNhZGVcIiBcIk9uY2UgYSB5ZWFyXCIgLi4uXG4gJCBORVdPZmZUb3BpYyAgICAgICAgICAgICAgICAgOiBjaHIgWzE6NjQ0NjFdIFwiTm90IHN1cmVcIiBcIk5vdCBzdXJlXCIgTkEgXCJOb3Qgc3VyZVwiIC4uLlxuICQgTkVXT25ib2FyZEdvb2QgICAgICAgICAgICAgIDogY2hyIFsxOjY0NDYxXSBOQSBOQSBOQSBcIlllc1wiIC4uLlxuICQgTkVXT3RoZXJDb21tcyAgICAgICAgICAgICAgIDogY2hyIFsxOjY0NDYxXSBcIk5vXCIgXCJOb1wiIFwiTm9cIiBcIlllc1wiIC4uLlxuICQgTkVXT3ZlcnRpbWUgICAgICAgICAgICAgICAgIDogY2hyIFsxOjY0NDYxXSBcIk9mdGVuOiAxLTIgZGF5cyBwZXIgd2VlayBvciBtb3JlXCIgTkEgTkEgXCJPY2Nhc2lvbmFsbHk6IDEtMiBkYXlzIHBlciBxdWFydGVyIGJ1dCBsZXNzIHRoYW4gbW9udGhseVwiIC4uLlxuICQgTkVXUHVyY2hhc2VSZXNlYXJjaCAgICAgICAgIDogY2hyIFsxOjY0NDYxXSBcIlN0YXJ0IGEgZnJlZSB0cmlhbDtBc2sgZGV2ZWxvcGVycyBJIGtub3cvd29yayB3aXRoXCIgTkEgTkEgTkEgLi4uXG4gJCBORVdQdXJwbGVMaW5rICAgICAgICAgICAgICAgOiBjaHIgWzE6NjQ0NjFdIFwiQW11c2VkXCIgXCJBbXVzZWRcIiBOQSBOQSAuLi5cbiAkIE5FV1NPU2l0ZXMgICAgICAgICAgICAgICAgICA6IGNociBbMTo2NDQ2MV0gXCJTdGFjayBPdmVyZmxvdyAocHVibGljIFEmQSBmb3IgYW55b25lIHdobyBjb2RlcylcIiBcIlN0YWNrIE92ZXJmbG93IChwdWJsaWMgUSZBIGZvciBhbnlvbmUgd2hvIGNvZGVzKTtTdGFjayBFeGNoYW5nZSAocHVibGljIFEmQSBmb3IgYSB2YXJpZXR5IG9mIHRvcGljcyk7U3RhY2sgT3ZlclwifCBfX3RydW5jYXRlZF9fIFwiU3RhY2sgT3ZlcmZsb3cgKHB1YmxpYyBRJkEgZm9yIGFueW9uZSB3aG8gY29kZXMpXCIgXCJTdGFjayBPdmVyZmxvdyAocHVibGljIFEmQSBmb3IgYW55b25lIHdobyBjb2Rlcyk7U3RhY2sgRXhjaGFuZ2UgKHB1YmxpYyBRJkEgZm9yIGEgdmFyaWV0eSBvZiB0b3BpY3MpO1N0YWNrIE92ZXJcInwgX190cnVuY2F0ZWRfXyAuLi5cbiAkIE5FV1N0dWNrICAgICAgICAgICAgICAgICAgICA6IGNociBbMTo2NDQ2MV0gXCJWaXNpdCBTdGFjayBPdmVyZmxvdztHbyBmb3IgYSB3YWxrIG9yIG90aGVyIHBoeXNpY2FsIGFjdGl2aXR5O0RvIG90aGVyIHdvcmsgYW5kIGNvbWUgYmFjayBsYXRlclwiIFwiVmlzaXQgU3RhY2sgT3ZlcmZsb3c7R28gZm9yIGEgd2FsayBvciBvdGhlciBwaHlzaWNhbCBhY3Rpdml0eVwiIE5BIE5BIC4uLlxuICQgT3BTeXMgICAgICAgICAgICAgICAgICAgICAgIDogY2hyIFsxOjY0NDYxXSBcIldpbmRvd3NcIiBcIk1hY09TXCIgXCJMaW51eC1iYXNlZFwiIFwiTGludXgtYmFzZWRcIiAuLi5cbiAkIE9yZ1NpemUgICAgICAgICAgICAgICAgICAgICA6IGNociBbMTo2NDQ2MV0gXCIyIHRvIDkgZW1wbG95ZWVzXCIgXCIxLDAwMCB0byA0LDk5OSBlbXBsb3llZXNcIiBOQSBcIjIwIHRvIDk5IGVtcGxveWVlc1wiIC4uLlxuICQgUGxhdGZvcm1EZXNpcmVOZXh0WWVhciAgICAgIDogY2hyIFsxOjY0NDYxXSBcIkFuZHJvaWQ7aU9TO0t1YmVybmV0ZXM7TWljcm9zb2Z0IEF6dXJlO1dpbmRvd3NcIiBcImlPUztLdWJlcm5ldGVzO0xpbnV4O01hY09TXCIgTkEgTkEgLi4uXG4gJCBQbGF0Zm9ybVdvcmtlZFdpdGggICAgICAgICAgOiBjaHIgWzE6NjQ0NjFdIFwiV2luZG93c1wiIFwiaU9TXCIgTkEgTkEgLi4uXG4gJCBQdXJjaGFzZVdoYXQgICAgICAgICAgICAgICAgOiBjaHIgWzE6NjQ0NjFdIE5BIFwiSSBoYXZlIGxpdHRsZSBvciBubyBpbmZsdWVuY2VcIiBOQSBcIkkgaGF2ZSBhIGdyZWF0IGRlYWwgb2YgaW5mbHVlbmNlXCIgLi4uXG4gJCBTZXh1YWxpdHkgICAgICAgICAgICAgICAgICAgOiBjaHIgWzE6NjQ0NjFdIFwiU3RyYWlnaHQgLyBIZXRlcm9zZXh1YWxcIiBOQSBOQSBcIlN0cmFpZ2h0IC8gSGV0ZXJvc2V4dWFsXCIgLi4uXG4gJCBTT0FjY291bnQgICAgICAgICAgICAgICAgICAgOiBjaHIgWzE6NjQ0NjFdIFwiTm9cIiBcIlllc1wiIFwiWWVzXCIgXCJZZXNcIiAuLi5cbiAkIFNPQ29tbSAgICAgICAgICAgICAgICAgICAgICA6IGNociBbMTo2NDQ2MV0gXCJObywgbm90IGF0IGFsbFwiIFwiWWVzLCBkZWZpbml0ZWx5XCIgXCJZZXMsIHNvbWV3aGF0XCIgXCJZZXMsIGRlZmluaXRlbHlcIiAuLi5cbiAkIFNPUGFydEZyZXEgICAgICAgICAgICAgICAgICA6IGNociBbMTo2NDQ2MV0gTkEgXCJMZXNzIHRoYW4gb25jZSBwZXIgbW9udGggb3IgbW9udGhseVwiIFwiQSBmZXcgdGltZXMgcGVyIG1vbnRoIG9yIHdlZWtseVwiIFwiQSBmZXcgdGltZXMgcGVyIG1vbnRoIG9yIHdlZWtseVwiIC4uLlxuICQgU09WaXNpdEZyZXEgICAgICAgICAgICAgICAgIDogY2hyIFsxOjY0NDYxXSBcIk11bHRpcGxlIHRpbWVzIHBlciBkYXlcIiBcIk11bHRpcGxlIHRpbWVzIHBlciBkYXlcIiBcIkRhaWx5IG9yIGFsbW9zdCBkYWlseVwiIFwiTXVsdGlwbGUgdGltZXMgcGVyIGRheVwiIC4uLlxuICQgU3VydmV5RWFzZSAgICAgICAgICAgICAgICAgIDogY2hyIFsxOjY0NDYxXSBcIk5laXRoZXIgZWFzeSBub3IgZGlmZmljdWx0XCIgTkEgXCJOZWl0aGVyIGVhc3kgbm9yIGRpZmZpY3VsdFwiIE5BIC4uLlxuICQgU3VydmV5TGVuZ3RoICAgICAgICAgICAgICAgIDogY2hyIFsxOjY0NDYxXSBcIkFwcHJvcHJpYXRlIGluIGxlbmd0aFwiIE5BIFwiQXBwcm9wcmlhdGUgaW4gbGVuZ3RoXCIgTkEgLi4uXG4gJCBUcmFucyAgICAgICAgICAgICAgICAgICAgICAgOiBjaHIgWzE6NjQ0NjFdIFwiTm9cIiBOQSBOQSBcIk5vXCIgLi4uXG4gJCBVbmRlcmdyYWRNYWpvciAgICAgICAgICAgICAgOiBjaHIgWzE6NjQ0NjFdIFwiQ29tcHV0ZXIgc2NpZW5jZSwgY29tcHV0ZXIgZW5naW5lZXJpbmcsIG9yIHNvZnR3YXJlIGVuZ2luZWVyaW5nXCIgXCJDb21wdXRlciBzY2llbmNlLCBjb21wdXRlciBlbmdpbmVlcmluZywgb3Igc29mdHdhcmUgZW5naW5lZXJpbmdcIiBOQSBcIkNvbXB1dGVyIHNjaWVuY2UsIGNvbXB1dGVyIGVuZ2luZWVyaW5nLCBvciBzb2Z0d2FyZSBlbmdpbmVlcmluZ1wiIC4uLlxuICQgV2ViZnJhbWVEZXNpcmVOZXh0WWVhciAgICAgIDogY2hyIFsxOjY0NDYxXSBcIkFTUC5ORVQgQ29yZVwiIE5BIE5BIE5BIC4uLlxuICQgV2ViZnJhbWVXb3JrZWRXaXRoICAgICAgICAgIDogY2hyIFsxOjY0NDYxXSBcIkFTUC5ORVQ7QVNQLk5FVCBDb3JlXCIgTkEgTkEgTkEgLi4uXG4gJCBXZWxjb21lQ2hhbmdlICAgICAgICAgICAgICAgOiBjaHIgWzE6NjQ0NjFdIFwiSnVzdCBhcyB3ZWxjb21lIG5vdyBhcyBJIGZlbHQgbGFzdCB5ZWFyXCIgXCJTb21ld2hhdCBtb3JlIHdlbGNvbWUgbm93IHRoYW4gbGFzdCB5ZWFyXCIgXCJTb21ld2hhdCBtb3JlIHdlbGNvbWUgbm93IHRoYW4gbGFzdCB5ZWFyXCIgXCJTb21ld2hhdCBsZXNzIHdlbGNvbWUgbm93IHRoYW4gbGFzdCB5ZWFyXCIgLi4uXG4gJCBXb3JrV2Vla0hycyAgICAgICAgICAgICAgICAgOiBudW0gWzE6NjQ0NjFdIDUwIE5BIE5BIDQwIE5BIE5BIE5BIDM5IDUwIDM2IC4uLlxuICQgWWVhcnNDb2RlICAgICAgICAgICAgICAgICAgIDogY2hyIFsxOjY0NDYxXSBcIjM2XCIgXCI3XCIgXCI0XCIgXCI3XCIgLi4uXG4gJCBZZWFyc0NvZGVQcm8gICAgICAgICAgICAgICAgOiBjaHIgWzE6NjQ0NjFdIFwiMjdcIiBcIjRcIiBOQSBcIjRcIiAuLi5cbiAtIGF0dHIoKiwgXCJzcGVjXCIpPVxuICAuLiBjb2xzKFxuICAuLiAgIFJlc3BvbmRlbnQgPSBjb2xfZG91YmxlKCksXG4gIC4uICAgTWFpbkJyYW5jaCA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgLi4gICBIb2JieWlzdCA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgLi4gICBBZ2UgPSBjb2xfZG91YmxlKCksXG4gIC4uICAgQWdlMXN0Q29kZSA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgLi4gICBDb21wRnJlcSA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgLi4gICBDb21wVG90YWwgPSBjb2xfZG91YmxlKCksXG4gIC4uICAgQ29udmVydGVkQ29tcCA9IGNvbF9kb3VibGUoKSxcbiAgLi4gICBDb3VudHJ5ID0gY29sX2NoYXJhY3RlcigpLFxuICAuLiAgIEN1cnJlbmN5RGVzYyA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgLi4gICBDdXJyZW5jeVN5bWJvbCA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgLi4gICBEYXRhYmFzZURlc2lyZU5leHRZZWFyID0gY29sX2NoYXJhY3RlcigpLFxuICAuLiAgIERhdGFiYXNlV29ya2VkV2l0aCA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgLi4gICBEZXZUeXBlID0gY29sX2NoYXJhY3RlcigpLFxuICAuLiAgIEVkTGV2ZWwgPSBjb2xfY2hhcmFjdGVyKCksXG4gIC4uICAgRW1wbG95bWVudCA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgLi4gICBFdGhuaWNpdHkgPSBjb2xfY2hhcmFjdGVyKCksXG4gIC4uICAgR2VuZGVyID0gY29sX2NoYXJhY3RlcigpLFxuICAuLiAgIEpvYkZhY3RvcnMgPSBjb2xfY2hhcmFjdGVyKCksXG4gIC4uICAgSm9iU2F0ID0gY29sX2NoYXJhY3RlcigpLFxuICAuLiAgIEpvYlNlZWsgPSBjb2xfY2hhcmFjdGVyKCksXG4gIC4uICAgTGFuZ3VhZ2VEZXNpcmVOZXh0WWVhciA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgLi4gICBMYW5ndWFnZVdvcmtlZFdpdGggPSBjb2xfY2hhcmFjdGVyKCksXG4gIC4uICAgTWlzY1RlY2hEZXNpcmVOZXh0WWVhciA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgLi4gICBNaXNjVGVjaFdvcmtlZFdpdGggPSBjb2xfY2hhcmFjdGVyKCksXG4gIC4uICAgTkVXQ29sbGFiVG9vbHNEZXNpcmVOZXh0WWVhciA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgLi4gICBORVdDb2xsYWJUb29sc1dvcmtlZFdpdGggPSBjb2xfY2hhcmFjdGVyKCksXG4gIC4uICAgTkVXRGV2T3BzID0gY29sX2NoYXJhY3RlcigpLFxuICAuLiAgIE5FV0Rldk9wc0ltcHQgPSBjb2xfY2hhcmFjdGVyKCksXG4gIC4uICAgTkVXRWRJbXB0ID0gY29sX2NoYXJhY3RlcigpLFxuICAuLiAgIE5FV0pvYkh1bnQgPSBjb2xfY2hhcmFjdGVyKCksXG4gIC4uICAgTkVXSm9iSHVudFJlc2VhcmNoID0gY29sX2NoYXJhY3RlcigpLFxuICAuLiAgIE5FV0xlYXJuID0gY29sX2NoYXJhY3RlcigpLFxuICAuLiAgIE5FV09mZlRvcGljID0gY29sX2NoYXJhY3RlcigpLFxuICAuLiAgIE5FV09uYm9hcmRHb29kID0gY29sX2NoYXJhY3RlcigpLFxuICAuLiAgIE5FV090aGVyQ29tbXMgPSBjb2xfY2hhcmFjdGVyKCksXG4gIC4uICAgTkVXT3ZlcnRpbWUgPSBjb2xfY2hhcmFjdGVyKCksXG4gIC4uICAgTkVXUHVyY2hhc2VSZXNlYXJjaCA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgLi4gICBORVdQdXJwbGVMaW5rID0gY29sX2NoYXJhY3RlcigpLFxuICAuLiAgIE5FV1NPU2l0ZXMgPSBjb2xfY2hhcmFjdGVyKCksXG4gIC4uICAgTkVXU3R1Y2sgPSBjb2xfY2hhcmFjdGVyKCksXG4gIC4uICAgT3BTeXMgPSBjb2xfY2hhcmFjdGVyKCksXG4gIC4uICAgT3JnU2l6ZSA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgLi4gICBQbGF0Zm9ybURlc2lyZU5leHRZZWFyID0gY29sX2NoYXJhY3RlcigpLFxuICAuLiAgIFBsYXRmb3JtV29ya2VkV2l0aCA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgLi4gICBQdXJjaGFzZVdoYXQgPSBjb2xfY2hhcmFjdGVyKCksXG4gIC4uICAgU2V4dWFsaXR5ID0gY29sX2NoYXJhY3RlcigpLFxuICAuLiAgIFNPQWNjb3VudCA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgLi4gICBTT0NvbW0gPSBjb2xfY2hhcmFjdGVyKCksXG4gIC4uICAgU09QYXJ0RnJlcSA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgLi4gICBTT1Zpc2l0RnJlcSA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgLi4gICBTdXJ2ZXlFYXNlID0gY29sX2NoYXJhY3RlcigpLFxuICAuLiAgIFN1cnZleUxlbmd0aCA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgLi4gICBUcmFucyA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgLi4gICBVbmRlcmdyYWRNYWpvciA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgLi4gICBXZWJmcmFtZURlc2lyZU5leHRZZWFyID0gY29sX2NoYXJhY3RlcigpLFxuICAuLiAgIFdlYmZyYW1lV29ya2VkV2l0aCA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgLi4gICBXZWxjb21lQ2hhbmdlID0gY29sX2NoYXJhY3RlcigpLFxuICAuLiAgIFdvcmtXZWVrSHJzID0gY29sX2RvdWJsZSgpLFxuICAuLiAgIFllYXJzQ29kZSA9IGNvbF9jaGFyYWN0ZXIoKSxcbiAgLi4gICBZZWFyc0NvZGVQcm8gPSBjb2xfY2hhcmFjdGVyKClcbiAgLi4gKVxuIn0= -->
-<pre><code>spec_tbl_df[,61] [64,461 × 61] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
- $ Respondent                  : num [1:64461] 1 2 3 4 5 6 7 8 9 10 ...
- $ MainBranch                  : chr [1:64461] &quot;I am a developer by profession&quot; &quot;I am a developer by profession&quot; &quot;I code primarily as a hobby&quot; &quot;I am a developer by profession&quot; ...
- $ Hobbyist                    : chr [1:64461] &quot;Yes&quot; &quot;No&quot; &quot;Yes&quot; &quot;Yes&quot; ...
- $ Age                         : num [1:64461] NA NA NA 25 31 NA NA 36 30 22 ...
- $ Age1stCode                  : chr [1:64461] &quot;13&quot; &quot;19&quot; &quot;15&quot; &quot;18&quot; ...
- $ CompFreq                    : chr [1:64461] &quot;Monthly&quot; NA NA NA ...
- $ CompTotal                   : num [1:64461] NA NA NA NA NA NA NA 116000 NA 25000 ...
- $ ConvertedComp               : num [1:64461] NA NA NA NA NA ...
- $ Country                     : chr [1:64461] &quot;Germany&quot; &quot;United Kingdom&quot; &quot;Russian Federation&quot; &quot;Albania&quot; ...
- $ CurrencyDesc                : chr [1:64461] &quot;European Euro&quot; &quot;Pound sterling&quot; NA &quot;Albanian lek&quot; ...
- $ CurrencySymbol              : chr [1:64461] &quot;EUR&quot; &quot;GBP&quot; NA &quot;ALL&quot; ...
- $ DatabaseDesireNextYear      : chr [1:64461] &quot;Microsoft SQL Server&quot; NA NA NA ...
- $ DatabaseWorkedWith          : chr [1:64461] &quot;Elasticsearch;Microsoft SQL Server;Oracle&quot; NA NA NA ...
- $ DevType                     : chr [1:64461] &quot;Developer, desktop or enterprise applications;Developer, full-stack&quot; &quot;Developer, full-stack;Developer, mobile&quot; NA NA ...
- $ EdLevel                     : chr [1:64461] &quot;Master’s degree (M.A., M.S., M.Eng., MBA, etc.)&quot; &quot;Bachelor’s degree (B.A., B.S., B.Eng., etc.)&quot; NA &quot;Master’s degree (M.A., M.S., M.Eng., MBA, etc.)&quot; ...
- $ Employment                  : chr [1:64461] &quot;Independent contractor, freelancer, or self-employed&quot; &quot;Employed full-time&quot; NA NA ...
- $ Ethnicity                   : chr [1:64461] &quot;White or of European descent&quot; NA NA &quot;White or of European descent&quot; ...
- $ Gender                      : chr [1:64461] &quot;Man&quot; NA NA &quot;Man&quot; ...
- $ JobFactors                  : chr [1:64461] &quot;Languages, frameworks, and other technologies I’d be working with;Remote work options;Opportunities for profess&quot;| __truncated__ NA NA &quot;Flex time or a flexible schedule;Office environment or company culture;Opportunities for professional development&quot; ...
- $ JobSat                      : chr [1:64461] &quot;Slightly satisfied&quot; &quot;Very dissatisfied&quot; NA &quot;Slightly dissatisfied&quot; ...
- $ JobSeek                     : chr [1:64461] &quot;I am not interested in new job opportunities&quot; &quot;I am not interested in new job opportunities&quot; NA &quot;I’m not actively looking, but I am open to new opportunities&quot; ...
- $ LanguageDesireNextYear      : chr [1:64461] &quot;C#;HTML/CSS;JavaScript&quot; &quot;Python;Swift&quot; &quot;Objective-C;Python;Swift&quot; NA ...
- $ LanguageWorkedWith          : chr [1:64461] &quot;C#;HTML/CSS;JavaScript&quot; &quot;JavaScript;Swift&quot; &quot;Objective-C;Python;Swift&quot; NA ...
- $ MiscTechDesireNextYear      : chr [1:64461] &quot;.NET Core;Xamarin&quot; &quot;React Native;TensorFlow;Unity 3D&quot; NA NA ...
- $ MiscTechWorkedWith          : chr [1:64461] &quot;.NET;.NET Core&quot; &quot;React Native&quot; NA NA ...
- $ NEWCollabToolsDesireNextYear: chr [1:64461] &quot;Microsoft Teams;Microsoft Azure;Trello&quot; &quot;Github;Slack&quot; NA NA ...
- $ NEWCollabToolsWorkedWith    : chr [1:64461] &quot;Confluence;Jira;Slack;Microsoft Azure;Trello&quot; &quot;Confluence;Jira;Github;Gitlab;Slack&quot; NA NA ...
- $ NEWDevOps                   : chr [1:64461] &quot;No&quot; NA NA &quot;No&quot; ...
- $ NEWDevOpsImpt               : chr [1:64461] &quot;Somewhat important&quot; NA NA NA ...
- $ NEWEdImpt                   : chr [1:64461] &quot;Fairly important&quot; &quot;Fairly important&quot; NA &quot;Not at all important/not necessary&quot; ...
- $ NEWJobHunt                  : chr [1:64461] NA NA NA &quot;Curious about other opportunities;Wanting to work with new technologies&quot; ...
- $ NEWJobHuntResearch          : chr [1:64461] NA NA NA NA ...
- $ NEWLearn                    : chr [1:64461] &quot;Once a year&quot; &quot;Once a year&quot; &quot;Once a decade&quot; &quot;Once a year&quot; ...
- $ NEWOffTopic                 : chr [1:64461] &quot;Not sure&quot; &quot;Not sure&quot; NA &quot;Not sure&quot; ...
- $ NEWOnboardGood              : chr [1:64461] NA NA NA &quot;Yes&quot; ...
- $ NEWOtherComms               : chr [1:64461] &quot;No&quot; &quot;No&quot; &quot;No&quot; &quot;Yes&quot; ...
- $ NEWOvertime                 : chr [1:64461] &quot;Often: 1-2 days per week or more&quot; NA NA &quot;Occasionally: 1-2 days per quarter but less than monthly&quot; ...
- $ NEWPurchaseResearch         : chr [1:64461] &quot;Start a free trial;Ask developers I know/work with&quot; NA NA NA ...
- $ NEWPurpleLink               : chr [1:64461] &quot;Amused&quot; &quot;Amused&quot; NA NA ...
- $ NEWSOSites                  : chr [1:64461] &quot;Stack Overflow (public Q&amp;A for anyone who codes)&quot; &quot;Stack Overflow (public Q&amp;A for anyone who codes);Stack Exchange (public Q&amp;A for a variety of topics);Stack Over&quot;| __truncated__ &quot;Stack Overflow (public Q&amp;A for anyone who codes)&quot; &quot;Stack Overflow (public Q&amp;A for anyone who codes);Stack Exchange (public Q&amp;A for a variety of topics);Stack Over&quot;| __truncated__ ...
- $ NEWStuck                    : chr [1:64461] &quot;Visit Stack Overflow;Go for a walk or other physical activity;Do other work and come back later&quot; &quot;Visit Stack Overflow;Go for a walk or other physical activity&quot; NA NA ...
- $ OpSys                       : chr [1:64461] &quot;Windows&quot; &quot;MacOS&quot; &quot;Linux-based&quot; &quot;Linux-based&quot; ...
- $ OrgSize                     : chr [1:64461] &quot;2 to 9 employees&quot; &quot;1,000 to 4,999 employees&quot; NA &quot;20 to 99 employees&quot; ...
- $ PlatformDesireNextYear      : chr [1:64461] &quot;Android;iOS;Kubernetes;Microsoft Azure;Windows&quot; &quot;iOS;Kubernetes;Linux;MacOS&quot; NA NA ...
- $ PlatformWorkedWith          : chr [1:64461] &quot;Windows&quot; &quot;iOS&quot; NA NA ...
- $ PurchaseWhat                : chr [1:64461] NA &quot;I have little or no influence&quot; NA &quot;I have a great deal of influence&quot; ...
- $ Sexuality                   : chr [1:64461] &quot;Straight / Heterosexual&quot; NA NA &quot;Straight / Heterosexual&quot; ...
- $ SOAccount                   : chr [1:64461] &quot;No&quot; &quot;Yes&quot; &quot;Yes&quot; &quot;Yes&quot; ...
- $ SOComm                      : chr [1:64461] &quot;No, not at all&quot; &quot;Yes, definitely&quot; &quot;Yes, somewhat&quot; &quot;Yes, definitely&quot; ...
- $ SOPartFreq                  : chr [1:64461] NA &quot;Less than once per month or monthly&quot; &quot;A few times per month or weekly&quot; &quot;A few times per month or weekly&quot; ...
- $ SOVisitFreq                 : chr [1:64461] &quot;Multiple times per day&quot; &quot;Multiple times per day&quot; &quot;Daily or almost daily&quot; &quot;Multiple times per day&quot; ...
- $ SurveyEase                  : chr [1:64461] &quot;Neither easy nor difficult&quot; NA &quot;Neither easy nor difficult&quot; NA ...
- $ SurveyLength                : chr [1:64461] &quot;Appropriate in length&quot; NA &quot;Appropriate in length&quot; NA ...
- $ Trans                       : chr [1:64461] &quot;No&quot; NA NA &quot;No&quot; ...
- $ UndergradMajor              : chr [1:64461] &quot;Computer science, computer engineering, or software engineering&quot; &quot;Computer science, computer engineering, or software engineering&quot; NA &quot;Computer science, computer engineering, or software engineering&quot; ...
- $ WebframeDesireNextYear      : chr [1:64461] &quot;ASP.NET Core&quot; NA NA NA ...
- $ WebframeWorkedWith          : chr [1:64461] &quot;ASP.NET;ASP.NET Core&quot; NA NA NA ...
- $ WelcomeChange               : chr [1:64461] &quot;Just as welcome now as I felt last year&quot; &quot;Somewhat more welcome now than last year&quot; &quot;Somewhat more welcome now than last year&quot; &quot;Somewhat less welcome now than last year&quot; ...
- $ WorkWeekHrs                 : num [1:64461] 50 NA NA 40 NA NA NA 39 50 36 ...
- $ YearsCode                   : chr [1:64461] &quot;36&quot; &quot;7&quot; &quot;4&quot; &quot;7&quot; ...
- $ YearsCodePro                : chr [1:64461] &quot;27&quot; &quot;4&quot; NA &quot;4&quot; ...
- - attr(*, &quot;spec&quot;)=
-  .. cols(
-  ..   Respondent = col_double(),
-  ..   MainBranch = col_character(),
-  ..   Hobbyist = col_character(),
-  ..   Age = col_double(),
-  ..   Age1stCode = col_character(),
-  ..   CompFreq = col_character(),
-  ..   CompTotal = col_double(),
-  ..   ConvertedComp = col_double(),
-  ..   Country = col_character(),
-  ..   CurrencyDesc = col_character(),
-  ..   CurrencySymbol = col_character(),
-  ..   DatabaseDesireNextYear = col_character(),
-  ..   DatabaseWorkedWith = col_character(),
-  ..   DevType = col_character(),
-  ..   EdLevel = col_character(),
-  ..   Employment = col_character(),
-  ..   Ethnicity = col_character(),
-  ..   Gender = col_character(),
-  ..   JobFactors = col_character(),
-  ..   JobSat = col_character(),
-  ..   JobSeek = col_character(),
-  ..   LanguageDesireNextYear = col_character(),
-  ..   LanguageWorkedWith = col_character(),
-  ..   MiscTechDesireNextYear = col_character(),
-  ..   MiscTechWorkedWith = col_character(),
-  ..   NEWCollabToolsDesireNextYear = col_character(),
-  ..   NEWCollabToolsWorkedWith = col_character(),
-  ..   NEWDevOps = col_character(),
-  ..   NEWDevOpsImpt = col_character(),
-  ..   NEWEdImpt = col_character(),
-  ..   NEWJobHunt = col_character(),
-  ..   NEWJobHuntResearch = col_character(),
-  ..   NEWLearn = col_character(),
-  ..   NEWOffTopic = col_character(),
-  ..   NEWOnboardGood = col_character(),
-  ..   NEWOtherComms = col_character(),
-  ..   NEWOvertime = col_character(),
-  ..   NEWPurchaseResearch = col_character(),
-  ..   NEWPurpleLink = col_character(),
-  ..   NEWSOSites = col_character(),
-  ..   NEWStuck = col_character(),
-  ..   OpSys = col_character(),
-  ..   OrgSize = col_character(),
-  ..   PlatformDesireNextYear = col_character(),
-  ..   PlatformWorkedWith = col_character(),
-  ..   PurchaseWhat = col_character(),
-  ..   Sexuality = col_character(),
-  ..   SOAccount = col_character(),
-  ..   SOComm = col_character(),
-  ..   SOPartFreq = col_character(),
-  ..   SOVisitFreq = col_character(),
-  ..   SurveyEase = col_character(),
-  ..   SurveyLength = col_character(),
-  ..   Trans = col_character(),
-  ..   UndergradMajor = col_character(),
-  ..   WebframeDesireNextYear = col_character(),
-  ..   WebframeWorkedWith = col_character(),
-  ..   WelcomeChange = col_character(),
-  ..   WorkWeekHrs = col_double(),
-  ..   YearsCode = col_character(),
-  ..   YearsCodePro = col_character()
-  .. )</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVhbihkZltkZiRDb3VudHJ5ID09IFwiUGVydVwiLF0kQWdlLCBuYS5ybSA9IFRSVUUpXG5gYGAifQ== -->
-<pre class="r"><code>mean(df[df$Country == &quot;Peru&quot;,]$Age, na.rm = TRUE)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuREZGIDwtIHNlbGVjdChkZiwgTWFpbkJyYW5jaCwgQ291bnRyeSxHZW5kZXIsQWdlLCBZZWFyc0NvZGUsIFllYXJzQ29kZVBybyAsRWRMZXZlbCxFbXBsb3ltZW50LCBKb2JTYXQsIE9yZ1NpemUsIFdvcmtXZWVrSHJzLCBORVdPdmVydGltZSwgTkVXT25ib2FyZEdvb2QsIEpvYlNlZWssIE5FV0xlYXJuLCBMYW5ndWFnZVdvcmtlZFdpdGgsUGxhdGZvcm1Xb3JrZWRXaXRoKVxuREZfVVNBIDwtIERGRltERkYkQ291bnRyeSA9PSBcIlVuaXRlZCBTdGF0ZXNcIiAmICFpcy5uYShERkYkQ291bnRyeSkgJiBERkYkTWFpbkJyYW5jaCA9PSBcIkkgYW0gYSBkZXZlbG9wZXIgYnkgcHJvZmVzc2lvblwiICYgIWlzLm5hKERGRiRNYWluQnJhbmNoKSwgXVszOjE3XVxuREZfTEMgPC0gY2JpbmQocmVnaW9uID0gYXMuY2hhcmFjdGVyKGNvdW50cnljb2RlKHNvdXJjZXZhciA9IERGRiRDb3VudHJ5LFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIG9yaWdpbiA9IFwiY291bnRyeS5uYW1lXCIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgZGVzdGluYXRpb24gPSBcInJlZ2lvblwiKSksIERGRilcbmBgYCJ9 -->
+<pre class="r"><code>DFF &lt;- select(df, MainBranch, Country,Gender,Age, YearsCode, YearsCodePro ,EdLevel,Employment, JobSat, OrgSize, WorkWeekHrs, NEWOvertime, NEWOnboardGood, JobSeek, NEWLearn, LanguageWorkedWith,PlatformWorkedWith)
+DF_USA &lt;- DFF[DFF$Country == &quot;United States&quot; &amp; !is.na(DFF$Country) &amp; DFF$MainBranch == &quot;I am a developer by profession&quot; &amp; !is.na(DFF$MainBranch), ][3:17]
+DF_LC &lt;- cbind(region = as.character(countrycode(sourcevar = DFF$Country,
+                            origin = &quot;country.name&quot;,
+                            destination = &quot;region&quot;)), DFF)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDI3LjUxMzg5XG4ifQ== -->
-<pre><code>[1] 27.51389</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiU29tZSB2YWx1ZXMgd2VyZSBub3QgbWF0Y2hlZCB1bmFtYmlndW91c2x5OiBOb21hZGljXG4ifQ== -->
+<pre><code>Some values were not matched unambiguously: Nomadic</code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVhbihkZltkZiRDb3VudHJ5ID09IFwiU3BhaW5cIixdJEFnZSwgbmEucm0gPSBUUlVFKVxuYGBgIn0= -->
-<pre class="r"><code>mean(df[df$Country == &quot;Spain&quot;,]$Age, na.rm = TRUE)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuREZfTEMgPC0gREZfTENbREZfTEMkcmVnaW9uID09IFwiTGF0aW4gQW1lcmljYSAmIENhcmliYmVhblwiICYgIWlzLm5hKERGX0xDJHJlZ2lvbikgJiBERkYkTWFpbkJyYW5jaCA9PSBcIkkgYW0gYSBkZXZlbG9wZXIgYnkgcHJvZmVzc2lvblwiICYgIWlzLm5hKERGRiRNYWluQnJhbmNoKSwgXVssIDQ6MThdXG5uYW1lcyhERkYpXG5gYGAifQ== -->
+<pre class="r"><code>DF_LC &lt;- DF_LC[DF_LC$region == &quot;Latin America &amp; Caribbean&quot; &amp; !is.na(DF_LC$region) &amp; DFF$MainBranch == &quot;I am a developer by profession&quot; &amp; !is.na(DFF$MainBranch), ][, 4:18]
+names(DFF)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDMyLjAzOTcxXG4ifQ== -->
-<pre><code>[1] 32.03971</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVhbihhcy5udW1lcmljKGRmW2RmJENvdW50cnkgPT0gXCJQZXJ1XCIsXSRZZWFyc0NvZGVQcm8pLCBuYS5ybSA9IFRSVUUpXG5gYGAifQ== -->
-<pre class="r"><code>mean(as.numeric(df[df$Country == &quot;Peru&quot;,]$YearsCodePro), na.rm = TRUE)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiTkFzIGludHJvZHVjZWQgYnkgY29lcmNpb25cbiJ9 -->
-<pre><code>NAs introduced by coercion</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDUuMjA5Njc3XG4ifQ== -->
-<pre><code>[1] 5.209677</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVhbihhcy5udW1lcmljKGRmW2RmJENvdW50cnkgPT0gXCJVbml0ZWQgU3RhdGVzXCIsXSRZZWFyc0NvZGVQcm8pLCBuYS5ybSA9IFRSVUUpXG5gYGAifQ== -->
-<pre class="r"><code>mean(as.numeric(df[df$Country == &quot;United States&quot;,]$YearsCodePro), na.rm = TRUE)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiTkFzIGludHJvZHVjZWQgYnkgY29lcmNpb25cbiJ9 -->
-<pre><code>NAs introduced by coercion</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDExLjAyMDI4XG4ifQ== -->
-<pre><code>[1] 11.02028</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI21lYW4oZGYkQWdlLCBuYS5ybSA9IFRSVUUpXG5kZltkZiRDb3VudHJ5ID09IFwiUGVydVwiLF0kQ291bnRyeVxuYGBgIn0= -->
-<pre class="r"><code>#mean(df$Age, na.rm = TRUE)
-df[df$Country == &quot;Peru&quot;,]$Country</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICBbMV0gXCJQZXJ1XCIgXCJQZXJ1XCIgXCJQZXJ1XCIgXCJQZXJ1XCIgXCJQZXJ1XCIgXCJQZXJ1XCIgXCJQZXJ1XCIgXCJQZXJ1XCIgXCJQZXJ1XCIgXCJQZXJ1XCIgXCJQZXJ1XCIgXCJQZXJ1XCIgXCJQZXJ1XCIgXCJQZXJ1XCIgXCJQZXJ1XCIgXCJQZXJ1XCIgXCJQZXJ1XCIgXCJQZXJ1XCJcbiBbMTldIFwiUGVydVwiIFwiUGVydVwiIFwiUGVydVwiIFwiUGVydVwiIFwiUGVydVwiIFwiUGVydVwiIFwiUGVydVwiIFwiUGVydVwiIFwiUGVydVwiIFwiUGVydVwiIFwiUGVydVwiIFwiUGVydVwiIFwiUGVydVwiIFwiUGVydVwiIFwiUGVydVwiIFwiUGVydVwiIFwiUGVydVwiIFwiUGVydVwiXG4gWzM3XSBcIlBlcnVcIiBcIlBlcnVcIiBcIlBlcnVcIiBcIlBlcnVcIiBcIlBlcnVcIiBcIlBlcnVcIiBcIlBlcnVcIiBcIlBlcnVcIiBcIlBlcnVcIiBcIlBlcnVcIiBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgXG4gWzU1XSBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIFwiUGVydVwiIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgXG4gWzczXSBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgIFxuIFs5MV0gTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICBcblsxMDldIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgXG5bMTI3XSBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBcIlBlcnVcIiBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgXG5bMTQ1XSBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgXCJQZXJ1XCIgTkEgICAgIFwiUGVydVwiIFwiUGVydVwiIE5BICAgICBcIlBlcnVcIiBcIlBlcnVcIiBOQSAgICBcblsxNjNdIE5BICAgICBOQSAgICAgTkEgICAgIFwiUGVydVwiIFwiUGVydVwiIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBcIlBlcnVcIiBcIlBlcnVcIiBOQSAgICAgXCJQZXJ1XCIgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgIFxuWzE4MV0gTkEgICAgIE5BICAgICBcIlBlcnVcIiBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgIFxuWzE5OV0gTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBcIlBlcnVcIiBOQSAgICAgXCJQZXJ1XCIgTkEgICAgIE5BICAgICBOQSAgICAgXCJQZXJ1XCIgTkEgICAgIE5BICAgICBcIlBlcnVcIiBOQSAgICAgTkEgICAgIFwiUGVydVwiXG5bMjE3XSBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgIFxuWzIzNV0gXCJQZXJ1XCIgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgIFxuWzI1M10gTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIFwiUGVydVwiIE5BICAgIFxuWzI3MV0gTkEgICAgIFwiUGVydVwiIE5BICAgICBOQSAgICAgTkEgICAgIFwiUGVydVwiIFwiUGVydVwiIE5BICAgICBOQSAgICAgTkEgICAgIFwiUGVydVwiIFwiUGVydVwiIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBcIlBlcnVcIiBOQSAgICBcblsyODldIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgXCJQZXJ1XCIgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBcIlBlcnVcIiBOQSAgICAgTkEgICAgIE5BICAgIFxuWzMwN10gTkEgICAgIE5BICAgICBcIlBlcnVcIiBOQSAgICAgXCJQZXJ1XCIgTkEgICAgIFwiUGVydVwiIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBcIlBlcnVcIiBcIlBlcnVcIiBcIlBlcnVcIiBOQSAgICBcblszMjVdIE5BICAgICBcIlBlcnVcIiBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgXCJQZXJ1XCIgXCJQZXJ1XCIgTkEgICAgIFwiUGVydVwiIFwiUGVydVwiIFwiUGVydVwiIFwiUGVydVwiIFwiUGVydVwiIFwiUGVydVwiIE5BICAgICBOQSAgICAgTkEgICAgXG5bMzQzXSBOQSAgICAgTkEgICAgIE5BICAgICBcIlBlcnVcIiBOQSAgICAgXCJQZXJ1XCIgXCJQZXJ1XCIgTkEgICAgIE5BICAgICBcIlBlcnVcIiBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgXG5bMzYxXSBOQSAgICAgXCJQZXJ1XCIgTkEgICAgIFwiUGVydVwiIFwiUGVydVwiIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgXCJQZXJ1XCIgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIFwiUGVydVwiIE5BICAgICBOQSAgICBcblszNzldIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgXG5bMzk3XSBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIFwiUGVydVwiIFwiUGVydVwiIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICBcbls0MTVdIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgXG5bNDMzXSBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIFwiUGVydVwiIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgXG5bNDUxXSBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgIFxuWzQ2OV0gTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgICBOQSAgICBcbls0ODddIE5BICAgICBOQSAgICAgTkEgICAgIE5BICAgIFxuIn0= -->
-<pre><code>  [1] &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot;
- [19] &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot;
- [37] &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; NA     NA     NA     NA     NA     NA     NA     NA    
- [55] NA     NA     NA     NA     NA     &quot;Peru&quot; NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA    
- [73] NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA    
- [91] NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA    
-[109] NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA    
-[127] NA     NA     NA     NA     NA     NA     NA     NA     NA     &quot;Peru&quot; NA     NA     NA     NA     NA     NA     NA     NA    
-[145] NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     &quot;Peru&quot; NA     &quot;Peru&quot; &quot;Peru&quot; NA     &quot;Peru&quot; &quot;Peru&quot; NA    
-[163] NA     NA     NA     &quot;Peru&quot; &quot;Peru&quot; NA     NA     NA     NA     &quot;Peru&quot; &quot;Peru&quot; NA     &quot;Peru&quot; NA     NA     NA     NA     NA    
-[181] NA     NA     &quot;Peru&quot; NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA    
-[199] NA     NA     NA     NA     NA     &quot;Peru&quot; NA     &quot;Peru&quot; NA     NA     NA     &quot;Peru&quot; NA     NA     &quot;Peru&quot; NA     NA     &quot;Peru&quot;
-[217] NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA    
-[235] &quot;Peru&quot; NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA    
-[253] NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     &quot;Peru&quot; NA    
-[271] NA     &quot;Peru&quot; NA     NA     NA     &quot;Peru&quot; &quot;Peru&quot; NA     NA     NA     &quot;Peru&quot; &quot;Peru&quot; NA     NA     NA     NA     &quot;Peru&quot; NA    
-[289] NA     NA     NA     NA     NA     NA     NA     NA     &quot;Peru&quot; NA     NA     NA     NA     NA     &quot;Peru&quot; NA     NA     NA    
-[307] NA     NA     &quot;Peru&quot; NA     &quot;Peru&quot; NA     &quot;Peru&quot; NA     NA     NA     NA     NA     NA     NA     &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; NA    
-[325] NA     &quot;Peru&quot; NA     NA     NA     NA     &quot;Peru&quot; &quot;Peru&quot; NA     &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; &quot;Peru&quot; NA     NA     NA    
-[343] NA     NA     NA     &quot;Peru&quot; NA     &quot;Peru&quot; &quot;Peru&quot; NA     NA     &quot;Peru&quot; NA     NA     NA     NA     NA     NA     NA     NA    
-[361] NA     &quot;Peru&quot; NA     &quot;Peru&quot; &quot;Peru&quot; NA     NA     NA     NA     NA     &quot;Peru&quot; NA     NA     NA     NA     &quot;Peru&quot; NA     NA    
-[379] NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA    
-[397] NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     &quot;Peru&quot; &quot;Peru&quot; NA     NA     NA     NA     NA    
-[415] NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA    
-[433] NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     &quot;Peru&quot; NA     NA     NA     NA     NA     NA    
-[451] NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA    
-[469] NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA     NA    
-[487] NA     NA     NA     NA    </code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiIFsxXSBcIk1haW5CcmFuY2hcIiAgICAgICAgIFwiQ291bnRyeVwiICAgICAgICAgICAgXCJHZW5kZXJcIiAgICAgICAgICAgICBcIkFnZVwiICAgICAgICAgICAgICAgIFwiWWVhcnNDb2RlXCIgICAgICAgICAgXCJZZWFyc0NvZGVQcm9cIiAgICAgIFxuIFs3XSBcIkVkTGV2ZWxcIiAgICAgICAgICAgIFwiRW1wbG95bWVudFwiICAgICAgICAgXCJKb2JTYXRcIiAgICAgICAgICAgICBcIk9yZ1NpemVcIiAgICAgICAgICAgIFwiV29ya1dlZWtIcnNcIiAgICAgICAgXCJORVdPdmVydGltZVwiICAgICAgIFxuWzEzXSBcIk5FV09uYm9hcmRHb29kXCIgICAgIFwiSm9iU2Vla1wiICAgICAgICAgICAgXCJORVdMZWFyblwiICAgICAgICAgICBcIkxhbmd1YWdlV29ya2VkV2l0aFwiIFwiUGxhdGZvcm1Xb3JrZWRXaXRoXCJcbiJ9 -->
+<pre><code> [1] &quot;MainBranch&quot;         &quot;Country&quot;            &quot;Gender&quot;             &quot;Age&quot;                &quot;YearsCode&quot;          &quot;YearsCodePro&quot;      
+ [7] &quot;EdLevel&quot;            &quot;Employment&quot;         &quot;JobSat&quot;             &quot;OrgSize&quot;            &quot;WorkWeekHrs&quot;        &quot;NEWOvertime&quot;       
+[13] &quot;NEWOnboardGood&quot;     &quot;JobSeek&quot;            &quot;NEWLearn&quot;           &quot;LanguageWorkedWith&quot; &quot;PlatformWorkedWith&quot;</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<p>#Tabla Descriptores</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>#Analisis Descriptores ##Gender ##Age ##YearsCode</p>
 <!-- rnb-text-end -->
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKYGBge3J9CmxpYnJhcnkocmVhZHIpCmRmIDwtIHJlYWRfY3N2KCJzdXJ2ZXlfcmVzdWx0c19wdWJsaWMuY3N2IikKc3RyKGRmKQoKYGBgCmBgYHtyfQptZWFuKGRmW2RmJENvdW50cnkgPT0gIlBlcnUiLF0kQWdlLCBuYS5ybSA9IFRSVUUpCm1lYW4oZGZbZGYkQ291bnRyeSA9PSAiU3BhaW4iLF0kQWdlLCBuYS5ybSA9IFRSVUUpCgptZWFuKGFzLm51bWVyaWMoZGZbZGYkQ291bnRyeSA9PSAiUGVydSIsXSRZZWFyc0NvZGVQcm8pLCBuYS5ybSA9IFRSVUUpCm1lYW4oYXMubnVtZXJpYyhkZltkZiRDb3VudHJ5ID09ICJVbml0ZWQgU3RhdGVzIixdJFllYXJzQ29kZVBybyksIG5hLnJtID0gVFJVRSkKI21lYW4oZGYkQWdlLCBuYS5ybSA9IFRSVUUpCmRmW2RmJENvdW50cnkgPT0gIlBlcnUiICYmIGlzLm5hKCksXSRDb3VudHJ5CmBgYAoKCg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKCgpgYGB7cn0KbGlicmFyeShyZWFkcikKbGlicmFyeShkcGx5cikKbGlicmFyeShjb3VudHJ5Y29kZSkKZGYgPC0gcmVhZF9jc3YoInN1cnZleV9yZXN1bHRzX3B1YmxpYy5jc3YiKQoKYGBgCmBgYHtyfQpERkYgPC0gc2VsZWN0KGRmLCBNYWluQnJhbmNoLCBDb3VudHJ5LEdlbmRlcixBZ2UsIFllYXJzQ29kZSwgWWVhcnNDb2RlUHJvICxFZExldmVsLEVtcGxveW1lbnQsIEpvYlNhdCwgT3JnU2l6ZSwgV29ya1dlZWtIcnMsIE5FV092ZXJ0aW1lLCBORVdPbmJvYXJkR29vZCwgSm9iU2VlaywgTkVXTGVhcm4sIExhbmd1YWdlV29ya2VkV2l0aCxQbGF0Zm9ybVdvcmtlZFdpdGgpCkRGX1VTQSA8LSBERkZbREZGJENvdW50cnkgPT0gIlVuaXRlZCBTdGF0ZXMiICYgIWlzLm5hKERGRiRDb3VudHJ5KSAmIERGRiRNYWluQnJhbmNoID09ICJJIGFtIGEgZGV2ZWxvcGVyIGJ5IHByb2Zlc3Npb24iICYgIWlzLm5hKERGRiRNYWluQnJhbmNoKSwgXVszOjE3XQpERl9MQyA8LSBjYmluZChyZWdpb24gPSBhcy5jaGFyYWN0ZXIoY291bnRyeWNvZGUoc291cmNldmFyID0gREZGJENvdW50cnksCiAgICAgICAgICAgICAgICAgICAgICAgICAgICBvcmlnaW4gPSAiY291bnRyeS5uYW1lIiwKICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRlc3RpbmF0aW9uID0gInJlZ2lvbiIpKSwgREZGKQpERl9MQyA8LSBERl9MQ1tERl9MQyRyZWdpb24gPT0gIkxhdGluIEFtZXJpY2EgJiBDYXJpYmJlYW4iICYgIWlzLm5hKERGX0xDJHJlZ2lvbikgJiBERkYkTWFpbkJyYW5jaCA9PSAiSSBhbSBhIGRldmVsb3BlciBieSBwcm9mZXNzaW9uIiAmICFpcy5uYShERkYkTWFpbkJyYW5jaCksIF1bLCA0OjE4XQpgYGAKI1RhYmxhIERlc2NyaXB0b3JlcwoKYGBge3J9CgpgYGAKI0FuYWxpc2lzIERlc2NyaXB0b3JlcwojI0dlbmRlcgojI0FnZQojI1llYXJzQ29kZQoK</div>
 
 
 
@@ -482,7 +314,7 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
-  window.initializeSourceEmbed("test.Rmd");
+  window.initializeSourceEmbed("P1.Rmd");
   window.initializeCodeFolding("show" === "show");
 });
 </script>

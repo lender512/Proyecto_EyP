@@ -3,20 +3,30 @@ title: "R Notebook"
 output: html_notebook
 ---
 
+
+
 ```{r}
 library(readr)
+library(dplyr)
+library(countrycode)
 df <- read_csv("survey_results_public.csv")
-str(df)
 
 ```
 ```{r}
-mean(df[df$Country == "Peru",]$Age, na.rm = TRUE)
-mean(df[df$Country == "Spain",]$Age, na.rm = TRUE)
-
-mean(as.numeric(df[df$Country == "Peru",]$YearsCodePro), na.rm = TRUE)
-mean(as.numeric(df[df$Country == "United States",]$YearsCodePro), na.rm = TRUE)
-#mean(df$Age, na.rm = TRUE)
-df[df$Country == "Peru" && is.na(),]$Country
+DFF <- select(df, MainBranch, Country,Gender,Age, YearsCode, YearsCodePro ,EdLevel,Employment, JobSat, OrgSize, WorkWeekHrs, NEWOvertime, NEWOnboardGood, JobSeek, NEWLearn, LanguageWorkedWith,PlatformWorkedWith)
+DF_USA <- DFF[DFF$Country == "United States" & !is.na(DFF$Country) & DFF$MainBranch == "I am a developer by profession" & !is.na(DFF$MainBranch), ][3:17]
+DF_LC <- cbind(region = as.character(countrycode(sourcevar = DFF$Country,
+                            origin = "country.name",
+                            destination = "region")), DFF)
+DF_LC <- DF_LC[DF_LC$region == "Latin America & Caribbean" & !is.na(DF_LC$region) & DFF$MainBranch == "I am a developer by profession" & !is.na(DFF$MainBranch), ][, 4:18]
 ```
+#Tabla Descriptores
 
+```{r}
+
+```
+#Analisis Descriptores
+##Gender
+##Age
+##YearsCode
 
