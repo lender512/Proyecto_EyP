@@ -1,0 +1,22 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(readr)
+df <- read_csv("survey_results_public.csv")
+str(df)
+
+```
+```{r}
+mean(df[df$Country == "Peru",]$Age, na.rm = TRUE)
+mean(df[df$Country == "Spain",]$Age, na.rm = TRUE)
+
+mean(as.numeric(df[df$Country == "Peru",]$YearsCodePro), na.rm = TRUE)
+mean(as.numeric(df[df$Country == "United States",]$YearsCodePro), na.rm = TRUE)
+#mean(df$Age, na.rm = TRUE)
+df[df$Country == "Peru" && is.na(),]$Country
+```
+
+

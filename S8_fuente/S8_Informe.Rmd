@@ -8,7 +8,11 @@ Miembros del grupo 8:
 
 -   Bryan Castillo
 
+<<<<<<< HEAD:S8_fuente/S8_Informe.Rmd
 -   Jorge Collazos
+=======
+-   Jorge Luis Collazos Martínez
+>>>>>>> 220b7cc5541f8c4065cddd2cf3550b01fb7024ce:S8_Informe.Rmd
 
 **Propuesta 1: Python Survey 2020**
 
@@ -28,7 +32,11 @@ Una encuesta realizada con el objetivo de conocer las preferencias y datos princ
 
 3.  *¿Es posible llegar a la información que se propone de manera específica y concreta?*
 
+<<<<<<< HEAD:S8_fuente/S8_Informe.Rmd
     Si es posible, pues la encuesta contó con la pregunta clave (país de origen) que nos permitirá dividir los datos y además tambien contó con preguntas para describir cómo utiliazan el lenguaje así como cómo es su ambiente de trabajo.
+=======
+    Si es posible, pues la encuesta contó con la pregunta clave (país de origen) que nos permitirá dividir los datos y además también contó con preguntas para describir cómo utiliazan el lenguaje así como cómo es su ambiente de trabajo.
+>>>>>>> 220b7cc5541f8c4065cddd2cf3550b01fb7024ce:S8_Informe.Rmd
 
 **Propuesta 2: Impacto del COVID-19 en empresas peruanas durante el 2020**
 
@@ -45,9 +53,21 @@ Una encuesta realizada con el objetivo de conocer el impacto económico y financ
 
     Una descripción sobre las empresas que a pesar de la pandemia siguen operativas, a que sector económico pertenecen, como cambio sus ventas, que modalidad de ventas emplearon y problemas que enfrentaron por el COVID-19 (proveedores, enfermedad de trabajadores, disminución de demanda, etc.).   
 
+<<<<<<< HEAD:S8_fuente/S8_Informe.Rmd
 3.  *¿Es posible llegar a la información que se propone de manera específica y concreta? * 
 
     Si es posible, la encuesta usó la pregunta clave acerca del nivel de operatividad de la empresa (operativa/parcialmente operativa/ inoperativa), esto permite dividir los datos. También contó con preguntas para las empresas operativas y parcialmente operativas sobre temáticas de ventas, empleo, finanzas, acceso a programas del gobierno y apreciación y expectativa, además de preguntas para las empresas inoperativas acerca del periodo y motivos de inoperatividad.
+=======
+    Una descripción sobre las empresas que a pesar de la pandemia siguen operativas, a que sector económico pertenecen, como cambio sus ventas, que modalidad de ventas emplearon y problemas que enfrentaron por el COVID-19 (proveedores, enfermedad de trabajadores, disminución de demanda, etc.).  
+
+2.  *¿Qué información se desea aportar al final del estudio?*
+
+    Una descripción sobre las empresas que a pesar de la pandemia siguen operativas, a que sector económico pertenecen, como cambio sus ventas, que modalidad de ventas emplearon y problemas que enfrentaron por el COVID-19 (proveedores, enfermedad de trabajadores, disminución de demanda, etc.).  
+
+3.  *¿Es posible llegar a la información que se propone de manera específica y concreta?*
+
+     Si es posible, la encuesta usó la pregunta clave acerca del nivel de operatividad de la empresa (operativa/parcialmente operativa/ inoperativa), esto permite dividir los datos. También contó con preguntas para las empresas operativas y parcialmente operativas sobre temáticas de ventas, empleo, finanzas, acceso a programas del gobierno y apreciación y expectativa, además de preguntas para las empresas inoperativas acerca del periodo y motivos de inoperatividad.
+>>>>>>> 220b7cc5541f8c4065cddd2cf3550b01fb7024ce:S8_Informe.Rmd
 
 **Propuesta 3: Primera encuesta virtual para personas LGTBI en el Perú**
 

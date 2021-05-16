@@ -1,0 +1,70 @@
+# P0 Pre-entrega
+
+Miembros del grupo 8:
+
+-   Luis Berrospi (Líder)
+
+-   Nincol Quiroz
+
+-   Bryan Castillo
+
+-   Jorge Collazos
+
+**Propuesta 1: Python Survey 2020**
+
+Una encuesta realizada con el objetivo de conocer las preferencias y datos principales de developers respecto al uso que le dan lenguaje de programación Python día a día.
+
+[Dataset](https://drive.google.com/file/d/1_ZN-MC8m13aGO5usPjiJ-7L5Vqht9IXe/view?usp=sharing) (56k obs)
+
+[Encuesta](https://drive.google.com/file/d/1lrixRB9dC8_VoHXoL6UA8OYNHMfLyzAh/view?usp=sharing)
+
+1.  *¿De qué manera el estudio es importante para la audiencia?*
+
+    Python es uno de los lenguajes más utilizados por programadores en todo el mundo, por lo que conocer los distintos datos sobre sus usuarios es de mucha ayuda.
+
+2.  *¿Qué información se desea aportar al final del estudio?*
+
+    Una descripción sobre el usuario de python por regiones para poder compararlos y ver las diferencias que existen entre, por ejemplo, un programador en latinoamérica con uno en Europa.
+
+3.  *¿Es posible llegar a la información que se propone de manera específica y concreta?*
+
+    Si es posible, pues la encuesta contó con la pregunta clave (país de origen) que nos permitirá dividir los datos y además tambien contó con preguntas para describir cómo utiliazan el lenguaje así como cómo es su ambiente de trabajo.
+
+**Propuesta 2: Impacto del COVID-19 en empresas peruanas durante el 2020**
+
+Una encuesta realizada con el objetivo de conocer el impacto económico y financiero de las empresas debido a la pandemia por el COVID-19.
+
+[Dataset](https://drive.google.com/file/d/1b05KRyGtVwAQVlD7q1uly9O9oT4Wu4-X/view?usp=sharing) (906 obs)
+
+[Encuesta](iinei.inei.gob.pe/microdatos/Detalle_Encuesta.asp?CU=19558&CodEncuesta=729&CodModulo=1586&NombreEncuesta=ENCUESTA+DE+OPINI�N+SOBRE+EL+IMPACTO+DEL+COVID-19+EN+LAS+EMPRESAS&NombreModulo=ENCUESTA+COVID_19)
+
+1.  *¿De qué manera el estudio es importante para la audiencia? * 
+
+    La pandemia por el COVID-19 afectó a todo el mundo y dañó a las economías más importantes, el Perú no es ajeno. Es importante conocer que sectores económicos fueron menos afectados y que métodos de ventas son más efectivos para poder aplicarlos en empresas en las que peligra su operabilidad o nuevas empresas.
+2.  *¿Qué información se desea aportar al final del estudio? *  
+
+    Una descripción sobre las empresas que a pesar de la pandemia siguen operativas, a que sector económico pertenecen, como cambio sus ventas, que modalidad de ventas emplearon y problemas que enfrentaron por el COVID-19 (proveedores, enfermedad de trabajadores, disminución de demanda, etc.).   
+
+3.  *¿Es posible llegar a la información que se propone de manera específica y concreta? * 
+
+    Si es posible, la encuesta usó la pregunta clave acerca del nivel de operatividad de la empresa (operativa/parcialmente operativa/ inoperativa), esto permite dividir los datos. También contó con preguntas para las empresas operativas y parcialmente operativas sobre temáticas de ventas, empleo, finanzas, acceso a programas del gobierno y apreciación y expectativa, además de preguntas para las empresas inoperativas acerca del periodo y motivos de inoperatividad.
+
+**Propuesta 3: Primera encuesta virtual para personas LGTBI en el Perú**
+
+Encuesta realizada con el objetivo de generar información sobre la población LGTBI en el Perú
+
+[Dataset](https://drive.google.com/file/d/1x37QNp3044JQJk3SODoqji7QXVwzMQom/view?usp=sharing) (12k obs)
+
+[Encuesta](iinei.inei.gob.pe/microdatos/Detalle_Encuesta.asp?CU=19558&CodEncuesta=602&CodModulo=1287&NombreEncuesta=Primera+Encuesta+Virtual+para+Personas+LGBTI+en+el+Per�&NombreModulo=LGBTI)
+
+1.  *¿De qué manera el estudio es importante para la audiencia?*
+
+    La comunidad LGTBI tiende a ser muy discriminada por sectores de la población por lo que es importante informar acerca de esta para disminuir esto, y poder garantizar la protección y reconocimiento de esta población.
+
+2.  *¿Qué información se desea aportar al final del estudio?*
+
+    Detallar los problemas de violencia sobre la población LGTBI, y cómo estas afectan en varios aspectos de la vida (social/laboral/académica/etc).
+
+3.  *¿Es posible llegar a la información que se propone de manera específica y concreta?*
+
+    Sí, porque el estudio hizo 11 preguntas sobre la violencia y discriminación relacionadas a distintos ámbitos clave (laboral/social/académica/etc), lo que nos permite sacar conclusiones acertadas sobre esta situación en concreto.
