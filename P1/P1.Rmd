@@ -74,9 +74,41 @@ DF_MIX
 
 ```{r}
 
-#(strsplit(DF_USA$Gender, ";"))
+temp = DF_USA$Gender[!is.na(DF_USA$Gender)]
+gender_vec_USA <- vector()
+gender_vec_LC <- vector()
+for (pal in temp) {
+  for (sub_pal in strsplit(pal, ";")) {
+    gender_vec_USA <- c(gender_vec_USA, sub_pal)
+  }
+}
+temp = DF_LC$Gender[!is.na(DF_LC$Gender)]
+gender_vec <- vector()
+for (pal in temp) {
+  for (sub_pal in strsplit(pal, ";")) {
+    gender_vec_LC <- c(gender_vec_LC, sub_pal)
+  }
+}
 
-#pie(DF_USA$Gender, na.rm = T)
+layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(6, 1))
+par(mai=rep(0.5, 4))
+
+temp = table(gender_vec_USA)
+man <- round(temp[1]/length(gender_vec_USA)*100,2)
+other <- round(temp[2]/length(gender_vec_USA)*100,2)
+woman <- round(temp[3]/length(gender_vec_USA)*100,2)
+pie(table(gender_vec_USA), main = "Estados Unidos", labels = c(paste(man, "%", sep = ""), paste(other, "%", sep = ""), paste(woman, "%", sep = "")), col = c("skyblue","orange","red"))
+temp = table(gender_vec_LC)
+
+man <- round(temp[1]/length(gender_vec_LC)*100,2)
+other <- round(temp[2]/length(gender_vec_LC)*100,2)
+woman <- round(temp[3]/length(gender_vec_LC)*100,2)
+pie(table(gender_vec_LC), main = "América Latina", labels = c(paste(man, "%", sep = ""), paste(other, "%", sep = ""), paste(woman, "%", sep = "")), col = c("skyblue","orange","red"))
+par(mai=c(0,0,0,0))
+plot.new()
+legend(x="center", ncol=3,legend=c("Hombre","Otros","Mujer"),
+       fill=c("skyblue","orange","red"))
+
 ```
 
 ### Edad
@@ -88,7 +120,7 @@ abline(h=mean(DF_LC$Age, na.rm = TRUE), col = "blue",lwd=2)
 legend(1.2,100,legend=c("media EEUU", "Media SyC"),col=c("red", "blue"),lwd=2)
 ```
 
-Podemos observar que las edades de los programadores profesionales están más concentradas en América Latina y el Caribe comparando los rangos intercuartílicos:
+Podemos observar que las edades de los programadores profesionales están más concentradas en América Latina comparando los rangos intercuartílicos:
 
 ```{r}
 IQR(DF_LC$Age, na.rm = TRUE)
