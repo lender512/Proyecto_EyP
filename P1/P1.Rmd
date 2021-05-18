@@ -111,12 +111,14 @@ legend(x="center", ncol=3,legend=c("Hombre","Otros","Mujer"),
 
 ```
 
+En el gráfico podemos ver como si bien, la proporción de mujeres que se dedican en Estados Unidos es el doble que la proporción en América Latina, en ambas regiones la brecha de genero es bastante grande.
+
 ### Edad
 
 ```{r, warning=FALSE}
-boxplot(DF_MIX$Age~DF_MIX$Region, na.rm= T, xlab = "Region", ylab = "Edad")
-abline(h=mean(DF_USA$Age, na.rm = TRUE), col = "red", lwd=2)
-abline(h=mean(DF_LC$Age, na.rm = TRUE), col = "blue",lwd=2)
+boxplot(DF_MIX$Age~DF_MIX$Region, na.rm= T, xlab = "Edad", ylab = "Region", notch=TRUE, horizontal = TRUE)
+abline(v=mean(DF_USA$Age, na.rm = TRUE), col = "red", lwd=2)
+abline(v=mean(DF_LC$Age, na.rm = TRUE), col = "blue",lwd=2)
 legend(1.2,100,legend=c("media EEUU", "Media SyC"),col=c("red", "blue"),lwd=2)
 ```
 
@@ -134,23 +136,23 @@ round(mean(DF_LC$Age, na.rm = TRUE), 2)
 round(mean(DF_USA$Age, na.rm = TRUE),2)
 ```
 
-Junto con las medianas podemos concluir que en general, los programadores profesiones de Estados Unidos son mayores que que los de América Latina.
+Junto con las medianas y la forma de las cajas podemos concluir que en general, no hay mucha diferencia de edad entre los programadores profesionales de ambos países
 
 ```{r}
 round(median(DF_LC$Age, na.rm = TRUE), 2)
 round(median(DF_USA$Age, na.rm = TRUE),2)
 ```
 
-### Años Codeado
+### Años Codeando
 
 ```{r, warning=FALSE}
-boxplot(as.numeric(DF_MIX$YearsCode)~DF_MIX$Region, na.rm= TRUE, xlab = "Region", ylab = "Años Codeando")
+boxplot(as.numeric(DF_MIX$YearsCode)~DF_MIX$Region, na.rm= TRUE, xlab = "Region", ylab = "Años Codeando", notch = TRUE)
 abline(h=mean(as.numeric(DF_USA$YearsCode), na.rm = TRUE), col = "red")
 abline(h=mean(as.numeric(DF_LC$YearsCode), na.rm = TRUE), col = "blue")
 legend(1.1,50,legend=c("media EEUU", "Media SyC"),col=c("red", "blue"),lwd=2)
 ```
 
-En el diagrama de cajas y bigotes podemos ver como los programadores profesionales de Estados Unidos llevan mas años programando en total en comparación con los de América Latina.
+En el diagrama de cajas y bigotes podemos ver como los programadores profesionales de Estados Unidos llevan mas años programando en total en comparación con los de América Latina. Sin embargo, esta diferencia es pequeña.
 
 También, es importante destacar la gran diferencia de 6 años que existe entre el 3er cuartíl de ambas regiones. Esto implica que el 75% de los programadores profesionales de Estados Unidos cuentan a lo mucho con 22 años programando mientras que en América latina solo 16.
 
