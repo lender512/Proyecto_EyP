@@ -47,9 +47,8 @@ Queremos responder las siguientes preguntas:
 library(readr)
 library(dplyr)
 library(countrycode)
-
-install.packages("tidyverse")
-library(tidyverse)
+library(ggplot2)
+#library(tidyverse)
 
 df <- read_csv("survey_results_public.csv")
 df <- df[!(df$Age == "1" &  !is.na(df$Age)),]
@@ -77,39 +76,41 @@ DF_MIX
 
 #### **Tabla Descriptores**
 
-+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-| Pregunta                                                                                                                                                                                                                                                                         | Variable                                                 | Tipo de Variable |
-+==================================================================================================================================================================================================================================================================================+==========================================================+==================+
-| Which of the following describe you, if any? Please check all that apply. If you prefer not to answer, you may leave this question blank.                                                                                                                                        | Genero                                                   | Nominal          |
-+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-| What is your age (in years)? If you prefer not to answer, you may leave this question blank.                                                                                                                                                                                     | Edad                                                     | Discreta         |
-+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-| Including any education, how many years have you been coding in total?                                                                                                                                                                                                           | Años codeando                                            | Discreta         |
-+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-| NOT including education, how many years have you coded professionally (as a part of your work)?                                                                                                                                                                                  | Años codeando profesionalmente                           | Discreta         |
-+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-| Which of the following best describes the highest level of formal education that you’ve completed?                                                                                                                                                                               | Grado educativo                                          | Jerárquica       |
-+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-| Which of the following best describes your current employment status?                                                                                                                                                                                                            | Tipo de empleo                                           | Nominal          |
-+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-| Which programming, scripting, and markup languages have you done extensive development work in over the past year, and which do you want to work in over the next year? (If you both worked with the language and want to continue to do so, please check both boxes in that row | Lenguajes con los que se trabajo                         | Nominal          |
-+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-| How frequently do you learn a new language or framework?                                                                                                                                                                                                                         | Frecuencia de aprendizaje de un nuevo lenguaje/framework | Nominal          |
-+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-| Which platforms have you done extensive development work in over the past year, and which do you want to work in over the next year? (If you both worked with the platform and want to continue to do so, please check both boxes in that row.)                                  | Plataformas con las que se trabajo                       | Nominal          |
-+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-|                                                                                                                                                                                    how often do you work overtime or beyond the formal time expectation of your job?            |        Frecuencia de horas extra                         |     Nominal             |
-+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-| Do you think your company has a good onboarding process? (By onboarding, we mean the structured 
-process of getting you settled in to your new role at a company)
-                                                                                                    |          Proceso de incorporación                        |     Nominal             |
-+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-|                                                                                                                                                                                 Which of the following best describes your current job-seeking status?                           |           Situación de empleo                            |     Nominal             |
-+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-|                                                                                                                                                                                                                                                                                  |                                                          |                  |
-+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-|                                                                                                                                                                                                                                                                                  |                                                          |                  |
-+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+-------------------+
+| Pregunta                                                                                                                                                                                                                                                                         | Variable                                                 | Tipo de Variable  |
++==================================================================================================================================================================================================================================================================================+==========================================================+===================+
+| Which of the following describe you, if any? Please check all that apply. If you prefer not to answer, you may leave this question blank.                                                                                                                                        | Genero                                                   | Nominal           |
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+-------------------+
+| What is your age (in years)? If you prefer not to answer, you may leave this question blank.                                                                                                                                                                                     | Edad                                                     | Discreta          |
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+-------------------+
+| Including any education, how many years have you been coding in total?                                                                                                                                                                                                           | Años codeando                                            | Discreta          |
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+-------------------+
+| NOT including education, how many years have you coded professionally (as a part of your work)?                                                                                                                                                                                  | Años codeando profesionalmente                           | Discreta          |
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+-------------------+
+| Which of the following best describes the highest level of formal education that you've completed?                                                                                                                                                                               | Grado educativo                                          | Jerárquica        |
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+-------------------+
+| Which of the following best describes your current employment status?                                                                                                                                                                                                            | Tipo de empleo                                           | Nominal           |
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+-------------------+
+| Which programming, scripting, and markup languages have you done extensive development work in over the past year, and which do you want to work in over the next year? (If you both worked with the language and want to continue to do so, please check both boxes in that row | Lenguajes con los que se trabajo                         | Nominal           |
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+-------------------+
+| How frequently do you learn a new language or framework?                                                                                                                                                                                                                         | Frecuencia de aprendizaje de un nuevo lenguaje/framework | Nominal           |
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+-------------------+
+| Which platforms have you done extensive development work in over the past year, and which do you want to work in over the next year? (If you both worked with the platform and want to continue to do so, please check both boxes in that row.)                                  | Plataformas con las que se trabajo                       | Nominal           |
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+-------------------+
+| how often do you work overtime or beyond the formal time expectation of your job?                                                                                                                                                                                                | Frecuencia de horas extra                                | Nomina            |
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+-------------------+
+| Do you think your company has a good onboarding process? (By onboarding, we mean the structured process of getting you settled in to your new role at a company)                                                                                                                 | Proceso de incorporación                                 | Nominal           |
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+-------------------+
+| Which of the following best describes your current job-seeking status?                                                                                                                                                                                                           | Situación de empleo                                      | Nominal           |
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+-------------------+
+| How satisfied are you with your current job? (If you work multiple jobs, answer for the one you spend the most hours on.)                                                                                                                                                        | Satisfacion laboral                                      | Ordinal \| \| \|  |
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+-------------------+
+| Approximately how many people are employed by the company or organization you currently work for?                                                                                                                                                                                | Cantidad de empleados                                    | Discreta \| \| \| |
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+-------------------+
+| On average, how many hours per week do you work? Please enter a whole number in the box.                                                                                                                                                                                         | Horas de trabajo semanales                               | Continua          |
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+-------------------+
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+---- -------------+
 
 ## Análisis de variables
 
@@ -220,11 +221,13 @@ Existe una diferencia de 4 años en el 3er cuartil de ambas regiones; es decir, 
 También existe una diferencia de 1 año el 4to cuartil. Esto implica que del 100% de programadores latinoamericanos al menos uno tiene un año más programando profesionalmente que el 100% de programadores estadounidenses.
 
 #### Programadores latinoamericanos
+
 ```{r, warning=FALSE}
 round(quantile(as.numeric(DF_LC$YearsCodePro), na.rm = TRUE), 2)
 ```
 
 #### Programadores estadounidenses
+
 ```{r, warning=FALSE}
 round(quantile(as.numeric(DF_USA$YearsCodePro), na.rm = TRUE),2)
 ```
@@ -245,7 +248,7 @@ barplot(tableLC, las=2, names.arg=names, main='Frecuencia relativa de grados edu
 
 ```
 
-Los gráficos de barras muestran que la mayoría de programadores tanto estadounidenses como latinoamericanos tienen licenciatura (Bachelor’s degree), si se compara, existe una mayor frecuencia relativa de programadores con licenciatura en Estados Unidos que en América Latina. 
+Los gráficos de barras muestran que la mayoría de programadores tanto estadounidenses como latinoamericanos tienen licenciatura (Bachelor's degree), si se compara, existe una mayor frecuencia relativa de programadores con licenciatura en Estados Unidos que en América Latina.
 
 Por otro lado, en América Latina existe una mayor frecuencia relativa de programadores que no terminaron sus estudios universitarios en comparación con Estados Unidos.
 
@@ -263,17 +266,110 @@ tableEmpleoLC
 barplot(tableEmpleoLC, las=2, main='Frecuencia relativa de el tipo de trabajo en América Latina')
 ```
 
-Los gráficos de barras muestran que la mayoría de programadores tanto estadounidenses como latinoamericanos trabajan a tiempo completo, existe una mayor frecuencia relativa de programadores trabajando a tiempo completo en Estados Unidos que en América Latina.. 
+Los gráficos de barras muestran que la mayoría de programadores tanto estadounidenses como latinoamericanos trabajan a tiempo completo, existe una mayor frecuencia relativa de programadores trabajando a tiempo completo en Estados Unidos que en América Latina..
 
 También se puede observar que existe mayor frecuencia relativa de latinoamericanos trabajando a medio tiempo y de manera independiente que los estadounidenses.
 
 ### Satisfacción con empleo
 
+```{r}
+temp = DF_USA$JobSat[!is.na(DF_USA$JobSat)]
+satis_vector_USA <- vector()
+satis_vector_LC <- vector()
+for (pal in temp) {
+  for (sub_pal in strsplit(pal, ";")) {
+    satis_vector_USA <- c(satis_vector_USA, sub_pal)
+  }
+}
+temp = DF_LC$JobSat[!is.na(DF_LC$JobSat)]
+satis_vector <- vector()
+for (pal in temp) {
+  for (sub_pal in strsplit(pal, ";")) {
+    satis_vector_LC <- c(satis_vector_LC, sub_pal)
+  }
+}
+
+layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(7, 1))
+par(mai=rep(0.6, 4))
+
+temp = table(satis_vector_USA)
+Very_satisfied                     <- round(temp[1]/length(satis_vector_USA)*100,2)
+Slightly_satisfied                 <- round(temp[2]/length(satis_vector_USA)*100,2)
+Neither_satisfied_nor_dissatisfied <- round(temp[3]/length(satis_vector_USA)*100,2)
+Slightly_dissatisfied              <- round(temp[4]/length(satis_vector_USA)*100,2)
+Very_dissatisfied                  <- round(temp[5]/length(satis_vector_USA)*100,2)
+
+pie(table(satis_vector_USA), main = "Estados Unidos", labels = c(paste(Very_satisfied, "%", sep = ""), paste(Slightly_satisfied, "%", sep = ""), paste(Neither_satisfied_nor_dissatisfied, "%", sep = ""), paste(Slightly_dissatisfied, "%", sep = ""), paste(Very_dissatisfied, "%", sep = "")), col = c("blue","orange","yellow", "green", "red"))
+
+
+temp = table(satis_vector_LC)
+Very_satisfied                     <- round(temp[1]/length(satis_vector_LC)*100,2)
+Slightly_satisfied                 <- round(temp[2]/length(satis_vector_LC)*100,2)
+Neither_satisfied_nor_dissatisfied <- round(temp[3]/length(satis_vector_LC)*100,2)
+Slightly_dissatisfied              <- round(temp[4]/length(satis_vector_LC)*100,2)
+Very_dissatisfied                  <- round(temp[5]/length(satis_vector_LC)*100,2)
+
+pie(table(satis_vector_LC), main = "América Latina", labels = c(paste(Very_satisfied, "%", sep = ""), paste(Slightly_satisfied, "%", sep = ""), paste(Neither_satisfied_nor_dissatisfied, "%", sep = ""), paste(Slightly_dissatisfied, "%", sep = ""), paste(Very_dissatisfied, "%", sep = "")), col = c("blue","orange","yellow", "green", "red"))
+
+par(mai=c(0,0,0,0))
+plot.new()
+legend(x="center", ncol=2,legend=c("Muy satisfecho","Algo satisfecho","Ni satisfecho ni insatisfecho", "Algo insatisfecho", "Muy insatisfecho"),
+       fill=c("blue","orange","yellow", "green", "red"))
+```
+
+En la gráfica podemos ver que América Latina tiene un nivel de satisfación mayor con su trabajo que Estado Unidos. Así mismo, en Estados Unidos el 48.18% de los encuenstados estan insatisfechos con su empleo.
+
 ### Tamaño de organizacion en la que trabaja
+
+```{r}
+
+```
+
+```{r}
+
+colorLC = c("darkblue")
+colorUSA = c("skyblue")
+
+empleados_LC <- table(DF_LC$OrgSize)
+empleados_USA <- table(DF_USA$OrgSize)
+
+ggplot(DF_LC, aes(x= OrgSize)) + geom_bar(fill = colorLC) + coord_flip() + labs(title = "Cantidad de empleados - America Latina", x="Rango de empleados", y = "Frecuencia")
+ggplot(DF_USA, aes(x= OrgSize)) + geom_bar(fill = colorUSA) + coord_flip() + labs(title = "Cantidad de empleados- USA", x="Rango de empleados", y = "Frecuencia")
+
+```
+
+Según las gráficas de barras de Estados Unidos la mayoría de los encuestras labora en un entorno con 10000 o más empleados (frecuencia absoluta de 1915), asi mismo en América Latina la mayoría de encuestados labora en un entorno de 20 a 99 empleados.
 
 ### Horas trabajadas semanalmente
 
-### Frecuencia de horas extra 
+### 
+
+```{r}
+horas_LC <- table(DF_LC$WorkWeekHrs)
+horas_USA <- table(DF_USA$WorkWeekHrs)
+
+
+mean(DF_LC$WorkWeekHrs, na.rm = TRUE)
+mean(DF_USA$WorkWeekHrs, na.rm = TRUE)
+
+color = c("darkblue", "skyblue")
+y_LC_median <- mean(DF_LC$WorkWeekHrs, na.rm = TRUE)
+y_USA_median <- mean(DF_USA$WorkWeekHrs, na.rm = TRUE)
+
+x_general <- c("Latino America", "Estados Unidos")
+y_general <- c(y_LC_median, y_USA_median)
+
+barplot(y_general, main ="Media de horas de trabajo por semana", ylab = "Horas", xlab = "Región", col = color)
+
+legend(x="center", ncol=2,legend=c("Latino America","Estados unidos"),
+       fill=c("darkblue","skyblue"))
+
+
+```
+
+Según la gráfica, la media de horas que trabajan los encuestados por semana en América Latina es de 39 horas y en Estados Unidos es de 41.60.
+
+### Frecuencia de horas extra
 
 ```{r}
 
@@ -323,7 +419,6 @@ round(x,2)
 
 Finalmente obtenemos que en America Latina el 26.05% de empleados trabaja horas extra a menudo(de 1 a mas dias a la semana).
 
-
 ```{r}
 
 dim(DF_USA)
@@ -338,10 +433,10 @@ El numero de personas de Estados Unidos que respondieron esta pregunta es 8375 d
 x2<-1744*100/8375
 round(x2,2)
 ```
-Finalmente obtenemos que en Estados Unidos el 20.82% de programadores trabaja horas extra a menudo(de 1 a mas dias a la semana). 
+
+Finalmente obtenemos que en Estados Unidos el 20.82% de programadores trabaja horas extra a menudo(de 1 a mas dias a la semana).
 
 La diferencia con America Latina(5.23%), a pesar de ser minima, podría indicar que programadores de Estados Unidos estan en una mejor situación laboral (aunque no por mucho) en comparación con America Latina.
-
 
 ### Proceso de Incorporación
 
@@ -381,7 +476,7 @@ ggplot(data = DF_MIX, mapping = aes(x = NEWOnboardGood, y =Age)) +
 
 ```
 
-En general, tanto en America Latina como en Estados Unidos, las empresas tienen un buen proceso de incorporación(no todas), pero es ligeramente mejor en Estados Unidos.Los programadores mas jovenes en su mayoria respondieron a estas preguntas, debido a que suelen incorporarse a esa edad a las empresas o se encargan tambien de incorporar gente nueva. 
+En general, tanto en America Latina como en Estados Unidos, las empresas tienen un buen proceso de incorporación(no todas), pero es ligeramente mejor en Estados Unidos.Los programadores mas jovenes en su mayoria respondieron a estas preguntas, debido a que suelen incorporarse a esa edad a las empresas o se encargan tambien de incorporar gente nueva.
 
 ### Situación de empleo
 
@@ -419,15 +514,15 @@ legend(x="bottom",c("Estoy buscando activamente un trabajo","No estoy buscando a
 ggplot(data = DF_MIX) +
   geom_point(mapping = aes(x = Age, y=YearsCode, color=JobSeek), position =
 "jitter") +
-  theme (text = element_text(size=8),axis.text.y=element_blank())+
+  theme (text = element_text(size=8),axis.text.y=element_blank())
   facet_wrap(~ Region, nrow = 2)
 
 ```
 
-En base a estos graficos podemos concluir que en America Latina hay una mayor cantidad de Programadores que no estan buscando activamente, pero que estan disponibles ante alguna oportunidad. Lo mismo ocurre en Estados Unidos, pero el porcentaje es menor. Sin embargo en Estados Unidos hay gente que ya no esta interesada en nuevas oportunidades de trabajo, y se debe a que hay programadores con muchos años de experiencia y de edad, lo cual podemos comprobar gracias al segundo grafico. Esto puede significar que ya mantienen un trabajo estable o que ya estan retirados.     
-
+En base a estos graficos podemos concluir que en America Latina hay una mayor cantidad de Programadores que no estan buscando activamente, pero que estan disponibles ante alguna oportunidad. Lo mismo ocurre en Estados Unidos, pero el porcentaje es menor. Sin embargo en Estados Unidos hay gente que ya no esta interesada en nuevas oportunidades de trabajo, y se debe a que hay programadores con muchos años de experiencia y de edad, lo cual podemos comprobar gracias al segundo grafico. Esto puede significar que ya mantienen un trabajo estable o que ya estan retirados.
 
 ### Lenguajes con los que trabajó
+
 ```{r}
 temp = DF_USA$LanguageWorkedWith[!is.na(DF_USA$LanguageWorkedWith)]
 LWW_vec_USA <- vector() #LWW(languageWorkedWith)
@@ -457,8 +552,8 @@ tabla_LWW_LC
 
 barplot(tabla_LWW_LC, xlab = 'lenguajes de programación', ylab = 'frecuencias relativas', las=2, col=c("skyblue","orange","red","beige","aliceblue","aquamarine","azure","skyblue","orange","red","beige","aliceblue","aquamarine","azure","skyblue","orange","red","beige","aliceblue","aquamarine","azure","skyblue","orange","red","beige"))
 ```
-Se destaca que entre los lenguajes más usados tanto en US como en LC son JavaScript, HTML/CSS,SQL. Es importante resaltar que en US hay un mayor uso de Python que en LC.
-### Frecuencia de aprendizaje de un nuevo lenguaje
+
+Se destaca que entre los lenguajes más usados tanto en US como en LC son JavaScript, HTML/CSS,SQL. Es importante resaltar que en US hay un mayor uso de Python que en LC. \#\#\# Frecuencia de aprendizaje de un nuevo lenguaje
 
 ```{r}
 #usa
@@ -475,8 +570,9 @@ tabla_NEWLearn_LC
 barplot(tabla_NEWLearn_LC, xlab = 'Tiempo de aprendizaje', ylab = 'Frecuencias Relativas', las=2, col=c("skyblue","orange","red","beige"))
 
 ```
-Se observa que en US la mayoría de programadores aprenden un nuevo lenguaje cada un año, seguido de pocos meses, mientras que en LC la mayoría aprenden un nuevo lenguaje cada pocos meses, seguido de un año.
-### Plataformas con las que se trabajó
+
+Se observa que en US la mayoría de programadores aprenden un nuevo lenguaje cada un año, seguido de pocos meses, mientras que en LC la mayoría aprenden un nuevo lenguaje cada pocos meses, seguido de un año. \#\#\# Plataformas con las que se trabajó
+
 ```{r}
 temp = DF_USA$PlatformWorkedWith[!is.na(DF_USA$PlatformWorkedWith)]
 PWW_vec_USA <- vector() #PWW(PlataformWorkedWith)
@@ -507,4 +603,5 @@ tabla_PWW_LC
 
 barplot(tabla_PWW_LC, xlab = 'Plataformas', ylab = 'frecuencias relativas', las=2, col=c("skyblue","orange","red","beige","aliceblue","aquamarine","azure","skyblue","orange","red","beige","aliceblue","aquamarine","azure","skyblue","orange","red"))
 ```
+
 Se observa que en tanto en USA como en LC la plataforma más usada es Linux, no obstante, en general, hay un uso distribudio en cuanto la plataforma en los disitntos sistemas operativos.
