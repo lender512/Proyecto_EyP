@@ -98,18 +98,18 @@ DF_MIX
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
 | Which platforms have you done extensive development work in over the past year, and which do you want to work in over the next year? (If you both worked with the platform and want to continue to do so, please check both boxes in that row.)                                  | Plataformas con las que se trabajo                       | Nominal          |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-|                                                                                                                                                                                    how often do you work overtime or beyond the formal time expectation of your job?            |        Frecuencia de horas extra                         |     Nominal             |
+| how often do you work overtime or beyond the formal time expectation of your job?                                                                                                                                                                                                | Frecuencia de horas extra                                | Nomina           |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-| Do you think your company has a good onboarding process? (By onboarding, we mean the structured 
-process of getting you settled in to your new role at a company)
-                                                                                                    |          Proceso de incorporación                        |     Nominal             |
+| Do you think your company has a good onboarding process? (By onboarding, we mean the structured process of getting you settled in to your new role at a company)                                                                                                                 | Proceso de incorporación                                 | Nominal          |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-|                                                                                                                                                                                 Which of the following best describes your current job-seeking status?                           |           Situación de empleo                            |     Nominal             |
+| Which of the following best describes your current job-seeking status?                                                                                                                                                                                                           | Situación de empleo                                      | Nominal          |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-|                                                                                                                                                                                                                                                                                  |                                                          |                  |
+| How satisfied are you with your current job? (If you work multiple jobs, answer for the one you spend the most hours on.)                                                                                                                                                        | Satisfacion laboral                                      | Ordinal          |                                                                                                                |                                                          |                  |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-|                                                                                                                                                                                                                                                                                  |                                                          |                  |
+| Approximately how many people are employed by the company or organization you currently work for?                                                                                                                                                                                | Cantidad de empleados                                    | Discreta         |                                                                                                                                                                                                                                                                              |                                                          |                  |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
+|On average, how many hours per week do you work? Please enter a whole number in the box.                                                                                                                                                                                          | Horas de trabajo semanales                               | Continua         |
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+---- -------------+
 
 ## Análisis de variables
 
@@ -268,10 +268,103 @@ Los gráficos de barras muestran que la mayoría de programadores tanto estadoun
 También se puede observar que existe mayor frecuencia relativa de latinoamericanos trabajando a medio tiempo y de manera independiente que los estadounidenses.
 
 ### Satisfacción con empleo
+```{r}
+temp = DF_USA$JobSat[!is.na(DF_USA$JobSat)]
+satis_vector_USA <- vector()
+satis_vector_LC <- vector()
+for (pal in temp) {
+  for (sub_pal in strsplit(pal, ";")) {
+    satis_vector_USA <- c(satis_vector_USA, sub_pal)
+  }
+}
+temp = DF_LC$JobSat[!is.na(DF_LC$JobSat)]
+satis_vector <- vector()
+for (pal in temp) {
+  for (sub_pal in strsplit(pal, ";")) {
+    satis_vector_LC <- c(satis_vector_LC, sub_pal)
+  }
+}
+
+layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(7, 1))
+par(mai=rep(0.6, 4))
+
+temp = table(satis_vector_USA)
+Very_satisfied                     <- round(temp[1]/length(satis_vector_USA)*100,2)
+Slightly_satisfied                 <- round(temp[2]/length(satis_vector_USA)*100,2)
+Neither_satisfied_nor_dissatisfied <- round(temp[3]/length(satis_vector_USA)*100,2)
+Slightly_dissatisfied              <- round(temp[4]/length(satis_vector_USA)*100,2)
+Very_dissatisfied                  <- round(temp[5]/length(satis_vector_USA)*100,2)
+
+pie(table(satis_vector_USA), main = "Estados Unidos", labels = c(paste(Very_satisfied, "%", sep = ""), paste(Slightly_satisfied, "%", sep = ""), paste(Neither_satisfied_nor_dissatisfied, "%", sep = ""), paste(Slightly_dissatisfied, "%", sep = ""), paste(Very_dissatisfied, "%", sep = "")), col = c("blue","orange","yellow", "green", "red"))
+
+
+temp = table(satis_vector_LC)
+Very_satisfied                     <- round(temp[1]/length(satis_vector_LC)*100,2)
+Slightly_satisfied                 <- round(temp[2]/length(satis_vector_LC)*100,2)
+Neither_satisfied_nor_dissatisfied <- round(temp[3]/length(satis_vector_LC)*100,2)
+Slightly_dissatisfied              <- round(temp[4]/length(satis_vector_LC)*100,2)
+Very_dissatisfied                  <- round(temp[5]/length(satis_vector_LC)*100,2)
+
+pie(table(satis_vector_LC), main = "América Latina", labels = c(paste(Very_satisfied, "%", sep = ""), paste(Slightly_satisfied, "%", sep = ""), paste(Neither_satisfied_nor_dissatisfied, "%", sep = ""), paste(Slightly_dissatisfied, "%", sep = ""), paste(Very_dissatisfied, "%", sep = "")), col = c("blue","orange","yellow", "green", "red"))
+
+par(mai=c(0,0,0,0))
+plot.new()
+legend(x="center", ncol=2,legend=c("Muy satisfecho","Algo satisfecho","Ni satisfecho ni insatisfecho", "Algo insatisfecho", "Muy insatisfecho"),
+       fill=c("blue","orange","yellow", "green", "red"))
+```  
+En la gráfica podemos ver que América Latina tiene un nivel de satisfación mayor con su trabajo que Estado Unidos. Así mismo, en Estados Unidos el 48.18% de los encuenstados estan insatisfechos con su empleo. 
+
 
 ### Tamaño de organizacion en la que trabaja
+```{r}
+
+```
+
+
+```{r}
+
+colorLC = c("darkblue")
+colorUSA = c("skyblue")
+
+empleados_LC <- table(DF_LC$OrgSize)
+empleados_USA <- table(DF_USA$OrgSize)
+
+ggplot(DF_LC, aes(x= OrgSize)) + geom_bar(fill = colorLC) + coord_flip() + labs(title = "Cantidad de empleados - America Latina", x="Rango de empleados", y = "Frecuencia")
+ggplot(DF_USA, aes(x= OrgSize)) + geom_bar(fill = colorUSA) + coord_flip() + labs(title = "Cantidad de empleados- USA", x="Rango de empleados", y = "Frecuencia")
+
+```  
+    
+Según las gráficas de barras de Estados Unidos la mayoría de los encuestras labora en un entorno con 10000 o más empleados (frecuencia absoluta de 1915), asi mismo en América Latina la mayoría de encuestados labora en un entorno de 20 a 99 empleados.
 
 ### Horas trabajadas semanalmente
+###  
+```{r}
+horas_LC <- table(DF_LC$WorkWeekHrs)
+horas_USA <- table(DF_USA$WorkWeekHrs)
+
+
+mean(DF_LC$WorkWeekHrs, na.rm = TRUE)
+mean(DF_USA$WorkWeekHrs, na.rm = TRUE)
+
+color = c("darkblue", "skyblue")
+y_LC_median <- mean(DF_LC$WorkWeekHrs, na.rm = TRUE)
+y_USA_median <- mean(DF_USA$WorkWeekHrs, na.rm = TRUE)
+
+x_general <- c("Latino America", "Estados Unidos")
+y_general <- c(y_LC_median, y_USA_median)
+
+barplot(y_general, main ="Media de horas de trabajo por semana", ylab = "Horas", xlab = "Región", col = color)
+
+legend(x="center", ncol=2,legend=c("Latino America","Estados unidos"),
+       fill=c("darkblue","skyblue"))
+
+
+```  
+  
+
+
+Según la gráfica, la media de horas que trabajan los encuestados por semana en América Latina es de 39 horas y en Estados Unidos es de 41.60.
+
 
 ### Frecuencia de horas extra 
 
