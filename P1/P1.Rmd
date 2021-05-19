@@ -47,6 +47,10 @@ Queremos responder las siguientes preguntas:
 library(readr)
 library(dplyr)
 library(countrycode)
+
+install.packages("tidyverse")
+library(tidyverse)
+
 df <- read_csv("survey_results_public.csv")
 df <- df[!(df$Age == "1" &  !is.na(df$Age)),]
 df <- df[!(df$Age == "10" &  !is.na(df$Age)),]
@@ -94,11 +98,13 @@ DF_MIX
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
 | Which platforms have you done extensive development work in over the past year, and which do you want to work in over the next year? (If you both worked with the platform and want to continue to do so, please check both boxes in that row.)                                  | Plataformas con las que se trabajo                       | Nominal          |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-|                                                                                                                                                                                                                                                                                  |                                                          |                  |
+|                                                                                                                                                                                    how often do you work overtime or beyond the formal time expectation of your job?            |        Frecuencia de horas extra                         |     Nominal             |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-|                                                                                                                                                                                                                                                                                  |                                                          |                  |
+| Do you think your company has a good onboarding process? (By onboarding, we mean the structured 
+process of getting you settled in to your new role at a company)
+                                                                                                    |          Proceso de incorporación                        |     Nominal             |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-|                                                                                                                                                                                                                                                                                  |                                                          |                  |
+|                                                                                                                                                                                 Which of the following best describes your current job-seeking status?                           |           Situación de empleo                            |     Nominal             |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
 |                                                                                                                                                                                                                                                                                  |                                                          |                  |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
@@ -257,7 +263,159 @@ El gráfico de barras muestra que la mayoría de programadores tanto estadounide
 
 ### Horas trabajadas semanalmente
 
-### Frecuencia de horas extra en el 
+### Frecuencia de horas extra 
+
+```{r}
+
+freq_lc<- ggplot(data = DF_LC) +
+ geom_bar(
+ mapping = aes(x = NEWOvertime, y=stat(count), fill=NEWOvertime),
+ show.legend = T,
+ position="dodge",
+ width = 1
+ ) +
+ ggtitle ("Horas extra de trabajo en America Latina")+
+ theme (text = element_text(size=8),axis.text.x=element_blank())+
+  labs(y = "Cantidad de personas" , x="Frecuencia") +
+  scale_fill_discrete(labels = c("Nunca", "Rara vez: 1-2 días al año o menos", "Ocasionalmente: 1-2 días por trimestre pero menos que al mes","A veces: 1-2 días al mes pero menos de una semana","A menudo: 1-2 días por semana o más", "N.A")
+  )+
+ labs(fill='') 
+freq_lc
+```
+
+```{r}
+
+freq_lc<- ggplot(data = DF_USA) +
+ geom_bar(
+ mapping = aes(x = NEWOvertime, y=stat(count), fill=NEWOvertime),
+ show.legend = T,
+ position="dodge",
+ width = 1
+ ) +
+ ggtitle ("Horas extra de trabajo en EEUU")+
+ theme (text = element_text(size=8),axis.text.x=element_blank())+
+  labs(y = "Cantidad de personas" , x="Frecuencia") +
+  scale_fill_discrete(labels = c("Nunca", "Rara vez: 1-2 días al año o menos", "Ocasionalmente: 1-2 días por trimestre pero menos que al mes","A veces: 1-2 días al mes pero menos de una semana","A menudo: 1-2 días por semana o más", "N.A")
+  )+
+ labs(fill='') 
+freq_lc
+```
+
+Como podemos observar,al igual que America Latina, en Estados Unidos la mayoria de trabajadores hacen horas extra de 1 a mas dias a la semana.
+
+El numero de personas de America Latina que respondieron esta pregunta es 2468 de 3033. Procedemos a determinar que porcentaje del total de personas que respodieron esta pregunta.
+
+```{r}
+summary(DF_LC$NEWOvertime=="Often: 1-2 days per week or more")
+x<-643*100/2468
+round(x,2)
+```
+
+Finalmente obtenemos que en America Latina el 26.05% de empleados trabaja horas extra a menudo(de 1 a mas dias a la semana).
+
+
+```{r}
+
+dim(DF_USA)
+sum(!is.na(DF_USA$NEWOvertime))
+a2<-2468
+summary(DF_USA$NEWOvertime=="Often: 1-2 days per week or more")
+```
+
+El numero de personas de Estados Unidos que respondieron esta pregunta es 8375 de 9456. Procedemos a determinar que porcentaje del total de personas que respodieron esta pregunta
+
+```{r}
+x2<-1744*100/8375
+round(x2,2)
+```
+Finalmente obtenemos que en Estados Unidos el 20.82% de programadores trabaja horas extra a menudo(de 1 a mas dias a la semana). 
+
+La diferencia con America Latina(5.23%), a pesar de ser minima, podría indicar que programadores de Estados Unidos estan en una mejor situación laboral (aunque no por mucho) en comparación con America Latina.
+
+
+### Proceso de Incorporación
+
+```{r}
+n<-
+x_lc_s<-length(which(DF_LC$NEWOnboardGood=="Yes"))
+x_lc_n<-length(which(DF_LC$NEWOnboardGood=="No"))
+x_lc_m<-length(which(DF_LC$NEWOnboardGood=="Onboarding? What onboarding?"))
+tot_x<-(sum(!is.na(DF_LC$NEWOnboardGood)))
+x_lc_s<-round(x_lc_s*100/tot_x,2)
+x_lc_n<-round(x_lc_n*100/tot_x,2)
+x_lc_m<-round(x_lc_m*100/tot_x,2)
+porc_lc<-c(x_lc_s,x_lc_n,x_lc_m)
+x_lc_s<-length(which(DF_USA$NEWOnboardGood=="Yes"))
+x_lc_n<-length(which(DF_USA$NEWOnboardGood=="No"))
+x_lc_m<-length(which(DF_USA$NEWOnboardGood=="Onboarding? What onboarding?"))
+tot_x<-(sum(!is.na(DF_USA$NEWOnboardGood)))
+x_lc_s<-round(x_lc_s*100/tot_x,2)
+x_lc_n<-round(x_lc_n*100/tot_x,2)
+x_lc_m<-round(x_lc_m*100/tot_x,2)
+porc_usa<-c(x_lc_s,x_lc_n,x_lc_m)
+
+label<-paste(porc_lc,"%",sep=" ")
+pie(porc_lc, labels = label, clockwise=TRUE, main="America Latina",col=color)
+color<-c("yellow", "blue", "cadetblue")
+legend("bottomleft",c("Si","No","No Se"),cex=0.8, fill=color)
+
+label<-paste(porc_usa,"%",sep=" ")
+pie(porc_usa, labels = label, clockwise=TRUE, main="Estados Unidos",col=color)
+color<-c("yellow", "blue", "cadetblue")
+legend("bottomleft",c("Si","No","No Se"),cex=0.8, fill=color)
+```
+
+```{r}
+ggplot(data = DF_MIX, mapping = aes(x = NEWOnboardGood, y =Age)) +
+ geom_boxplot() 
+
+```
+
+En general, tanto en America Latina como en Estados Unidos, las empresas tienen un buen proceso de incorporación(no todas), pero es ligeramente mejor en Estados Unidos.Los programadores mas jovenes en su mayoria respondieron a estas preguntas, debido a que suelen incorporarse a esa edad a las empresas o se encargan tambien de incorporar gente nueva. 
+
+### Situación de empleo
+
+```{r}
+n<-
+x_lc_s<-length(which(DF_LC$JobSeek=="I am actively looking for a job"))
+x_lc_n<-length(which(DF_LC$JobSeek=="I’m not actively looking, but I am open to new opportunities"))
+x_lc_m<-length(which(DF_LC$JobSeek=="I am not interested in new job opportunities"))
+tot_x<-(sum(!is.na(DF_LC$JobSeek)))
+x_lc_s<-round(x_lc_s*100/tot_x,2)
+x_lc_n<-round(x_lc_n*100/tot_x,2)
+x_lc_m<-round(x_lc_m*100/tot_x,2)
+porc_lc<-c(x_lc_s,x_lc_n,x_lc_m)
+x_lc_s<-length(which(DF_USA$JobSeek=="I am actively looking for a job"))
+x_lc_n<-length(which(DF_USA$JobSeek=="I’m not actively looking, but I am open to new opportunities"))
+x_lc_m<-length(which(DF_USA$JobSeek=="I am not interested in new job opportunities"))
+tot_x<-(sum(!is.na(DF_USA$JobSeek)))
+x_lc_s<-round(x_lc_s*100/tot_x,2)
+x_lc_n<-round(x_lc_n*100/tot_x,2)
+x_lc_m<-round(x_lc_m*100/tot_x,2)
+porc_usa<-c(x_lc_s,x_lc_n,x_lc_m)
+
+label<-paste(porc_lc,"%",sep=" ")
+pie(porc_lc, labels = label, clockwise=TRUE, main="America Latina",col=color)
+color<-c("yellow", "blue", "cadetblue")
+legend("bottomleft",c("Estoy buscando activamente un trabajo","No estoy buscando activamente, pero estoy abierto a nuevas oportunidades","No estoy interesado en nuevas oportunidades de trabajo"),cex=0.4, fill=color)
+
+label<-paste(porc_usa,"%",sep=" ")
+pie(porc_usa, labels = label, clockwise=TRUE, main="Estados Unidos",col=color)
+color<-c("yellow", "blue", "cadetblue")
+legend(x="bottom",c("Estoy buscando activamente un trabajo","No estoy buscando activamente, pero estoy abierto a nuevas oportunidades","No estoy interesado en nuevas oportunidades de trabajo"),cex=0.5, fill=color)
+```
+
+```{r}
+ggplot(data = DF_MIX) +
+  geom_point(mapping = aes(x = Age, y=YearsCode, color=JobSeek), position =
+"jitter") +
+  theme (text = element_text(size=8),axis.text.y=element_blank())+
+  facet_wrap(~ Region, nrow = 2)
+
+```
+
+En base a estos graficos podemos concluir que en America Latina hay una mayor cantidad de Programadores que no estan buscando activamente, pero que estan disponibles ante alguna oportunidad. Lo mismo ocurre en Estados Unidos, pero el porcentaje es menor. Sin embargo en Estados Unidos hay gente que ya no esta interesada en nuevas oportunidades de trabajo, y se debe a que hay programadores con muchos años de experiencia y de edad, lo cual podemos comprobar gracias al segundo grafico. Esto puede significar que ya mantienen un trabajo estable o que ya estan retirados.     
+
 
 ### Lenguajes con los que trabajó
 ```{r}
