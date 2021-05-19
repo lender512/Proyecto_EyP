@@ -5,15 +5,56 @@ output:
     df_print: paged
 ---
 
-```{r}
+# Programadores profesionales
+
+## Las diferencias en el aspecto educativo y laboral entre programadores de Estados Unidos y de América Latina
+
+### Integrantes
+
+-   Luis Berrospi *(lider)*
+
+-   Bryan Castillo
+
+-   Luis Robledo
+
+-   Jorge Collazos
+
+-   Nincol Quiroz
+
+### Introducción
+
+Son muchas las personas que se dedican profesionalmente a programar en todo el mundo. Sin embargo, las características de estas y el contexto en el que viven no son iguales. Tenemos la hipótesis de que el lugar de procedencia influye bastante en la situación tanto laboral como educativa de los programadores profesionales, por lo que decidimos realizar este análisis concentrándonos en lugares bastante distintos en desarrollo respecta, Latino América y Estados Unidos. Este estudio es importante porque lograremos observar si es que realmente existen estas diferencias. Además, si las hay, podremos identificar donde es que se encuentran para poder sugerir que es lo que una región esta haciendo mejor o peor que la otra y se pueda encontrar una solución al verdadero problema.
+
+### Objetivos
+
+Queremos responder las siguientes preguntas:
+
+-   ¿Existen diferencias en el aspecto educativo y laboral entre programadores profesionales de América Latina y de Estados Unidos?
+
+-   ¿Cual es el nivel de estas diferencias?¿Cuales son las más pronunciadas?
+
+-   ¿Que variables no varían entre regiones?
+
+### Marco teórico
+
+-   Población objetivo
+
+-   Unidades muestrales
+
+-   Base de Datos
+
+```{r echo=FALSE, paged.print=FALSE, results=FALSE}
 library(readr)
 library(dplyr)
 library(countrycode)
 df <- read_csv("survey_results_public.csv")
+df <- df[!(df$Age == "1" &  !is.na(df$Age)),]
+df <- df[!(df$Age == "10" &  !is.na(df$Age)),]
+df <- df[!(df$Age == "99" &  !is.na(df$Age)),]
 
 ```
 
-```{r}
+```{r, warning=FALSE}
 DFF <- select(df, MainBranch, Country,Gender,Age, YearsCode, YearsCodePro ,EdLevel,Employment, JobSat, OrgSize, WorkWeekHrs, NEWOvertime, NEWOnboardGood, JobSeek, NEWLearn, LanguageWorkedWith,PlatformWorkedWith)
 DF_USA <- DFF[DFF$Country == "United States" & !is.na(DFF$Country) & DFF$MainBranch == "I am a developer by profession" & !is.na(DFF$MainBranch), ][3:17]
 DF_LC <- cbind(region = as.character(countrycode(sourcevar = DFF$Country,
@@ -30,7 +71,7 @@ colnames(DF_MIX)[which(names(DF_MIX) == "Country")] <- "Region"
 DF_MIX
 ```
 
-## **Tabla Descriptores**
+#### **Tabla Descriptores**
 
 +-------------------------------------------------------------------------------------------------------------------------------------------+---------------+------------------+
 | Pregunta                                                                                                                                  | Variable      | Tipo de Variable |
@@ -111,7 +152,7 @@ legend(x="center", ncol=3,legend=c("Hombre","Otros","Mujer"),
 
 ```
 
-En el gráfico podemos ver como si bien, la proporción de mujeres que se dedican en Estados Unidos es el doble que la proporción en América Latina, en ambas regiones la brecha de genero es bastante grande.
+En el gráfico podemos ver como si bien, la proporción de mujeres que se dedican en Estados Unidos es el doble que la proporción en América Latina, en ambas regiones la brecha de genero es bastante grande lo que significa que la gran mayoría de los programadores profesionales son hombres
 
 ### Edad
 
@@ -119,7 +160,7 @@ En el gráfico podemos ver como si bien, la proporción de mujeres que se dedica
 boxplot(DF_MIX$Age~DF_MIX$Region, na.rm= T, xlab = "Edad", ylab = "Region", notch=TRUE, horizontal = TRUE)
 abline(v=mean(DF_USA$Age, na.rm = TRUE), col = "red", lwd=2)
 abline(v=mean(DF_LC$Age, na.rm = TRUE), col = "blue",lwd=2)
-legend(1.2,100,legend=c("media EEUU", "Media SyC"),col=c("red", "blue"),lwd=2)
+legend(60,1.7,legend=c("media EEUU", "Media Latam"),col=c("red", "blue"),lwd=2)
 ```
 
 Podemos observar que las edades de los programadores profesionales están más concentradas en América Latina comparando los rangos intercuartílicos:
@@ -136,7 +177,7 @@ round(mean(DF_LC$Age, na.rm = TRUE), 2)
 round(mean(DF_USA$Age, na.rm = TRUE),2)
 ```
 
-Junto con las medianas y la forma de las cajas podemos concluir que en general, no hay mucha diferencia de edad entre los programadores profesionales de ambos países
+Junto con las medianas y la forma de las cajas podemos sugerir que en general, si bien, la diferencia de las medianas son estadísticamente significativas, no es mucha diferencia de edad entre los programadores profesionales de ambos países
 
 ```{r}
 round(median(DF_LC$Age, na.rm = TRUE), 2)
@@ -146,10 +187,10 @@ round(median(DF_USA$Age, na.rm = TRUE),2)
 ### Años Codeando
 
 ```{r, warning=FALSE}
-boxplot(as.numeric(DF_MIX$YearsCode)~DF_MIX$Region, na.rm= TRUE, xlab = "Region", ylab = "Años Codeando", notch = TRUE)
-abline(h=mean(as.numeric(DF_USA$YearsCode), na.rm = TRUE), col = "red")
-abline(h=mean(as.numeric(DF_LC$YearsCode), na.rm = TRUE), col = "blue")
-legend(1.1,50,legend=c("media EEUU", "Media SyC"),col=c("red", "blue"),lwd=2)
+boxplot(as.numeric(DF_MIX$YearsCode)~DF_MIX$Region, na.rm= TRUE, ylab = "Region", xlab = "Años Codeando", notch = TRUE, horizontal = TRUE)
+abline(v=mean(as.numeric(DF_USA$YearsCode), na.rm = TRUE), col = "red")
+abline(v=mean(as.numeric(DF_LC$YearsCode), na.rm = TRUE), col = "blue")
+legend(25,1.7,legend=c("media EEUU", "media Latam"),col=c("red", "blue"),lwd=2)
 ```
 
 En el diagrama de cajas y bigotes podemos ver como los programadores profesionales de Estados Unidos llevan mas años programando en total en comparación con los de América Latina. Sin embargo, esta diferencia es pequeña.
