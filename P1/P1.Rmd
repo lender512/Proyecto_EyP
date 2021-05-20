@@ -261,8 +261,6 @@ tableEmpleoUSA <- prop.table(tableEmpleoUSA)
 tableEmpleoUSA
 namesEmpleo <- c("TC", "TP", "IA", "SEBT", "SEST", "R", "E")
 
-barplot(tableEmpleoUSA, names.arg=namesEmpleo, las=2, main='Frecuencia relativa de el tipo de trabajo en Estados Unidos')
-
 barplot(tableEmpleoUSA, las=1, names.arg=namesEmpleo, main='Empleos en Estados Unidos', xlab = "Tipo de empleo",  ylab = "Frecuencia relativa", col=c("skyblue","orange","red","beige","aliceblue","black","blue"),legend.text=c("Tiempo Completo","Tiempo Parcial", "Independiente, Autónomo", "Sin Empleo, Buscando Trabajo", "Sin Empleo, Sin buscar Trabajo", "Retirado", "Estudiante"),xlim=c(0,8), ylim = c(0, 0.9))
 
 tableEmpleoLC <- table(DF_LC$Employment)
