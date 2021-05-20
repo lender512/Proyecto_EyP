@@ -277,6 +277,7 @@ También se puede observar que existe mayor frecuencia relativa de latinoamerica
 ### Satisfacción con empleo
 
 ```{r}
+variables1 <- c(" ", " ", " ", " ", " ")
 temp = DF_USA$JobSat[!is.na(DF_USA$JobSat)]
 satis_vector_USA <- vector()
 satis_vector_LC <- vector()
@@ -296,29 +297,16 @@ for (pal in temp) {
 layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(7, 1))
 par(mai=rep(0.6, 4))
 
-temp = table(satis_vector_USA)
-Very_satisfied                     <- round(temp[1]/length(satis_vector_USA)*100,2)
-Slightly_satisfied                 <- round(temp[2]/length(satis_vector_USA)*100,2)
-Neither_satisfied_nor_dissatisfied <- round(temp[3]/length(satis_vector_USA)*100,2)
-Slightly_dissatisfied              <- round(temp[4]/length(satis_vector_USA)*100,2)
-Very_dissatisfied                  <- round(temp[5]/length(satis_vector_USA)*100,2)
 
-pie(table(satis_vector_USA), main = "Estados Unidos", labels = c(paste(Very_satisfied, "%", sep = ""), paste(Slightly_satisfied, "%", sep = ""), paste(Neither_satisfied_nor_dissatisfied, "%", sep = ""), paste(Slightly_dissatisfied, "%", sep = ""), paste(Very_dissatisfied, "%", sep = "")), col = c("blue","orange","yellow", "green", "red"))
+barplot(table(satis_vector_USA), main = "Estados Unidos", names.arg = variables1, col = c("blue","orange","yellow", "green", "red"))
 
 
-temp = table(satis_vector_LC)
-Very_satisfied                     <- round(temp[1]/length(satis_vector_LC)*100,2)
-Slightly_satisfied                 <- round(temp[2]/length(satis_vector_LC)*100,2)
-Neither_satisfied_nor_dissatisfied <- round(temp[3]/length(satis_vector_LC)*100,2)
-Slightly_dissatisfied              <- round(temp[4]/length(satis_vector_LC)*100,2)
-Very_dissatisfied                  <- round(temp[5]/length(satis_vector_LC)*100,2)
 
-pie(table(satis_vector_LC), main = "América Latina", labels = c(paste(Very_satisfied, "%", sep = ""), paste(Slightly_satisfied, "%", sep = ""), paste(Neither_satisfied_nor_dissatisfied, "%", sep = ""), paste(Slightly_dissatisfied, "%", sep = ""), paste(Very_dissatisfied, "%", sep = "")), col = c("blue","orange","yellow", "green", "red"))
+barplot(table(satis_vector_LC), names.arg = variables1 , main = "América Latina", col = c("blue","orange","yellow", "green", "red"))
 
 par(mai=c(0,0,0,0))
 plot.new()
-legend(x="center", ncol=2,legend=c("Muy satisfecho","Algo satisfecho","Ni satisfecho ni insatisfecho", "Algo insatisfecho", "Muy insatisfecho"),
-       fill=c("blue","orange","yellow", "green", "red"))
+legend(x="center", ncol=2,legend=c("Muy satisfecho","Algo satisfecho","Ni satisfecho ni insatisfecho", "Algo insatisfecho", "Muy insatisfecho"), fill=c("blue","orange","yellow", "green", "red"))
 ```
 
 En la gráfica podemos ver que América Latina tiene un nivel de satisfación mayor con su trabajo que Estado Unidos. Así mismo, en Estados Unidos el 48.18% de los encuenstados estan insatisfechos con su empleo.
@@ -330,15 +318,14 @@ En la gráfica podemos ver que América Latina tiene un nivel de satisfación ma
 ```
 
 ```{r}
-
-colorLC = c("darkblue")
-colorUSA = c("skyblue")
-
 empleados_LC <- table(DF_LC$OrgSize)
 empleados_USA <- table(DF_USA$OrgSize)
+color_LC <- c("red", "yellow", "pink", "blue", "green", "orange", "black", "purple", "gray")
+variables <- c(" "," "," "," "," "," "," "," "," ")
 
-ggplot(DF_LC, aes(x= OrgSize)) + geom_bar(fill = colorLC) + coord_flip() + labs(title = "Cantidad de empleados - America Latina", x="Rango de empleados", y = "Frecuencia")
-ggplot(DF_USA, aes(x= OrgSize)) + geom_bar(fill = colorUSA) + coord_flip() + labs(title = "Cantidad de empleados- USA", x="Rango de empleados", y = "Frecuencia")
+barplot(empleados_LC, names.arg = variables, col = color_LC, ylab ="Frecuencias Relativas", , las=2, ylim=c(0,600), xlim = c(0, 15), main = "Tamaño de las organizaciones o empresas en América Latina", legend.text=c("1000 a 4999 empleados","10 a 19 eempleados", "10000 o más empleados", "100 a 499 empleados", "2 a 9 empleados", "20 a 99 empleados", "5000 a 9999 empleados", "500 a 999 empleados", "Solo yo"))
+
+barplot(empleados_USA, names.arg = variables, col = color_LC, ylab ="Frecuencias Relativas", , las=2, ylim=c(0,2000), xlim = c(0, 16), main = "Tamaño de las organizaciones o empresas en Estados Unidos", legend.text=c("1000 a 4999 empleados","10 a 19 eempleados", "10000 o más empleados", "100 a 499 empleados", "2 a 9 empleados", "20 a 99 empleados", "5000 a 9999 empleados", "500 a 999 empleados", "Solo yo"))
 
 ```
 
