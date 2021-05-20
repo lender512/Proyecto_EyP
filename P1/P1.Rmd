@@ -238,17 +238,18 @@ round(quantile(as.numeric(DF_USA$YearsCodePro), na.rm = TRUE),2)
 tableUSA <- table(DF_USA$EdLevel)
 tableUSA <- prop.table(tableUSA)
 tableUSA
-names <- c("Associate degree", "Bachelor’s degree", "I never completed any formal education", "Master’s degree", "Other doctoral degree", "Primary/elementary school", "Professional degree", "Secondary school", "Some college/university study without earning a degree")
-barplot(tableUSA, las=2, names.arg=names, main='Frecuencia relativa de grados educativos en Estados Unidos')
+names <- c("GA", "L", "NCE", "M", "OD", "EP", "TP", "ES", "EST")
+
+barplot(tableUSA, las=1, names.arg=names, main='Grados educativos en Estados Unidos', xlab = "Grados educativos",  ylab = "Frecuencia relativa", col=c("skyblue","orange","red","beige","aliceblue","black","azure", "burlywood3", "cornflowerblue"),legend.text=c("Grado Asociado","Licenciatura", "Nunca Completé ninguna Educación formal", "Maestría", "Otro Doctorado", "Escuela Primaria", "Título Profesional", "Escuela Secundaria", "Estudios Superiores sin obtener un Título"),xlim=c(0,16), ylim = c(0, 0.85))
 
 tableLC <- table(DF_LC$EdLevel)
 tableLC <- prop.table(tableLC)
 tableLC
-barplot(tableLC, las=2, names.arg=names, main='Frecuencia relativa de grados educativos en América Latina')
+barplot(tableLC, las=1, names.arg=names, main='Grados educativos en América Latina', xlab = "Grados educativos",  ylab = "Frecuencia relativa", col=c("skyblue","orange","red","beige","aliceblue","black","azure", "burlywood3", "cornflowerblue"),legend.text=c("Grado Asociado","Licenciatura", "Nunca Completé ninguna Educación formal", "Maestría", "Otro Doctorado", "Escuela Primaria", "Título Profesional", "Escuela Secundaria", "Estudios Superiores sin obtener un Título"),xlim=c(0,16), ylim = c(0, 0.85))
 
 ```
 
-Los gráficos de barras muestran que la mayoría de programadores tanto estadounidenses como latinoamericanos tienen licenciatura (Bachelor's degree), si se compara, existe una mayor frecuencia relativa de programadores con licenciatura en Estados Unidos que en América Latina.
+Los gráficos de barras muestran que la mayoría de programadores tanto estadounidenses como latinoamericanos tienen licenciatura, si se compara, existe una mayor frecuencia relativa de programadores con licenciatura en Estados Unidos que en América Latina.
 
 Por otro lado, en América Latina existe una mayor frecuencia relativa de programadores que no terminaron sus estudios universitarios en comparación con Estados Unidos.
 
@@ -258,12 +259,17 @@ Por otro lado, en América Latina existe una mayor frecuencia relativa de progra
 tableEmpleoUSA <- table(DF_USA$Employment)
 tableEmpleoUSA <- prop.table(tableEmpleoUSA)
 tableEmpleoUSA
-barplot(tableEmpleoUSA, las=2, main='Frecuencia relativa de el tipo de trabajo en Estados Unidos')
+namesEmpleo <- c("TC", "TP", "IA", "SEBT", "SEST", "R", "E")
+
+barplot(tableEmpleoUSA, names.arg=namesEmpleo, las=2, main='Frecuencia relativa de el tipo de trabajo en Estados Unidos')
+
+barplot(tableEmpleoUSA, las=1, names.arg=namesEmpleo, main='Empleos en Estados Unidos', xlab = "Tipo de empleo",  ylab = "Frecuencia relativa", col=c("skyblue","orange","red","beige","aliceblue","black","blue"),legend.text=c("Tiempo Completo","Tiempo Parcial", "Independiente, Autónomo", "Sin Empleo, Buscando Trabajo", "Sin Empleo, Sin buscar Trabajo", "Retirado", "Estudiante"),xlim=c(0,8), ylim = c(0, 0.9))
 
 tableEmpleoLC <- table(DF_LC$Employment)
 tableEmpleoLC <- prop.table(tableEmpleoLC)
 tableEmpleoLC
-barplot(tableEmpleoLC, las=2, main='Frecuencia relativa de el tipo de trabajo en América Latina')
+barplot(tableEmpleoLC, las=1, names.arg=namesEmpleo, main='Empleos en América Latina', xlab = "Tipo de empleo",  ylab = "Frecuencia relativa", col=c("skyblue","orange","red","beige","aliceblue","black","blue"),legend.text=c("Tiempo Completo","Tiempo Parcial", "Independiente, Autónomo", "Sin Empleo, Buscando Trabajo", "Sin Empleo, Sin buscar Trabajo", "Retirado", "Estudiante"),xlim=c(0,8), ylim = c(0, 0.9))
+
 ```
 
 Los gráficos de barras muestran que la mayoría de programadores tanto estadounidenses como latinoamericanos trabajan a tiempo completo, existe una mayor frecuencia relativa de programadores trabajando a tiempo completo en Estados Unidos que en América Latina..
