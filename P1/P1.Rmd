@@ -298,11 +298,11 @@ layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(7, 1))
 par(mai=rep(0.6, 4))
 
 
-barplot(table(satis_vector_USA), main = "Estados Unidos", names.arg = variables1, col = c("blue","orange","yellow", "green", "red"))
+barplot(table(satis_vector_USA), main = "Estados Unidos", names.arg = variables1, col = c("blue","orange","yellow", "green", "red"), ylab ="Frecuencias Relativas")
 
 
 
-barplot(table(satis_vector_LC), names.arg = variables1 , main = "América Latina", col = c("blue","orange","yellow", "green", "red"))
+barplot(table(satis_vector_LC), names.arg = variables1 , main = "América Latina", col = c("blue","orange","yellow", "green", "red"), ylab ="Frecuencias Relativas")
 
 par(mai=c(0,0,0,0))
 plot.new()
