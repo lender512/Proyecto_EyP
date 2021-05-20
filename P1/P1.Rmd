@@ -369,79 +369,49 @@ legend(x="center", ncol=2,legend=c("Latino America","Estados unidos"),
 
 Según la gráfica, la media de horas que trabajan los encuestados por semana en América Latina es de 39 horas y en Estados Unidos es de 41.60.
 
-### Frecuencia de horas extra
+### Frecuencia de horas extra en el trabajo
+
+
+
+
+
+
+
+
+
+
+
 
 ```{r}
 
-freq_lc<- ggplot(data = DF_LC) +
- geom_bar(
- mapping = aes(x = NEWOvertime, y=stat(count), fill=NEWOvertime),
- show.legend = T,
- position="dodge",
- width = 1
- ) +
- ggtitle ("Horas extra de trabajo en America Latina")+
- theme (text = element_text(size=8),axis.text.x=element_blank())+
-  labs(y = "Cantidad de personas" , x="Frecuencia") +
-  scale_fill_discrete(labels = c("Nunca", "Rara vez: 1-2 días al año o menos", "Ocasionalmente: 1-2 días por trimestre pero menos que al mes","A veces: 1-2 días al mes pero menos de una semana","A menudo: 1-2 días por semana o más", "N.A")
-  )+
- labs(fill='') 
-freq_lc
+layout(matrix(c(1,2,3,3), nrow=2,byrow=TRUE), heights=c(3, 1))
+m<-prop.table(table(DF_LC$NEWOvertime[!is.na(DF_LC$NEWOvertime)]))*100
+colors<-c('blue','yellow','green','orange','brown')
+b1<-barplot(m, xlab='Frecuencia',ylab = "Porcentaje(%)", main='Frecuencia de horas extra\nLatinoamérica', width = 5, col.lab="darkgreen",names.arg=c("Nunca","Ocasionalmente","A menudo","Rara vez","A veces"),beside=TRUE,
+col=colors,cex.names=0.8)
+text(b1, m-1, labels = round(m,2))
+
+
+
+n<-prop.table(table(DF_USA$NEWOvertime[!is.na(DF_USA$NEWOvertime)]))*100
+b2<-barplot(n, xlab='Frecuencia',ylab = "Porcentaje(%)", main='Frecuencia de horas extra\nEstados Unidos', width = 5, col.lab="darkgreen",names.arg=c("Nunca","Ocasionalmente","A menudo","Rara vez","A veces"),
+col=colors,cex.names=0.8)
+text(b2, n-1, labels = round(n,2))
+ 
+par(mai=c(0,0,0,0))
+plot.new()
+legend(x="center", legend = c("Nunca", "Ocasionalmente: 1-2 días por trimestre pero menos que al mes", "A menudo: 1-2 días por semana o más", "Rara vez: 1-2 días al año o menos", "A veces: 1-2 días al mes pero menos de una semana"), fill=colors,ncol=1)
 ```
 
-```{r}
+Gracias a estos graficos sabemos que en America Latina el 26.05% de empleados trabaja horas extra a menudo(de 1 a mas dias a la semana) y el 27.71% a veces(1 o 2 dos días al mes).
+En Estados Unidos, las 2 respuestas mas votadas son "A veces" y "Ocasionalmente(1o 2 dias por trimestre)", con 26.35% y 25.71% cada una. También podemos observar que la variable 
+"Nunca" tiene mayor porcentaje en Estados Unidos. Todo esto nos dice claramente que en America Latina los desarrolladores trabajan mas horas extra a comparación de Estados Unidos, y esto podría deberse a un mejor entorno laboral.
 
-freq_lc<- ggplot(data = DF_USA) +
- geom_bar(
- mapping = aes(x = NEWOvertime, y=stat(count), fill=NEWOvertime),
- show.legend = T,
- position="dodge",
- width = 1
- ) +
- ggtitle ("Horas extra de trabajo en EEUU")+
- theme (text = element_text(size=8),axis.text.x=element_blank())+
-  labs(y = "Cantidad de personas" , x="Frecuencia") +
-  scale_fill_discrete(labels = c("Nunca", "Rara vez: 1-2 días al año o menos", "Ocasionalmente: 1-2 días por trimestre pero menos que al mes","A veces: 1-2 días al mes pero menos de una semana","A menudo: 1-2 días por semana o más", "N.A")
-  )+
- labs(fill='') 
-freq_lc
-```
 
-Como podemos observar,al igual que America Latina, en Estados Unidos la mayoria de trabajadores hacen horas extra de 1 a mas dias a la semana.
-
-El numero de personas de America Latina que respondieron esta pregunta es 2468 de 3033. Procedemos a determinar que porcentaje del total de personas que respodieron esta pregunta.
+##proceso de incorporacion
 
 ```{r}
-summary(DF_LC$NEWOvertime=="Often: 1-2 days per week or more")
-x<-643*100/2468
-round(x,2)
-```
-
-Finalmente obtenemos que en America Latina el 26.05% de empleados trabaja horas extra a menudo(de 1 a mas dias a la semana).
-
-```{r}
-
-dim(DF_USA)
-sum(!is.na(DF_USA$NEWOvertime))
-a2<-2468
-summary(DF_USA$NEWOvertime=="Often: 1-2 days per week or more")
-```
-
-El numero de personas de Estados Unidos que respondieron esta pregunta es 8375 de 9456. Procedemos a determinar que porcentaje del total de personas que respodieron esta pregunta
-
-```{r}
-x2<-1744*100/8375
-round(x2,2)
-```
-
-Finalmente obtenemos que en Estados Unidos el 20.82% de programadores trabaja horas extra a menudo(de 1 a mas dias a la semana).
-
-La diferencia con America Latina(5.23%), a pesar de ser minima, podría indicar que programadores de Estados Unidos estan en una mejor situación laboral (aunque no por mucho) en comparación con America Latina.
-
-### Proceso de Incorporación
-
-```{r}
-n<-
+layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(6, 1))
 x_lc_s<-length(which(DF_LC$NEWOnboardGood=="Yes"))
 x_lc_n<-length(which(DF_LC$NEWOnboardGood=="No"))
 x_lc_m<-length(which(DF_LC$NEWOnboardGood=="Onboarding? What onboarding?"))
@@ -458,25 +428,21 @@ x_lc_s<-round(x_lc_s*100/tot_x,2)
 x_lc_n<-round(x_lc_n*100/tot_x,2)
 x_lc_m<-round(x_lc_m*100/tot_x,2)
 porc_usa<-c(x_lc_s,x_lc_n,x_lc_m)
-
 label<-paste(porc_lc,"%",sep=" ")
+
 pie(porc_lc, labels = label, clockwise=TRUE, main="America Latina",col=color)
 color<-c("yellow", "blue", "cadetblue")
-legend("bottomleft",c("Si","No","No Se"),cex=0.8, fill=color)
-
 label<-paste(porc_usa,"%",sep=" ")
 pie(porc_usa, labels = label, clockwise=TRUE, main="Estados Unidos",col=color)
 color<-c("yellow", "blue", "cadetblue")
-legend("bottomleft",c("Si","No","No Se"),cex=0.8, fill=color)
-```
-
-```{r}
-ggplot(data = DF_MIX, mapping = aes(x = NEWOnboardGood, y =Age)) +
- geom_boxplot() 
+par(mai=c(0,0,0,0))
+plot.new()
+legend(x="center",c("Si","No","No Se"), fill=color,ncol=3)
 
 ```
 
-En general, tanto en America Latina como en Estados Unidos, las empresas tienen un buen proceso de incorporación(no todas), pero es ligeramente mejor en Estados Unidos.Los programadores mas jovenes en su mayoria respondieron a estas preguntas, debido a que suelen incorporarse a esa edad a las empresas o se encargan tambien de incorporar gente nueva.
+En general, tanto en America Latina como en Estados Unidos, las empresas tienen un buen proceso de incorporación(no todas), pero es ligeramente mejor en Estados Unidos, lo que implica que en America Latina existen mas empresas con un mal proceso de incorporación. Los programadores mas jovenes en su mayoria respondieron a estas preguntas, debido a que suelen incorporarse a esa edad a las empresas o se encargan tambien de incorporar gente nueva. 
+
 
 ### Situación de empleo
 
