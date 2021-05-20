@@ -112,9 +112,9 @@ DF_MIX
 
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+---- -------------+
 
-## Análisis de variables
+### Análisis de variables
 
-### Genero
+#### Genero
 
 ```{r}
 
@@ -157,7 +157,7 @@ legend(x="center", ncol=3,legend=c("Hombre","Otros","Mujer"),
 
 En el gráfico podemos ver como si bien, la proporción de mujeres que se dedican en Estados Unidos es el doble que la proporción en América Latina, en ambas regiones la brecha de genero es bastante grande lo que significa que la gran mayoría de los programadores profesionales son hombres
 
-### Edad
+#### Edad
 
 ```{r, warning=FALSE}
 boxplot(DF_MIX$Age~DF_MIX$Region, na.rm= T, xlab = "Edad", ylab = "Region", notch=TRUE, horizontal = TRUE)
@@ -187,7 +187,7 @@ round(median(DF_LC$Age, na.rm = TRUE), 2)
 round(median(DF_USA$Age, na.rm = TRUE),2)
 ```
 
-### Años Codeando
+#### Años Codeando
 
 ```{r, warning=FALSE}
 boxplot(as.numeric(DF_MIX$YearsCode)~DF_MIX$Region, na.rm= TRUE, ylab = "Region", xlab = "Años Codeando", notch = TRUE, horizontal = TRUE)
@@ -198,14 +198,14 @@ legend(25,1.7,legend=c("media EEUU", "media Latam"),col=c("red", "blue"),lwd=2)
 
 En el diagrama de cajas y bigotes podemos ver como los programadores profesionales de Estados Unidos llevan mas años programando en total en comparación con los de América Latina. Sin embargo, esta diferencia es pequeña.
 
-También, es importante destacar la gran diferencia de 6 años que existe entre el 3er cuartíl de ambas regiones. Esto implica que el 75% de los programadores profesionales de Estados Unidos cuentan a lo mucho con 22 años programando mientras que en América latina solo 16.
+También, es importante destacar la gran diferencia de 6 años que existe entre el tercer cuartíl de ambas regiones. Esto implica que el 75% de los programadores profesionales de Estados Unidos cuentan a lo mucho con 22 años programando mientras que en América latina solo 16.
 
 ```{r, warning=FALSE}
 round(quantile(as.numeric(DF_LC$YearsCode), na.rm = TRUE), 2)
 round(quantile(as.numeric(DF_USA$YearsCode), na.rm = TRUE),2)
 ```
 
-### Años codeado profesionalmente
+#### Años codeado profesionalmente
 
 ```{r, warning=FALSE}
 boxplot(as.numeric(DF_MIX$YearsCodePro)~DF_MIX$Region, na.rm= TRUE, ylab = "Region", xlab = "Años Codeando Profesionalmente", notch = TRUE, horizontal = TRUE)
@@ -216,9 +216,7 @@ legend(25,1.7,legend=c("media EEUU", "media Latam"),col=c("red", "blue"),lwd=2)
 
 En este diagrama de cajas y bigotes se observa que los programadores de Estados Unidos tienen más años programando profesionalmente en total en comparación con los programadores de América Latina.
 
-Existe una diferencia de 4 años en el 3er cuartil de ambas regiones; es decir, el 75% de los programadores estadounidenses cuentan a los mucho con 15 años programando profesionalmente y los latinoamericanos con 11 años.
-
-También existe una diferencia de 1 año el 4to cuartil. Esto implica que del 100% de programadores latinoamericanos al menos uno tiene un año más programando profesionalmente que el 100% de programadores estadounidenses.
+Existe una diferencia de 4 años en el tercer cuartíl de ambas regiones; es decir, el 75% de los programadores estadounidenses cuentan a los mucho con 15 años programando profesionalmente y los latinoamericanos con 11 años.
 
 #### Programadores latinoamericanos
 
@@ -238,14 +236,26 @@ round(quantile(as.numeric(DF_USA$YearsCodePro), na.rm = TRUE),2)
 tableUSA <- table(DF_USA$EdLevel)
 tableUSA <- prop.table(tableUSA)
 tableUSA
-names <- c("GA", "L", "NCE", "M", "OD", "EP", "TP", "ES", "EST")
-
-barplot(tableUSA, las=1, names.arg=names, main='Grados educativos en Estados Unidos', xlab = "Grados educativos",  ylab = "Frecuencia relativa", col=c("skyblue","orange","red","beige","aliceblue","black","azure", "burlywood3", "cornflowerblue"),legend.text=c("Grado Asociado","Licenciatura", "Nunca Completé ninguna Educación formal", "Maestría", "Otro Doctorado", "Escuela Primaria", "Título Profesional", "Escuela Secundaria", "Estudios Superiores sin obtener un Título"),xlim=c(0,16), ylim = c(0, 0.85))
+names <- c("GA", "L", "NCE", "M", "OD", "EP", "TP", "ES", "ST")
 
 tableLC <- table(DF_LC$EdLevel)
 tableLC <- prop.table(tableLC)
 tableLC
-barplot(tableLC, las=1, names.arg=names, main='Grados educativos en América Latina', xlab = "Grados educativos",  ylab = "Frecuencia relativa", col=c("skyblue","orange","red","beige","aliceblue","black","azure", "burlywood3", "cornflowerblue"),legend.text=c("Grado Asociado","Licenciatura", "Nunca Completé ninguna Educación formal", "Maestría", "Otro Doctorado", "Escuela Primaria", "Título Profesional", "Escuela Secundaria", "Estudios Superiores sin obtener un Título"),xlim=c(0,16), ylim = c(0, 0.85))
+
+layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(6, 1))
+par(mai=rep(0.5, 4))
+
+barplot(tableUSA, las=1, names.arg=names, main='Grados educativos en Estados Unidos', xlab = "Grados educativos",  ylab = "Frecuencia relativa", col=c("skyblue","orange","red","beige","aliceblue","black","azure", "burlywood3", "cornflowerblue"),xlim=c(0,16), ylim = c(0, 0.85))
+
+
+barplot(tableLC, las=1, names.arg=names, main='Grados educativos en América Latina', xlab = "Grados educativos",  ylab = "Frecuencia relativa", col=c("skyblue","orange","red","beige","aliceblue","black","azure", "burlywood3", "cornflowerblue"),xlim=c(0,16), ylim = c(0, 0.85))
+
+#legend.text=c("Grado Asociado","Licenciatura", "Nunca Completé ninguna Educación formal", "Maestría", "Otro Doctorado", "Escuela Primaria", "Título Profesional", "Escuela Secundaria", "Estudios Superiores sin obtener un Título")
+
+par(mai=c(0,0,0,0))
+plot.new()
+#legend(x="center", ncol=3,legend=c("Hombre","Otros","Mujer"),fill=c("skyblue","orange","red"))
+legend(x="center", ncol=3, legend = c("Grado Asociado","Licenciatura", "Nunca Completé ninguna Educación formal", "Maestría", "Otro Doctorado", "Escuela Primaria", "Título Profesional", "Escuela Secundaria", "Estudios Superiores sin obtener un Título"), fill=c("skyblue","orange","red","beige","aliceblue","black","azure", "burlywood3", "cornflowerblue"))
 
 ```
 
@@ -261,12 +271,24 @@ tableEmpleoUSA <- prop.table(tableEmpleoUSA)
 tableEmpleoUSA
 namesEmpleo <- c("TC", "TP", "IA", "SEBT", "SEST", "R", "E")
 
-barplot(tableEmpleoUSA, las=1, names.arg=namesEmpleo, main='Empleos en Estados Unidos', xlab = "Tipo de empleo",  ylab = "Frecuencia relativa", col=c("skyblue","orange","red","beige","aliceblue","black","blue"),legend.text=c("Tiempo Completo","Tiempo Parcial", "Independiente, Autónomo", "Sin Empleo, Buscando Trabajo", "Sin Empleo, Sin buscar Trabajo", "Retirado", "Estudiante"),xlim=c(0,8), ylim = c(0, 0.9))
+
 
 tableEmpleoLC <- table(DF_LC$Employment)
 tableEmpleoLC <- prop.table(tableEmpleoLC)
 tableEmpleoLC
-barplot(tableEmpleoLC, las=1, names.arg=namesEmpleo, main='Empleos en América Latina', xlab = "Tipo de empleo",  ylab = "Frecuencia relativa", col=c("skyblue","orange","red","beige","aliceblue","black","blue"),legend.text=c("Tiempo Completo","Tiempo Parcial", "Independiente, Autónomo", "Sin Empleo, Buscando Trabajo", "Sin Empleo, Sin buscar Trabajo", "Retirado", "Estudiante"),xlim=c(0,8), ylim = c(0, 0.9))
+
+layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(6, 1))
+par(mai=rep(0.5, 4))
+
+barplot(tableEmpleoUSA, las=1, names.arg=namesEmpleo, main='Empleos en Estados Unidos', xlab = "Tipo de empleo",  ylab = "Frecuencia relativa", col=c("skyblue","orange","red","beige","aliceblue","black","blue"),xlim=c(0,8), ylim = c(0, 0.9))
+
+barplot(tableEmpleoLC, las=1, names.arg=namesEmpleo, main='Empleos en América Latina', xlab = "Tipo de empleo",  ylab = "Frecuencia relativa", col=c("skyblue","orange","red","beige","aliceblue","black","blue"),xlim=c(0,8), ylim = c(0, 0.9))
+
+par(mai=c(0,0,0,0))
+plot.new()
+#legend(x="center", ncol=3,legend=c("Hombre","Otros","Mujer"),fill=c("skyblue","orange","red"))
+legend(x="center", ncol=3, legend = c("Tiempo Completo","Tiempo Parcial", "Independiente, Autónomo", "Sin Empleo, Buscando Trabajo", "Sin Empleo, Sin buscar Trabajo", "Retirado", "Estudiante"), fill=c("skyblue","orange","red","beige","aliceblue","black","blue"))
+
 
 ```
 
@@ -337,7 +359,7 @@ colorUSA = c("skyblue")
 empleados_LC <- table(DF_LC$OrgSize)
 empleados_USA <- table(DF_USA$OrgSize)
 
-ggplot(DF_LC, aes(x= OrgSize)) + geom_bar(fill = colorLC) + coord_flip() + labs(title = "Cantidad de empleados - America Latina", x="Rango de empleados", y = "Frecuencia")
+ggplot(DF_LC, aes(x= OrgSize)) + geom_bar(fill = colorLC) + coord_flip() + labs(title = "Cantidad de empleados - América Latina", x="Rango de empleados", y = "Frecuencia")
 ggplot(DF_USA, aes(x= OrgSize)) + geom_bar(fill = colorUSA) + coord_flip() + labs(title = "Cantidad de empleados- USA", x="Rango de empleados", y = "Frecuencia")
 
 ```
@@ -360,12 +382,12 @@ color = c("darkblue", "skyblue")
 y_LC_median <- mean(DF_LC$WorkWeekHrs, na.rm = TRUE)
 y_USA_median <- mean(DF_USA$WorkWeekHrs, na.rm = TRUE)
 
-x_general <- c("Latino America", "Estados Unidos")
+x_general <- c("Latino América", "Estados Unidos")
 y_general <- c(y_LC_median, y_USA_median)
 
 barplot(y_general, main ="Media de horas de trabajo por semana", ylab = "Horas", xlab = "Región", col = color)
 
-legend(x="center", ncol=2,legend=c("Latino America","Estados unidos"),
+legend(x="center", ncol=2,legend=c("Latino América","Estados unidos"),
        fill=c("darkblue","skyblue"))
 
 
@@ -396,12 +418,9 @@ plot.new()
 legend(x="center", legend = c("Nunca", "Ocasionalmente: 1-2 días por trimestre pero menos que al mes", "A menudo: 1-2 días por semana o más", "Rara vez: 1-2 días al año o menos", "A veces: 1-2 días al mes pero menos de una semana"), fill=colors,ncol=1)
 ```
 
-Gracias a estos graficos sabemos que en America Latina el 26.05% de empleados trabaja horas extra a menudo(de 1 a mas dias a la semana) y el 27.71% a veces(1 o 2 dos días al mes).
-En Estados Unidos, las 2 respuestas mas votadas son "A veces" y "Ocasionalmente(1o 2 dias por trimestre)", con 26.35% y 25.71% cada una. También podemos observar que la variable 
-"Nunca" tiene mayor porcentaje en Estados Unidos. Todo esto nos dice claramente que en America Latina los desarrolladores trabajan mas horas extra a comparación de Estados Unidos, y esto podría deberse a un mejor entorno laboral.
+Gracias a estos gráficos sabemos que en América Latina el 26.05% de empleados trabaja horas extra a menudo(de 1 a mas días a la semana) y el 27.71% a veces(1 o 2 dos días al mes). En Estados Unidos, las 2 respuestas mas votadas son "A veces" y "Ocasionalmente(1o 2 días por trimestre)", con 26.35% y 25.71% cada una. También podemos observar que la variable "Nunca" tiene mayor porcentaje en Estados Unidos. Todo esto nos dice claramente que en América Latina los desarrolladores trabajan mas horas extra a comparación de Estados Unidos, y esto podría deberse a un mejor entorno laboral.
 
-
-##proceso de incorporacion
+#### \#\#proceso de incorporacion
 
 ```{r}
 layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(6, 1))
@@ -434,11 +453,9 @@ legend(x="center",c("Si","No","No Se"), fill=color,ncol=3)
 
 ```
 
-En general, tanto en America Latina como en Estados Unidos, las empresas tienen un buen proceso de incorporación(no todas), pero es ligeramente mejor en Estados Unidos, lo que implica que en America Latina existen mas empresas con un mal proceso de incorporación. Los programadores mas jovenes en su mayoria respondieron a estas preguntas, debido a que suelen incorporarse a esa edad a las empresas o se encargan tambien de incorporar gente nueva. 
-
+En general, tanto en America Latina como en Estados Unidos, las empresas tienen un buen proceso de incorporación(no todas), pero es ligeramente mejor en Estados Unidos, lo que implica que en America Latina existen mas empresas con un mal proceso de incorporación. Los programadores mas jovenes en su mayoria respondieron a estas preguntas, debido a que suelen incorporarse a esa edad a las empresas o se encargan tambien de incorporar gente nueva.
 
 ### Situación de empleo
-
 
 ```{r}
 
@@ -466,15 +483,12 @@ legend(x="center", legend = et, fill=colors,ncol=1)
 
 ```
 
-
-
 ```{r, warning=FALSE}
 layout(matrix(c(1,2,3,3), nrow=2,byrow=TRUE), heights=c(9, 1))
 boxplot(as.numeric(DF_LC$Age)~DF_LC$JobSeek, na.rm= TRUE, xlab = "Situación Laboral", ylab = "Años", cex.names=0.2, main="Situacion de empleo por edad\nAmerica Latina", names=c("busco","no busco", "no busco/\ndisponible"))
 
 boxplot(as.numeric(DF_USA$Age)~DF_USA$JobSeek, na.rm= TRUE, xlab = "Situación Laboral", ylab = "Años", cex.names=0.2, main="Situacion de empleo por edad\nEstados Unidos", names=c("busco","no busco", "no busco/\ndisponible"))
 ```
-
 
 En base a estos graficos podemos ver que la cantidad de programadores que buscan empleo es mayor en america latina, y la cantidad de programadores que no buscan empleo es mucho mayor en Estados Unidos. Esto puede deberese a que hay mayor disponibilidad de trabajos en Estados Unidos que en America Latina y tambien que los desarroladores en Estados Unidos ya tienen estabilidad laboral.
 
