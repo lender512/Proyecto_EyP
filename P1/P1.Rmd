@@ -375,17 +375,6 @@ Según la gráfica, la media de horas que trabajan los encuestados por semana en
 
 ### Frecuencia de horas extra en el trabajo
 
-
-
-
-
-
-
-
-
-
-
-
 ```{r}
 
 layout(matrix(c(1,2,3,3), nrow=2,byrow=TRUE), heights=c(3, 1))
@@ -450,46 +439,46 @@ En general, tanto en America Latina como en Estados Unidos, las empresas tienen 
 
 ### Situación de empleo
 
-```{r}
-n<-
-x_lc_s<-length(which(DF_LC$JobSeek=="I am actively looking for a job"))
-x_lc_n<-length(which(DF_LC$JobSeek=="I’m not actively looking, but I am open to new opportunities"))
-x_lc_m<-length(which(DF_LC$JobSeek=="I am not interested in new job opportunities"))
-tot_x<-(sum(!is.na(DF_LC$JobSeek)))
-x_lc_s<-round(x_lc_s*100/tot_x,2)
-x_lc_n<-round(x_lc_n*100/tot_x,2)
-x_lc_m<-round(x_lc_m*100/tot_x,2)
-porc_lc<-c(x_lc_s,x_lc_n,x_lc_m)
-x_lc_s<-length(which(DF_USA$JobSeek=="I am actively looking for a job"))
-x_lc_n<-length(which(DF_USA$JobSeek=="I’m not actively looking, but I am open to new opportunities"))
-x_lc_m<-length(which(DF_USA$JobSeek=="I am not interested in new job opportunities"))
-tot_x<-(sum(!is.na(DF_USA$JobSeek)))
-x_lc_s<-round(x_lc_s*100/tot_x,2)
-x_lc_n<-round(x_lc_n*100/tot_x,2)
-x_lc_m<-round(x_lc_m*100/tot_x,2)
-porc_usa<-c(x_lc_s,x_lc_n,x_lc_m)
-
-label<-paste(porc_lc,"%",sep=" ")
-pie(porc_lc, labels = label, clockwise=TRUE, main="America Latina",col=color)
-color<-c("yellow", "blue", "cadetblue")
-legend("bottomleft",c("Estoy buscando activamente un trabajo","No estoy buscando activamente, pero estoy abierto a nuevas oportunidades","No estoy interesado en nuevas oportunidades de trabajo"),cex=0.4, fill=color)
-
-label<-paste(porc_usa,"%",sep=" ")
-pie(porc_usa, labels = label, clockwise=TRUE, main="Estados Unidos",col=color)
-color<-c("yellow", "blue", "cadetblue")
-legend(x="bottom",c("Estoy buscando activamente un trabajo","No estoy buscando activamente, pero estoy abierto a nuevas oportunidades","No estoy interesado en nuevas oportunidades de trabajo"),cex=0.5, fill=color)
-```
 
 ```{r}
-ggplot(data = DF_MIX) +
-  geom_point(mapping = aes(x = Age, y=YearsCode, color=JobSeek), position =
-"jitter") +
-  theme (text = element_text(size=8),axis.text.y=element_blank())
-  facet_wrap(~ Region, nrow = 2)
+
+layout(matrix(c(1,2,3,3), nrow=2,byrow=TRUE), heights=c(3, 1))
+m<-prop.table(table(DF_LC$JobSeek[!is.na(DF_LC$JobSeek)]))*100
+n<-prop.table(table(DF_USA$JobSeek[!is.na(DF_USA$JobSeek)]))*100
+et<-c("Estoy buscando activamente un trabajo","No estoy interesado en nuevas oportunidades de trabajo", "No estoy buscando activamente, pero estoy abierto a nuevas oportunidades" )
+ar<-c("busco","no busco", "no busco/\ndisponible")
+colors<-c('blue','yellow','green')
+c1<-barplot(m,xlab='Frecuencia', ylab = "Porcentaje(%)", main='Situacion de Empleo\nAmerica Latina', width = 5, col.lab="darkgreen",names.arg=ar,
+col=colors,cex.names=0.8)
+text(c1, m-2, labels = round(m,2))
+
+
+
+
+c2<-barplot(n, xlab='Frecuencia',ylab = "Porcentaje(%)", main='Situacion de Empleo\nEstados Unidos', width = 5, col.lab="darkgreen",
+col=colors,cex.names=0.8,names.arg=ar)
+text(c2, n-2, labels = round(n,2))
+ 
+par(mai=c(0,0,0,0))
+plot.new()
+legend(x="center", legend = et, fill=colors,ncol=1)
+
 
 ```
 
-En base a estos graficos podemos concluir que en America Latina hay una mayor cantidad de Programadores que no estan buscando activamente, pero que estan disponibles ante alguna oportunidad. Lo mismo ocurre en Estados Unidos, pero el porcentaje es menor. Sin embargo en Estados Unidos hay gente que ya no esta interesada en nuevas oportunidades de trabajo, y se debe a que hay programadores con muchos años de experiencia y de edad, lo cual podemos comprobar gracias al segundo grafico. Esto puede significar que ya mantienen un trabajo estable o que ya estan retirados.
+
+
+```{r, warning=FALSE}
+layout(matrix(c(1,2,3,3), nrow=2,byrow=TRUE), heights=c(9, 1))
+boxplot(as.numeric(DF_LC$Age)~DF_LC$JobSeek, na.rm= TRUE, xlab = "Situación Laboral", ylab = "Años", cex.names=0.2, main="Situacion de empleo por edad\nAmerica Latina", names=c("busco","no busco", "no busco/\ndisponible"))
+
+boxplot(as.numeric(DF_USA$Age)~DF_USA$JobSeek, na.rm= TRUE, xlab = "Situación Laboral", ylab = "Años", cex.names=0.2, main="Situacion de empleo por edad\nEstados Unidos", names=c("busco","no busco", "no busco/\ndisponible"))
+```
+
+
+En base a estos graficos podemos ver que la cantidad de programadores que buscan empleo es mayor en america latina, y la cantidad de programadores que no buscan empleo es mucho mayor en Estados Unidos. Esto puede deberese a que hay mayor disponibilidad de trabajos en Estados Unidos que en America Latina y tambien que los desarroladores en Estados Unidos ya tienen estabilidad laboral.
+
+Ademas, podemos observar que en America Latina los desarrolladores buscan empleo desde aproximadamente la misa edad que en Estados Unidos, sin embargo en latinoamerica la edad de las personas que buscan suele ser menor a Estados Unidos.
 
 ### Lenguajes con los que trabajó
 
