@@ -66,6 +66,8 @@ En este estudio tenemos los siguientes objetivos:
 
 -   **Muestra:** Programadores profesionales que usan constantemente el foro "Stack Overflow"
 
+-   **Muestreo:** Por conveniencia, pues se seleccionaron a las personas que usan Stack Overflow
+
 -   **Base de Datos:** La base de datos es el resultado de la Stack Overflow Developer Survey 2020, esta encuesta busca saber cómo es que aprenden, que herramientas usan y que y como se relacionan con el foro cualquier persona que sabe programar. La base de datos cuenta con cerca de 65000 observaciones totales y 61 variables, pero para este trabajo, delimitamos las observaciones según lo realmente necesitábamos.
 
 
@@ -84,12 +86,12 @@ df <- read_csv("survey_results_public.csv")
 df <- df[!(df$Age == "1" &  !is.na(df$Age)),]
 df <- df[!(df$Age == "10" &  !is.na(df$Age)),]
 df <- df[!(df$Age == "99" &  !is.na(df$Age)),]
-df <- df[!(df$WorkWeekHrs > 100 & !is.na(df$WorkWeekHrs)),]
-df <- df[!(df$WorkWeekHrs < 1 & !is.na(df$WorkWeekHrs)),]
+df <- df[!(df$WorkWeekHrs > 120 & !is.na(df$WorkWeekHrs)),]
 
 ```
 
-Cargamos la base de datos original y limpiamos algunos datos que tenían datos atípicos en en ciertas variables y que al  analizarlos eran claramente errores o datos inválidos.
+
+Cargamos la base de datos original y procedimos a revisar los datos de las personas en las regiones que nos interesan, pudimos observar que personas que marcaron que tenían la edad de 1, 10 y 99 años, tenían otros datos irreales, como cantidad de horas trabajadas semanalmente muy altas o les faltaba una cantidad importante de datos, por estos motivos consideramos que eran datos inválidos. Además, decidimos eliminar las observaciones que contaban con más de 120 horas trabajadas a la semana pues esto implica que trabajan más de 17 horas diarias 7 días a la semana y esto es ilógico. Si bien, la invalidación de toda una observación por unos cuantos errores puede sesgar el estudio, creemos que esta limpieza es suficiente pues para la cantidad de datos que tenemos, los demás errores no afectarán mucho nuestras medidas.
 
 ```{r, warning=FALSE}
 DFF <- select(df, MainBranch, Country,Gender,Age, YearsCode, YearsCodePro ,EdLevel,Employment, JobSat, OrgSize, WorkWeekHrs, NEWOvertime, NEWOnboardGood, JobSeek, NEWLearn, LanguageWorkedWith,PlatformWorkedWith)
@@ -108,13 +110,17 @@ colnames(DF_MIX)[which(names(DF_MIX) == "Country")] <- "Region"
 DF_MIX
 ```
 
-Luego de eso, creamos 2 *data frames*: DF_USA para guardar los datos de los programadores profesionales de Estados Unidos con 9452 observaciones y DF_LA para los datos de los de América Latina con 3032 observaciones. Amos *data_frames* cuentan con 15 variables que consideramos importantes para describir la situación educativa y laboral de los programadores profesionales. Además decidimos crear un tercer *data frame*, DF_MIX que es la unión de los dos anteriores con una variable más, "Región" para distinguirlos entre los que son de Estados Unidos y de América Latina, este fue creado con el objetivo de simplificar la realizacion de gráficos en el futuro. 
+Luego de eso, creamos 2 *data frames*: DF_USA para guardar los datos de los programadores profesionales de Estados Unidos con 9452 observaciones y DF_LA para los datos de los de América Latina con 3032 observaciones. El estudio original contenía 61 variables, entre las cuales se encontraban múltiples relacionadas con el uso del foro y que no nos interesaban para este estudio, respecto a las demás variables, decidimos quedarnos con 15 que consideramos claves para describir la situación educativa y laboral de los programadores profesionales. Por último, decidimos crear un tercer *data frame*, DF_MIX para que sea la unión de los dos anteriores con una variable más, "Región" para distinguirlos entre los que son de Estados Unidos y de América Latina, con el objetivo de simplificar el calculo de algunos descriptores en el futuro.
+
 **Datos Faltantes(%):**
 ```{r, comment=NA}
 round(sum(is.na(DF_MIX))/(nrow(DF_MIX)*ncol(DF_MIX))*100, 2)
 ```
-
-
+**Observaciones incompletas(%):**
+```{r, comment=NA}
+100 - round(sum(complete.cases(DF_MIX))/(nrow(DF_MIX))*100, 2)
+```
+Podemos ver que tenemos un gran porcentaje de observaciones incompletas (34,71%), sin embargo, a estas no les faltan mucho datos, pues tenemos 10.26% de datos faltantes. No eliminaremos las observaciones incompletas pues reduciría la representatividad de nuestra muestra, así que simplemente no consideraremos los datos NA para los indicadores en los que estos estén presentes.
 #### **Tabla descriptores**
 
 A continuación, se especifican las variables con las que trabajaremos y su tipo, así como la pregunta que se realizó originalmente en la encuesta
@@ -126,9 +132,9 @@ A continuación, se especifican las variables con las que trabajaremos y su tipo
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
 | What is your age (in years)? If you prefer not to answer, you may leave this question blank.                                                                                                                                                                                     | Edad                                                     | Discreta         |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-| Including any education, how many years have you been coding in total?                                                                                                                                                                                                           | Años codeando                                            | Discreta         |
+| Including any education, how many years have you been coding in total?                                                                                                                                                                                                           | Años programando                                            | Discreta         |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-| NOT including education, how many years have you coded professionally (as a part of your work)?                                                                                                                                                                                  | Años codeando profesionalmente                           | Discreta         |
+| NOT including education, how many years have you coded professionally (as a part of your work)?                                                                                                                                                                                  | Años programando profesionalmente                           | Discreta         |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
 | Which of the following best describes the highest level of formal education that you've completed?                                                                                                                                                                               | Grado educativo                                          | Ordinal          |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
@@ -161,7 +167,7 @@ A continuación, se especifican las variables con las que trabajaremos y su tipo
 
 temp = DF_USA$Gender[!is.na(DF_USA$Gender)]
 gender_vec_USA <- vector()
-gender_vec_LC <- vector()
+gender_vec_LA <- vector()
 for (pal in temp) {
   for (sub_pal in strsplit(pal, ";")) {
     gender_vec_USA <- c(gender_vec_USA, sub_pal)
@@ -171,7 +177,7 @@ temp = DF_LA$Gender[!is.na(DF_LA$Gender)]
 gender_vec <- vector()
 for (pal in temp) {
   for (sub_pal in strsplit(pal, ";")) {
-    gender_vec_LC <- c(gender_vec_LC, sub_pal)
+    gender_vec_LA <- c(gender_vec_LA, sub_pal)
   }
 }
 
@@ -183,12 +189,12 @@ man <- round(temp[1]/length(gender_vec_USA)*100,2)
 other <- round(temp[2]/length(gender_vec_USA)*100,2)
 woman <- round(temp[3]/length(gender_vec_USA)*100,2)
 pie(table(gender_vec_USA), main = "Estados Unidos", labels = c(paste(man, "%", sep = ""), paste(other, "%", sep = ""), paste(woman, "%", sep = "")), col = c("skyblue","orange","red"))
-temp = table(gender_vec_LC)
+temp = table(gender_vec_LA)
 
-man <- round(temp[1]/length(gender_vec_LC)*100,2)
-other <- round(temp[2]/length(gender_vec_LC)*100,2)
-woman <- round(temp[3]/length(gender_vec_LC)*100,2)
-pie(table(gender_vec_LC), main = "América Latina", labels = c(paste(man, "%", sep = ""), paste(other, "%", sep = ""), paste(woman, "%", sep = "")), col = c("skyblue","orange","red"))
+man <- round(temp[1]/length(gender_vec_LA)*100,2)
+other <- round(temp[2]/length(gender_vec_LA)*100,2)
+woman <- round(temp[3]/length(gender_vec_LA)*100,2)
+pie(table(gender_vec_LA), main = "América Latina", labels = c(paste(man, "%", sep = ""), paste(other, "%", sep = ""), paste(woman, "%", sep = "")), col = c("skyblue","orange","red"))
 par(mai=c(0,0,0,0))
 plot.new()
 legend(x="center", ncol=3,legend=c("Hombre","Otros","Mujer"),
@@ -228,7 +234,7 @@ round(median(DF_LA$Age, na.rm = TRUE), 2)
 round(median(DF_USA$Age, na.rm = TRUE),2)
 ```
 
-#### Años codeando
+#### Años programando
 
 ```{r, warning=FALSE, comment=NA}
 boxplot(as.numeric(DF_MIX$YearsCode)~DF_MIX$Region, na.rm= TRUE, ylab = "Región", xlab = "Años", notch = TRUE, horizontal = TRUE, main='Años codenado por región')
@@ -256,7 +262,7 @@ round(sd(as.numeric(DF_LA$YearsCode), na.rm = TRUE)/mean(as.numeric(DF_LA$YearsC
 #### Años codeado profesionalmente
 
 ```{r, warning=FALSE, comment=NA}
-boxplot(as.numeric(DF_MIX$YearsCodePro)~DF_MIX$Region, na.rm= TRUE, ylab = "Región", xlab = "Años", notch = TRUE, horizontal = TRUE, main='Años codeando profesionalmente por región')
+boxplot(as.numeric(DF_MIX$YearsCodePro)~DF_MIX$Region, na.rm= TRUE, ylab = "Región", xlab = "Años", notch = TRUE, horizontal = TRUE, main='Años programando profesionalmente por región')
 abline(v=mean(as.numeric(DF_USA$YearsCodePro), na.rm = TRUE), col = "red")
 abline(v=mean(as.numeric(DF_LA$YearsCodePro), na.rm = TRUE), col = "blue")
 legend(25,1.7,legend=c("media EEUU", "media Latam"),col=c("red", "blue"),lwd=2)
@@ -278,7 +284,7 @@ round(quantile(as.numeric(DF_LA$YearsCodePro), na.rm = TRUE), 2)
 round(quantile(as.numeric(DF_USA$YearsCodePro), na.rm = TRUE),2)
 ```
 
-### Grado educativo
+#### Grado educativo
 
 ```{r, warning=FALSE, comment=NA}
 tableUSA <- table(DF_USA$EdLevel)
@@ -286,9 +292,9 @@ tableUSA <- prop.table(tableUSA)
 tableUSA
 names <- c("GA", "L", "NCE", "M", "OD", "EP", "TP", "ES", "ST")
 
-tableLC <- table(DF_LA$EdLevel)
-tableLC <- prop.table(tableLC)
-tableLC
+tableLA <- table(DF_LA$EdLevel)
+tableLA <- prop.table(tableLA)
+tableLA
 
 layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(6, 2))
 par(mai=rep(0.8, 4))
@@ -296,7 +302,7 @@ par(mai=rep(0.8, 4))
 barplot(tableUSA, las=2, names.arg=names, main='Grados educativos en Estados Unidos', xlab = "Grados educativos",  ylab = "Frecuencia relativa", col=c("skyblue","orange","red","beige","aliceblue","black","azure", "burlywood3", "cornflowerblue"),xlim=c(0,10), ylim = c(0, 0.6), cex.names=0.8)
 
 
-barplot(tableLC, las=2, names.arg=names, main='Grados educativos en América Latina', xlab = "Grados educativos",  ylab = "Frecuencia relativa", col=c("skyblue","orange","red","beige","aliceblue","black","azure", "burlywood3", "cornflowerblue"),xlim=c(0,10), ylim = c(0, 0.6), cex.names=0.8)
+barplot(tableLA, las=2, names.arg=names, main='Grados educativos en América Latina', xlab = "Grados educativos",  ylab = "Frecuencia relativa", col=c("skyblue","orange","red","beige","aliceblue","black","azure", "burlywood3", "cornflowerblue"),xlim=c(0,10), ylim = c(0, 0.6), cex.names=0.8)
 
 par(mai=c(0,0,0,0))
 plot.new()
@@ -316,7 +322,7 @@ mlv(DF_USA$EdLevel)
 mlv(DF_LA$EdLevel)
 ```
 
-### Tipo de empleo
+#### Tipo de empleo
 
 ```{r, comment=NA}
 tableEmpleoUSA <- table(DF_USA$Employment)
@@ -326,16 +332,16 @@ namesEmpleo <- c("TC", "TP", "IA", "SEBT", "SEST", "R", "E")
 
 
 
-tableEmpleoLC <- table(DF_LA$Employment)
-tableEmpleoLC <- prop.table(tableEmpleoLC)
-tableEmpleoLC
+tableEmpleoLA <- table(DF_LA$Employment)
+tableEmpleoLA <- prop.table(tableEmpleoLA)
+tableEmpleoLA
 
 layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(8, 2))
 par(mai=rep(0.8, 4))
 
 barplot(tableEmpleoUSA, las=1, names.arg=namesEmpleo, main='Empleos en Estados Unidos', xlab = "Tipo de empleo",  ylab = "Frecuencia relativa", col=c("skyblue","orange","red","beige","aliceblue","black","blue"),xlim=c(0,8), ylim = c(0, 1), cex.names=0.8, las=2)
 
-barplot(tableEmpleoLC, las=1, names.arg=namesEmpleo, main='Empleos en América Latina', xlab = "Tipo de empleo",  ylab = "Frecuencia relativa", col=c("skyblue","orange","red","beige","aliceblue","black","blue"),xlim=c(0,8), ylim = c(0, 1),cex.names=0.8, las=2)
+barplot(tableEmpleoLA, las=1, names.arg=namesEmpleo, main='Empleos en América Latina', xlab = "Tipo de empleo",  ylab = "Frecuencia relativa", col=c("skyblue","orange","red","beige","aliceblue","black","blue"),xlim=c(0,8), ylim = c(0, 1),cex.names=0.8, las=2)
 
 par(mai=c(0,0,0,0))
 plot.new()
@@ -348,13 +354,13 @@ Los gráficos de barras muestran que la mayoría de los programadores tanto esta
 
 También se puede observar que existe mayor frecuencia relativa de latinoamericanos trabajando a medio tiempo y de manera independiente que los estadounidenses.
 
-### Satisfacción con empleo
+#### Satisfacción con empleo
 
 ```{r, comment=NA}
 variables1 <- c("MS", "AS", "NSN", "AI", "MI")
 temp = DF_USA$JobSat[!is.na(DF_USA$JobSat)]
 satis_vector_USA <- vector()
-satis_vector_LC <- vector()
+satis_vector_LA <- vector()
 for (pal in temp) {
   for (sub_pal in strsplit(pal, ";")) {
     satis_vector_USA <- c(satis_vector_USA, sub_pal)
@@ -364,7 +370,7 @@ temp = DF_LA$JobSat[!is.na(DF_LA$JobSat)]
 satis_vector <- vector()
 for (pal in temp) {
   for (sub_pal in strsplit(pal, ";")) {
-    satis_vector_LC <- c(satis_vector_LC, sub_pal)
+    satis_vector_LA <- c(satis_vector_LA, sub_pal)
   }
 }
 
@@ -376,7 +382,7 @@ barplot(table(satis_vector_USA)/sum(table(satis_vector_USA)), main = "Estados Un
 
 
 
-barplot(table(satis_vector_LC)/sum(table(satis_vector_LC)), names.arg = variables1 , main = "América Latina", col = c("blue","orange","yellow", "green", "red"), ylab ="Frecuencias Relativas", xlab = "Grado de satisfacción", ylim = c(0, 0.4))
+barplot(table(satis_vector_LA)/sum(table(satis_vector_LA)), names.arg = variables1 , main = "América Latina", col = c("blue","orange","yellow", "green", "red"), ylab ="Frecuencias Relativas", xlab = "Grado de satisfacción", ylim = c(0, 0.4))
 
 par(mai=c(0,0,0,0))
 plot.new()
@@ -385,36 +391,36 @@ legend(x="center", ncol=2,legend=c("Muy Satisfecho","Algo Satisfecho","Ni Satisf
 
 En la gráfica podemos ver que América Latina tiene un nivel de satisfacción mayor con su trabajo que Estado Unidos. Así mismo, en Estados Unidos el 48.18% de los encuestados están insatisfechos con su empleo. Además, la mayoría de los programadores en América Latina se encuentra ni satisfechos ni insatisfechos con su empleo.
 
-### Tamaño de organización en la que trabaja
+#### Tamaño de organización en la que trabaja
 
 ```{r, comment=NA}
-empleados_LC <- table(DF_LA$OrgSize)
-empleados_LC <- empleados_LC[c(9, 5, 2, 6, 4, 8, 1, 7, 3)]
+empleados_LA <- table(DF_LA$OrgSize)
+empleados_LA <- empleados_LA[c(9, 5, 2, 6, 4, 8, 1, 7, 3)]
 empleados_USA <- table(DF_USA$OrgSize)
 empleados_USA <- empleados_USA[c(9, 5, 2, 6, 4, 8, 1, 7, 3)]
 legend_text <- c("1000 a 4999 empleados","10 a 19 eempleados", "10000 o más empleados", "100 a 499 empleados", "2 a 9 empleados", "20 a 99 empleados", "5000 a 9999 empleados", "500 a 999 empleados", "Solo yo")
 legend_text <- legend_text[c(9, 5, 2, 6, 4, 8, 1, 7, 3)]
-color_LC <- c("red", "yellow", "pink", "blue", "green", "orange", "black", "purple", "gray")
+color_LA <- c("red", "yellow", "pink", "blue", "green", "orange", "black", "purple", "gray")
 variables <- c(" "," "," "," "," "," "," "," "," ")
 
 layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(7, 1))
 par(mai=rep(0.8, 4))
 
-barplot(empleados_LC/sum(empleados_LC), names.arg = variables, col = color_LC, ylab ="Frecuencias Relativas", las=2, ylim=c(0,0.4), xlim = c(0, 10), main = "Tamaño de las organizaciones o empresas en América Latina", cex.main=0.8)
+barplot(empleados_LA/sum(empleados_LA), names.arg = variables, col = color_LA, ylab ="Frecuencias Relativas", las=2, ylim=c(0,0.4), xlim = c(0, 10), main = "Tamaño de las organizaciones o empresas en América Latina", cex.main=0.8)
 
-barplot(empleados_USA/sum(empleados_USA), names.arg = variables, col = color_LC, ylab ="Frecuencias Relativas", las=2, ylim=c(0,0.4), xlim = c(0, 10), main = "Tamaño de las organizaciones o empresas en Estados Unidos", cex.main=0.8)
+barplot(empleados_USA/sum(empleados_USA), names.arg = variables, col = color_LA, ylab ="Frecuencias Relativas", las=2, ylim=c(0,0.4), xlim = c(0, 10), main = "Tamaño de las organizaciones o empresas en Estados Unidos", cex.main=0.8)
 
 par(mai=c(0,0,0,0))
 plot.new()
-legend(x="center", ncol=3,legend=legend_text, fill=color_LC)
+legend(x="center", ncol=3,legend=legend_text, fill=color_LA)
 ```
 
 Según las gráficas de barras de Estados Unidos la mayoría de los encuestados labora en un entorno con 10000 o más empleados (frecuencia absoluta de 1915), así mismo en América Latina la mayoría de encuestados labora en un entorno de 20 a 99 empleados.
 
-### Horas trabajadas semanalmente
+#### Horas trabajadas semanalmente
 
 ```{r, comment=NA}
-horas_LC <- table(DF_LA$WorkWeekHrs)
+horas_LA <- table(DF_LA$WorkWeekHrs)
 horas_USA <- table(DF_USA$WorkWeekHrs)
 
 
@@ -422,11 +428,11 @@ mean(DF_LA$WorkWeekHrs, na.rm = TRUE)
 mean(DF_USA$WorkWeekHrs, na.rm = TRUE)
 
 color = c("darkblue", "skyblue")
-y_LC_median <- mean(DF_LA$WorkWeekHrs, na.rm = TRUE)
+y_LA_median <- mean(DF_LA$WorkWeekHrs, na.rm = TRUE)
 y_USA_median <- mean(DF_USA$WorkWeekHrs, na.rm = TRUE)
 
 x_general <- c("Latino América", "Estados Unidos")
-y_general <- c(y_LC_median, y_USA_median)
+y_general <- c(y_LA_median, y_USA_median)
 
 DF_TEMP <-DF_MIX[DF_MIX$Employment == "Employed full-time" & !is.na(DF_MIX$Employment),]
 
@@ -436,14 +442,14 @@ boxplot(DF_TEMP$WorkWeekHrs~DF_TEMP$Region, ylab = "Región", xlab = "Horas", ma
 
 ```
 
-Se consideró solo a los que trabajan a los desarrolladores que trabajan a tiempo completo para que las unidades muestrales ean comparables. Según la gráfica, la media de horas que trabajan los encuestados por semana en América Latina es de 38.38 horas y en Estados Unidos es de 41.57. Sin embargo, si nos fijamos en que las medianas son iguales, esta diferencia no es estadísticamente significativa, por lo que podemos concluir que las horas de trabajo semanales no tienen relación con la región.
+Se consideró solo a los que trabajan a los desarrolladores que trabajan a tiempo completo para que las unidades muestrales eran comparables. Según la gráfica, la media de horas que trabajan los encuestados por semana en América Latina es de 38.38 horas y en Estados Unidos es de 41.57. Sin embargo, si nos fijamos en que las medianas son iguales, esta diferencia no es estadísticamente significativa, por lo que podemos concluir que las horas de trabajo semanales no tienen relación con la región.
 
 ```{r, comment=NA}
 sd(DF_USA$WorkWeekHrs, na.rm = TRUE)/mean(DF_USA$WorkWeekHrs, na.rm = TRUE)
 sd(DF_LA$WorkWeekHrs, na.rm = TRUE)/mean(DF_LA$WorkWeekHrs, na.rm = TRUE)
 ```
 
-### Frecuencia de horas extra en el trabajo
+#### Frecuencia de horas extra en el trabajo
 
 ```{r echo=FALSE, comment=NA}
 
@@ -472,26 +478,26 @@ Gracias a estos gráficos sabemos que en América Latina el 26.05% de empleados 
 
 ```{r echo=FALSE, comment=NA}
 layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(6, 1))
-x_lc_s<-length(which(DF_LA$NEWOnboardGood=="Yes"))
-x_lc_n<-length(which(DF_LA$NEWOnboardGood=="No"))
-x_lc_m<-length(which(DF_LA$NEWOnboardGood=="Onboarding? What onboarding?"))
+x_LA_s<-length(which(DF_LA$NEWOnboardGood=="Yes"))
+x_LA_n<-length(which(DF_LA$NEWOnboardGood=="No"))
+x_LA_m<-length(which(DF_LA$NEWOnboardGood=="Onboarding? What onboarding?"))
 tot_x<-(sum(!is.na(DF_LA$NEWOnboardGood)))
-x_lc_s<-round(x_lc_s*100/tot_x,2)
-x_lc_n<-round(x_lc_n*100/tot_x,2)
-x_lc_m<-round(x_lc_m*100/tot_x,2)
-porc_lc<-c(x_lc_s,x_lc_n,x_lc_m)
-x_lc_s<-length(which(DF_USA$NEWOnboardGood=="Yes"))
-x_lc_n<-length(which(DF_USA$NEWOnboardGood=="No"))
-x_lc_m<-length(which(DF_USA$NEWOnboardGood=="Onboarding? What onboarding?"))
+x_LA_s<-round(x_LA_s*100/tot_x,2)
+x_LA_n<-round(x_LA_n*100/tot_x,2)
+x_LA_m<-round(x_LA_m*100/tot_x,2)
+porc_LA<-c(x_LA_s,x_LA_n,x_LA_m)
+x_LA_s<-length(which(DF_USA$NEWOnboardGood=="Yes"))
+x_LA_n<-length(which(DF_USA$NEWOnboardGood=="No"))
+x_LA_m<-length(which(DF_USA$NEWOnboardGood=="Onboarding? What onboarding?"))
 tot_x<-(sum(!is.na(DF_USA$NEWOnboardGood)))
-x_lc_s<-round(x_lc_s*100/tot_x,2)
-x_lc_n<-round(x_lc_n*100/tot_x,2)
-x_lc_m<-round(x_lc_m*100/tot_x,2)
-porc_usa<-c(x_lc_s,x_lc_n,x_lc_m)
-label<-paste(porc_lc,"%",sep=" ")
+x_LA_s<-round(x_LA_s*100/tot_x,2)
+x_LA_n<-round(x_LA_n*100/tot_x,2)
+x_LA_m<-round(x_LA_m*100/tot_x,2)
+porc_usa<-c(x_LA_s,x_LA_n,x_LA_m)
+label<-paste(porc_LA,"%",sep=" ")
 
 color<-c("yellow", "blue", "cadetblue")
-pie(porc_lc, labels = label, clockwise=TRUE, main="America Latina",col=color)
+pie(porc_LA, labels = label, clockwise=TRUE, main="America Latina",col=color)
 label<-paste(porc_usa,"%",sep=" ")
 pie(porc_usa, labels = label, clockwise=TRUE, main="Estados Unidos",col=color)
 par(mai=c(0,0,0,0))
@@ -501,7 +507,7 @@ legend(x="center",c("Si","No","No Se"), fill=color,ncol=3)
 
 En general, tanto en América Latina como en Estados Unidos, las empresas tienen un buen proceso de incorporación (no todas), pero es ligeramente mejor en Estados Unidos, lo que implica que en América Latina existen más empresas con un mal proceso de incorporación. Los programadores más jóvenes en su mayoría respondieron a estas preguntas, debido a que suelen incorporarse a esa edad a las empresas o se encargan también de incorporar gente nueva.
 
-### Situación de busqueda de empleo
+#### Situación de busqueda de empleo
 
 ```{r echo=FALSE, comment=NA}
 
@@ -542,10 +548,10 @@ for (pal in temp) {
   }
 }
 temp = DF_LA$LanguageWorkedWith[!is.na(DF_LA$LanguageWorkedWith)]
-LWW_vec_LC <- vector()
+LWW_vec_LA <- vector()
 for (pal in temp) {
   for (sub_pal in strsplit(pal, ";")) {
-    LWW_vec_LC <- c(LWW_vec_LC, sub_pal)
+    LWW_vec_LA <- c(LWW_vec_LA, sub_pal)
   }
 }
 #USA
@@ -555,13 +561,13 @@ tabla_LWW_USA_o <- data.frame(names(tabla_LWW_USA_F), as.vector(tabla_LWW_USA_F)
 names(tabla_LWW_USA_o) <- c('lenguajes','Frecuencia', 'Frencuencia Relativa')
 tabla_LWW_USA_or <- tabla_LWW_USA_o[order(tabla_LWW_USA_o$`Frencuencia Relativa`,decreasing = TRUE), ]
 barplot(tabla_LWW_USA_or$`Frencuencia Relativa`, names.arg = tabla_LWW_USA_or$lenguajes, main = "Estados Unidos", ylab = 'frecuencias relativas', las=2, font.lab = 4,  cex.names = 0.7, ylim = c(0,0.16))
-#LC
-tabla_LWW_LC_F <- table(LWW_vec_LC)
-tabla_LWW_LC_FR <- prop.table(tabla_LWW_LC_F)
-tabla_LWW_LC_o <- data.frame(names(tabla_LWW_LC_F), as.vector(tabla_LWW_LC_F), as.vector(tabla_LWW_LC_FR))
-names(tabla_LWW_LC_o) <- c('lenguajes','Frecuencia', 'Frencuencia Relativa')
-tabla_LWW_LC_or <- tabla_LWW_LC_o[order(tabla_LWW_LC_o$`Frencuencia Relativa`,decreasing = TRUE), ]
-barplot(tabla_LWW_LC_or$`Frencuencia Relativa`, names.arg = tabla_LWW_LC_or$lenguajes, main = "América Latina", ylab = 'frecuencias relativas', las=2, font.lab = 4, cex.names = 0.7, ylim = c(0,0.16))
+#LA
+tabla_LWW_LA_F <- table(LWW_vec_LA)
+tabla_LWW_LA_FR <- prop.table(tabla_LWW_LA_F)
+tabla_LWW_LA_o <- data.frame(names(tabla_LWW_LA_F), as.vector(tabla_LWW_LA_F), as.vector(tabla_LWW_LA_FR))
+names(tabla_LWW_LA_o) <- c('lenguajes','Frecuencia', 'Frencuencia Relativa')
+tabla_LWW_LA_or <- tabla_LWW_LA_o[order(tabla_LWW_LA_o$`Frencuencia Relativa`,decreasing = TRUE), ]
+barplot(tabla_LWW_LA_or$`Frencuencia Relativa`, names.arg = tabla_LWW_LA_or$lenguajes, main = "América Latina", ylab = 'frecuencias relativas', las=2, font.lab = 4, cex.names = 0.7, ylim = c(0,0.16))
 ```
 
 Se destaca que entre los lenguajes más usados tanto en Estados Unidos como en América Latina son JavaScript, HTML/CSS, SQL. Es importante resaltar que en Estados Unidos hay un mayor uso de Python que en América Latina.
@@ -578,16 +584,16 @@ tiemponames <- c("Pocos meses", "Una por década", "Una vez al año", "Pocos añ
 par(mfrow=c(1, 2))
 
 barplot(tabla_NEWLearn_USA, names.arg=tiemponames, xlab = 'Tiempo', ylab = 'Frecuencias Relativas', main="Tiempo de aprendizaje", col=c("skyblue","orange","red","beige"), ylim = c(0,0.5), cex.names = 0.4, las =1)
-#LC
+#LA
 temp2 = DF_LA$NEWLearn[!is.na(DF_LA$NEWLearn)]
-tabla_NEWLearn_LC = table(temp2)
-tabla_NEWLearn_LC = prop.table(tabla_NEWLearn_LC)
-tabla_NEWLearn_LC
-barplot(tabla_NEWLearn_LC, names.arg=tiemponames, xlab = 'Tiempo', ylab = 'Frecuencias Relativas', main="Tiempo de aprendizaje", col=c("skyblue","orange","red","beige"), ylim = c(0,0.5), cex.names = 0.4, las =1)
+tabla_NEWLearn_LA = table(temp2)
+tabla_NEWLearn_LA = prop.table(tabla_NEWLearn_LA)
+tabla_NEWLearn_LA
+barplot(tabla_NEWLearn_LA, names.arg=tiemponames, xlab = 'Tiempo', ylab = 'Frecuencias Relativas', main="Tiempo de aprendizaje", col=c("skyblue","orange","red","beige"), ylim = c(0,0.5), cex.names = 0.4, las =1)
 
 ```
 
-Se observa que en US la mayoría de los programadores aprenden un nuevo lenguaje cada año, seguido de pocos meses, mientras que en LC la mayoría aprenden un nuevo lenguaje cada poco mes, seguido de un año.
+Se observa que en US la mayoría de los programadores aprenden un nuevo lenguaje cada año, seguido de pocos meses, mientras que en LA la mayoría aprenden un nuevo lenguaje cada poco mes, seguido de un año.
 
 #### Plataformas con las que se trabajó
 
@@ -600,10 +606,10 @@ for (pal in temp) {
   }
 }
 temp = DF_LA$PlatformWorkedWith[!is.na(DF_LA$PlatformWorkedWith)]
-PWW_vec_LC <- vector()
+PWW_vec_LA <- vector()
 for (pal in temp) {
   for (sub_pal in strsplit(pal, ";")) {
-    PWW_vec_LC <- c(PWW_vec_LC, sub_pal)
+    PWW_vec_LA <- c(PWW_vec_LA, sub_pal)
   }
 }
 
@@ -620,19 +626,19 @@ tabla_PWW_USA_or <- tabla_PWW_USA_o[order(tabla_PWW_USA_o$`Frencuencia Relativa`
 
 barplot(tabla_PWW_USA_or$`Frencuencia Relativa`, names.arg = tabla_PWW_USA_or$PlataformasSO, main = "Estados Unidos", ylab = 'Frecuencias relativas', las=2, font.lab = 4, cex.names = 0.39)
 
-#LC
-tabla_PWW_LC_F <- table(PWW_vec_LC)
-tabla_PWW_LC_FR <- prop.table(tabla_PWW_LC_F)
-tabla_PWW_LC_o <- data.frame(names(tabla_PWW_LC_F), as.vector(tabla_PWW_LC_F), as.vector(tabla_PWW_LC_FR))
+#LA
+tabla_PWW_LA_F <- table(PWW_vec_LA)
+tabla_PWW_LA_FR <- prop.table(tabla_PWW_LA_F)
+tabla_PWW_LA_o <- data.frame(names(tabla_PWW_LA_F), as.vector(tabla_PWW_LA_F), as.vector(tabla_PWW_LA_FR))
 
-names(tabla_PWW_LC_o) <- c('PlataformasSO','Frecuencia', 'Frencuencia Relativa')
+names(tabla_PWW_LA_o) <- c('PlataformasSO','Frecuencia', 'Frencuencia Relativa')
 
-tabla_PWW_LC_o
+tabla_PWW_LA_o
 
-tabla_PWW_LC_or <- tabla_PWW_LC_o[order(tabla_PWW_LC_o$`Frencuencia Relativa`,decreasing = TRUE), ]
+tabla_PWW_LA_or <- tabla_PWW_LA_o[order(tabla_PWW_LA_o$`Frencuencia Relativa`,decreasing = TRUE), ]
 
 
-barplot(tabla_PWW_LC_or$`Frencuencia Relativa`, names.arg = tabla_PWW_LC_or$PlataformasSO, ylab = 'Frecuencias relativas', las=2, font.lab = 4, main = "América Latina", cex.names = 0.39)
+barplot(tabla_PWW_LA_or$`Frencuencia Relativa`, names.arg = tabla_PWW_LA_or$PlataformasSO, ylab = 'Frecuencias relativas', las=2, font.lab = 4, main = "América Latina", cex.names = 0.39)
 ```
 
 Se observa que en tanto en Estados Unidos como en Latinoamérica la plataforma más usada es Linux, seguido de Windows, no obstante, en general, hay un uso distribuido en cuanto la plataforma en los distintos sistemas operativos.
