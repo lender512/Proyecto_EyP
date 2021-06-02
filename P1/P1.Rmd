@@ -399,8 +399,7 @@ plot.new()
 legend(x="center", ncol=2,legend=c("Muy Satisfecho","Algo Satisfecho","Ni Satisfecho Ni insatisfecho", "Algo Insatisfecho", "Muy Insatisfecho"), fill=c("blue","orange","yellow", "green", "red"))
 ```
 
-En la gráfica podemos ver que América Latina tiene un nivel de satisfacción mayor con su trabajo que Estado Unidos. Así mismo, en Estados Unidos el 48.18% de los encuestados están insatisfechos con su empleo. Además, la mayoría de los programadores en América Latina se encuentra ni satisfechos ni insatisfechos con su empleo.
-
+Los grados de satisfacción son 5 y la diferencia entre las frecuencias relativas no son grandes, por lo tanto, es visualmente mejor comparar la frecuencia relativa de los grados de satisfacción mediante barras rectangulares, de modo que en este apartado se utiliza el grafico de barras. En la gráfica podemos ver que América Latina tiene un nivel de satisfacción mayor con su trabajo que Estado Unidos. Así mismo, en Estados Unidos el 48.18% de los encuestados están insatisfechos con su empleo. Además, la mayoría de los programadores en América Latina se encuentra ni satisfechos ni insatisfechos con su empleo.
 #### Tamaño de organización en la que trabaja
 
 ```{r, comment=NA}
@@ -425,8 +424,7 @@ plot.new()
 legend(x="center", ncol=3,legend=legend_text, fill=color_LA)
 ```
 
-Según las gráficas de barras de Estados Unidos la mayoría de los encuestados labora en un entorno con 10000 o más empleados (frecuencia absoluta de 1915), así mismo en América Latina la mayoría de encuestados labora en un entorno de 20 a 99 empleados.
-
+Al igual que en el apartado anterior se utiliza la gráfica de barras, debido a que la diferencias entre las frecuencias relativas no son muy grandes por lo tanto visualmente no se aprecia barras muy pequeñas como si su valor fuera 0. Según las gráficas de barras de Estados Unidos la mayoría de los encuestados labora en un entorno con 10000 o más empleados (frecuencia absoluta de 1915), así mismo en América Latina la mayoría de encuestados labora en un entorno de 20 a 99 empleados.
 #### Horas trabajadas semanalmente
 
 ```{r, comment=NA}
@@ -451,7 +449,7 @@ boxplot(DF_TEMP$WorkWeekHrs~DF_TEMP$Region, ylab = "Región", xlab = "Horas", ma
 
 ```
 
-Se consideró solo a los que trabajan a los desarrolladores que trabajan a tiempo completo para que las unidades muestrales eran comparables. Según la gráfica, la media de horas que trabajan los encuestados por semana en América Latina es de 38.38 horas y en Estados Unidos es de 41.57. Sin embargo, si nos fijamos en que las medianas son iguales, esta diferencia no es estadísticamente significativa, por lo que podemos concluir que las horas de trabajo semanales no tienen relación con la región.
+Para este apartado se utiliza la gráfica de caja porque ayuda a representar gráficamente variables cuantitativas mediante la distribución de sus cuartiles, además de que permite incluir los datos atípicos, que en este caso son varios. Para la gráfica se consideró a los desarrolladores que trabajan a tiempo completo para que las unidades muestrales sean comparables. Según la gráfica, la media de horas que trabajan los encuestados por semana en América Latina es de 38.38 horas y en Estados Unidos es de 41.57. Sin embargo, si nos fijamos en que las medianas son iguales, esta diferencia no es estadísticamente significativa, por lo que podemos concluir que las horas de trabajo semanales no tienen relación con la región.
 
 ```{r, comment=NA}
 sd(DF_USA$WorkWeekHrs, na.rm = TRUE)/mean(DF_USA$WorkWeekHrs, na.rm = TRUE)
