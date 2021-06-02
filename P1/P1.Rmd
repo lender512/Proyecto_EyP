@@ -297,14 +297,22 @@ round(quantile(as.numeric(DF_USA$YearsCodePro), na.rm = TRUE),2)
 #### Grado educativo
 
 ```{r, warning=FALSE, comment=NA}
-tableUSA <- table(DF_USA$EdLevel)
-tableUSA <- prop.table(tableUSA)
-tableUSA
+
+tableUSA_WFR <- table(DF_USA$EdLevel)
+tableUSA <- prop.table(tableUSA_WFR)
+tablaUSA_DF <- data.frame(names(tableUSA_WFR), as.vector(tableUSA))
+names(tablaUSA_DF) <- c('Grado estudio','Frecuencia Relativa')
+
+tablaUSA_DF
+
+
 names <- c("GA", "L", "NCE", "M", "OD", "EP", "TP", "ES", "ST")
 
-tableLA <- table(DF_LA$EdLevel)
-tableLA <- prop.table(tableLA)
-tableLA
+tableLA_WFR <- table(DF_LA$EdLevel)
+tableLA <- prop.table(tableLA_WFR)
+tableLA_DF <- data.frame(names(tableLA_WFR), as.vector(tableLA))
+names(tableLA_DF) <- c('Grado estudio','Frecuencia Relativa')
+tableLA_DF
 
 layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(6, 2))
 par(mai=rep(0.8, 4))
@@ -321,6 +329,8 @@ legend(x="center", ncol=2, legend = c("Grado Asociado","Licenciatura", "Nunca Co
 
 ```
 
+En este estudio se contemplaron 9 diferentes grados de estudios, en algunos casos la diferencia entre ellos es abismal. Por lo tanto, para poder observar mejor las diferencias se utilizó gráficos de barra, además para poder tener una mejor visualización de las diferencias de frecuencia relativa entre Estados Unidos y América Latina se optó por poner los gráficos uno al costado de otro.
+
 Los gráficos de barras muestran que la mayoría de los programadores tanto estadounidenses como latinoamericanos tienen licenciatura, si se compara, existe una mayor frecuencia relativa de programadores con licenciatura en Estados Unidos que en América Latina.
 
 Por otro lado, en América Latina existe una mayor frecuencia relativa de programadores que no terminaron sus estudios universitarios en comparación con Estados Unidos.
@@ -335,16 +345,21 @@ mlv(DF_LA$EdLevel)
 #### Tipo de empleo
 
 ```{r, comment=NA}
-tableEmpleoUSA <- table(DF_USA$Employment)
-tableEmpleoUSA <- prop.table(tableEmpleoUSA)
-tableEmpleoUSA
+tableEmpleoUSA_WFR <- table(DF_USA$Employment)
+tableEmpleoUSA <- prop.table(tableEmpleoUSA_WFR)
+tableEmpleoUSA_DF <- data.frame(names(tableEmpleoUSA_WFR), as.vector(tableEmpleoUSA))
+names(tableEmpleoUSA_DF) <- c('Tipo de empleo','Frecuencia Relativa')
+tableEmpleoUSA_DF
+
+
 namesEmpleo <- c("TC", "TP", "IA", "SEBT", "SEST", "R", "E")
 
 
-
-tableEmpleoLA <- table(DF_LA$Employment)
-tableEmpleoLA <- prop.table(tableEmpleoLA)
-tableEmpleoLA
+tableEmpleoLA_WFR <- table(DF_LA$Employment)
+tableEmpleoLA <- prop.table(tableEmpleoLA_WFR)
+tableEmpleoLA_DF <- data.frame(names(tableEmpleoLA_WFR), as.vector(tableEmpleoLA))
+names(tableEmpleoLA_DF) <- c('Tipo de empleo','Frecuencia Relativa')
+tableEmpleoLA_DF
 
 layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(8, 2))
 par(mai=rep(0.8, 4))
@@ -359,6 +374,8 @@ legend(x="center", ncol=3, legend = c("Tiempo Completo","Tiempo Parcial", "Indep
 
 
 ```
+
+En este apartado contempla 7 tipos de empleos diferentes, en algunos casos la diferencia entre ellos es abismal. Por lo tanto, para poder observar mejor las diferencias se utilizó gráficos de barra, además para poder tener una mejor visualización de las diferencias de frecuencia relativa entre Estados Unidos y América Latina se optó por poner los gráficos uno al costado de otro.
 
 Los gráficos de barras muestran que la mayoría de los programadores tanto estadounidenses como latinoamericanos trabajan a tiempo completo, existe una mayor frecuencia relativa de programadores trabajando a tiempo completo en Estados Unidos que en América Latina.
 
@@ -400,6 +417,7 @@ legend(x="center", ncol=2,legend=c("Muy Satisfecho","Algo Satisfecho","Ni Satisf
 ```
 
 Los grados de satisfacción son 5 y la diferencia entre las frecuencias relativas no son grandes, por lo tanto, es visualmente mejor comparar la frecuencia relativa de los grados de satisfacción mediante barras rectangulares, de modo que en este apartado se utiliza el grafico de barras. En la gráfica podemos ver que América Latina tiene un nivel de satisfacción mayor con su trabajo que Estado Unidos. Así mismo, en Estados Unidos el 48.18% de los encuestados están insatisfechos con su empleo. Además, la mayoría de los programadores en América Latina se encuentra ni satisfechos ni insatisfechos con su empleo.
+
 #### Tamaño de organización en la que trabaja
 
 ```{r, comment=NA}
