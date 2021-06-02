@@ -9,7 +9,6 @@ output:
 knitr::opts_chunk$set(warning=FALSE, comment=NA)
 ```
 
-
 # Programadores profesionales
 
 ## Las diferencias en el aspecto educativo y laboral entre programadores de Estados Unidos y de América Latina en 2020
@@ -44,7 +43,7 @@ knitr::opts_chunk$set(warning=FALSE, comment=NA)
 | 12          | Revisar relaciones entre variables (regresión)               |
 | 14 **(P3)** | Revisar Formato de entrega                                   |
 | 15          | Feedback P3 y revisar variables más importantes del proyecto |
-| 16 **(P4)**  | Reflexión sobre preguntas iniciales                          |
+| 16 **(P4)** | Reflexión sobre preguntas iniciales                          |
 
 ### Introducción
 
@@ -70,7 +69,6 @@ En este estudio tenemos los siguientes objetivos:
 
 -   **Base de Datos:** La base de datos es el resultado de la Stack Overflow Developer Survey 2020, esta encuesta busca saber cómo es que aprenden, que herramientas usan y que y como se relacionan con el foro cualquier persona que sabe programar. La base de datos cuenta con cerca de 65000 observaciones totales y 61 variables, pero para este trabajo, delimitamos las observaciones según lo realmente necesitábamos.
 
-
     -   [Stack Overflow survey 2020 CSV y Cuestionario](https://insights.stackoverflow.com/survey/?_ga=2.142137586.1351526073.1621523165-1106211812.1621523165)
 
 ```{r echo=FALSE, paged.print=FALSE, results=FALSE}
@@ -90,8 +88,13 @@ df <- df[!(df$WorkWeekHrs > 120 & !is.na(df$WorkWeekHrs)),]
 
 ```
 
+**Limpieza de datos:**
 
-Cargamos la base de datos original y procedimos a revisar los datos de las personas en las regiones que nos interesan, pudimos observar que personas que marcaron que tenían la edad de 1, 10 y 99 años, tenían otros datos irreales, como cantidad de horas trabajadas semanalmente muy altas o les faltaba una cantidad importante de datos, por estos motivos consideramos que eran datos inválidos. Además, decidimos eliminar las observaciones que contaban con más de 120 horas trabajadas a la semana pues esto implica que trabajan más de 17 horas diarias 7 días a la semana y esto es ilógico. Si bien, la invalidación de toda una observación por unos cuantos errores puede sesgar el estudio, creemos que esta limpieza es suficiente pues para la cantidad de datos que tenemos, los demás errores no afectarán mucho nuestras medidas.
+Cargamos la base de datos original y procedimos a revisar los datos de las personas en las regiones que nos interesan, pudimos observar que personas que marcaron que tenían la edad de 1, 10 y 99 años, tenían otros datos irreales, como cantidad de horas trabajadas semanalmente muy altas o les faltaba una cantidad importante de datos, por estos motivos consideramos que eran datos inválidos. Por otro lado, también decidimos eliminar las observaciones que contaban con más de 120 horas trabajadas a la semana pues esto implica que trabajan más de 17 horas diarias 7 días a la semana y consideramos estos valores como ilógicos. Si bien, reconocemos que la invalidación de toda una observación por unos cuantos errores puede sesgar el estudio, los datos eliminados representan una parte minúscula de los datos restantes y consideramos que no perdemos representatividad.
+
+Consideramos que la limpieza de datos fue suficiente puesto que aun contamos con un gran numero de datos que permiten que los indicadores prácticamente no se vean afectados por datos atípicos. Además, revisando algunos de estos datos más resaltantes, no encontramos evidencia suficiente para categorizarlos como inválidos.
+
+**Segmentación del *Data Frame* original*:***
 
 ```{r, warning=FALSE}
 DFF <- select(df, MainBranch, Country,Gender,Age, YearsCode, YearsCodePro ,EdLevel,Employment, JobSat, OrgSize, WorkWeekHrs, NEWOvertime, NEWOnboardGood, JobSeek, NEWLearn, LanguageWorkedWith,PlatformWorkedWith)
@@ -110,18 +113,25 @@ colnames(DF_MIX)[which(names(DF_MIX) == "Country")] <- "Region"
 DF_MIX
 ```
 
-Luego de eso, creamos 2 *data frames*: DF_USA para guardar los datos de los programadores profesionales de Estados Unidos con 9452 observaciones y DF_LA para los datos de los de América Latina con 3032 observaciones. El estudio original contenía 61 variables, entre las cuales se encontraban múltiples relacionadas con el uso del foro y que no nos interesaban para este estudio, respecto a las demás variables, decidimos quedarnos con 15 que consideramos claves para describir la situación educativa y laboral de los programadores profesionales. Por último, decidimos crear un tercer *data frame*, DF_MIX para que sea la unión de los dos anteriores con una variable más, "Región" para distinguirlos entre los que son de Estados Unidos y de América Latina, con el objetivo de simplificar el calculo de algunos descriptores en el futuro.
+Creamos 2 *data frames*: DF_USA para guardar los datos de los programadores profesionales de Estados Unidos con 9452 observaciones y DF_LA para los datos de los de América Latina con 3032 observaciones. El estudio original contenía 61 variables, entre las cuales se encontraban múltiples relacionadas con el uso del foro y que no nos interesaban para este estudio, respecto a las demás variables, decidimos quedarnos con 15 que consideramos claves para describir la situación educativa y laboral de los programadores profesionales. Por último, decidimos crear un tercer *data frame*, DF_MIX para que sea la unión de los dos anteriores con una variable más, "Región" para distinguirlos entre los que son de Estados Unidos y de América Latina, con el objetivo de simplificar el calculo de algunos descriptores en el futuro.
+
+#### Integridad de los datos
 
 **Datos Faltantes(%):**
+
 ```{r, comment=NA}
 round(sum(is.na(DF_MIX))/(nrow(DF_MIX)*ncol(DF_MIX))*100, 2)
 ```
+
 **Observaciones incompletas(%):**
+
 ```{r, comment=NA}
 100 - round(sum(complete.cases(DF_MIX))/(nrow(DF_MIX))*100, 2)
 ```
-Podemos ver que tenemos un gran porcentaje de observaciones incompletas (34,71%), sin embargo, a estas no les faltan mucho datos, pues tenemos 10.26% de datos faltantes. No eliminaremos las observaciones incompletas pues reduciría la representatividad de nuestra muestra, así que simplemente no consideraremos los datos NA para los indicadores en los que estos estén presentes.
-#### **Tabla descriptores**
+
+Podemos ver que tenemos un gran porcentaje de observaciones incompletas (34,71%), sin embargo, a estas no les faltan mucho datos, pues tenemos 10.26% de datos faltantes. No eliminaremos las observaciones incompletas pues reduciría la representatividad de nuestra muestra, así que lo que se hará será no considerar los datos NA para los indicadores en los que estos estén presentes.
+
+### **Tabla descriptores**
 
 A continuación, se especifican las variables con las que trabajaremos y su tipo, así como la pregunta que se realizó originalmente en la encuesta
 
@@ -132,9 +142,9 @@ A continuación, se especifican las variables con las que trabajaremos y su tipo
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
 | What is your age (in years)? If you prefer not to answer, you may leave this question blank.                                                                                                                                                                                     | Edad                                                     | Discreta         |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-| Including any education, how many years have you been coding in total?                                                                                                                                                                                                           | Años programando                                            | Discreta         |
+| Including any education, how many years have you been coding in total?                                                                                                                                                                                                           | Años programando                                         | Discreta         |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-| NOT including education, how many years have you coded professionally (as a part of your work)?                                                                                                                                                                                  | Años programando profesionalmente                           | Discreta         |
+| NOT including education, how many years have you coded professionally (as a part of your work)?                                                                                                                                                                                  | Años programando profesionalmente                        | Discreta         |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
 | Which of the following best describes the highest level of formal education that you've completed?                                                                                                                                                                               | Grado educativo                                          | Ordinal          |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
@@ -146,13 +156,13 @@ A continuación, se especifican las variables con las que trabajaremos y su tipo
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
 | Which platforms have you done extensive development work in over the past year, and which do you want to work in over the next year? (If you both worked with the platform and want to continue to do so, please check both boxes in that row.)                                  | Plataformas con las que trabajó                          | Nominal          |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-| how often do you work overtime or beyond the formal time expectation of your job?                                                                                                                                                                                                | Frecuencia de horas extra                                | Ordinal           |
+| how often do you work overtime or beyond the formal time expectation of your job?                                                                                                                                                                                                | Frecuencia de horas extra                                | Ordinal          |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
 | Do you think your company has a good onboarding process? (By onboarding, we mean the structured process of getting you settled in to your new role at a company)                                                                                                                 | Proceso de incorporación                                 | Nominal          |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
 | Which of the following best describes your current job-seeking status?                                                                                                                                                                                                           | Situación de empleo                                      | Nominal          |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-| How satisfied are you with your current job? (If you work multiple jobs, answer for the one you spend the most hours on.)                                                                                                                                                        | Satisfación laboral                                      | Ordinal          |
+| How satisfied are you with your current job? (If you work multiple jobs, answer for the one you spend the most hours on.)                                                                                                                                                        | Satisfacción laboral                                     | Ordinal          |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
 | Approximately how many people are employed by the company or organization you currently work for?                                                                                                                                                                                | Cantidad de empleados                                    | Ordinal          |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
@@ -202,7 +212,7 @@ legend(x="center", ncol=3,legend=c("Hombre","Otros","Mujer"),
 
 ```
 
-En el gráfico podemos ver como si bien, la proporción de mujeres que se dedican en Estados Unidos es el doble que la proporción en América Latina, en ambas regiones la brecha de género es bastante grande lo que significa que la gran mayoría de los programadores profesionales son hombres.
+Decidimos usar el gráfico de pie porque contamos con pocas categorías y las diferencias entre estas resaltan bastante. Podemos ver como si bien, la proporción de mujeres que se dedican en Estados Unidos es el doble que la proporción en América Latina, en ambas regiones la brecha de género es bastante grande lo que significa que la gran mayoría de los programadores profesionales son hombres.
 
 #### Edad
 
@@ -210,24 +220,24 @@ En el gráfico podemos ver como si bien, la proporción de mujeres que se dedica
 boxplot(DF_MIX$Age~DF_MIX$Region, na.rm= T, xlab = "Edad", ylab = "Región", notch=TRUE, horizontal = TRUE, main='Edad de programadores por región')
 abline(v=mean(DF_USA$Age, na.rm = TRUE), col = "red", lwd=2)
 abline(v=mean(DF_LA$Age, na.rm = TRUE), col = "blue",lwd=2)
-legend(60,1.7,legend=c("media EEUU", "Media Latam"),col=c("red", "blue"),lwd=2)
+legend(60,1.7,legend=c("media EEUU", "media Latam"),col=c("red", "blue"),lwd=2)
 ```
 
-Podemos observar que las edades de los programadores profesionales están más concentradas en América Latina comparando los rangos intercuartílicos:
+Decidimos utilizar un gráfico de cajas y bigotes porque nos permite observar múltiples indicadores numéricos a la vez y utilizando el parámetro "notch" nos permite ver si la diferencia de las medianas son estadísticamente significativas. Podemos observar que las edades de los programadores profesionales están más concentradas en América Latina comparando los rangos intercuartílicos para ver la dispersión de los datos:
 
 ```{r}
 IQR(DF_LA$Age, na.rm = TRUE)
 IQR(DF_USA$Age, na.rm = TRUE)
 ```
 
-Además, la edad promedio de los programadores profesionales de América Latina es de 30.14 mientras que en Estados Unidos es de 34.33 .
+Además, podemos usar el promedio de la edad de los programadores para comparar fácilmente un representante de los programadores de cada región. Podemos ver que la edad de los profesionales de América Latina es de 30.14 mientras que en Estados Unidos es de 34.33.
 
 ```{r, comment=NA}
 round(mean(DF_LA$Age, na.rm = TRUE), 2)
 round(mean(DF_USA$Age, na.rm = TRUE),2)
 ```
 
-Junto con las medianas y la forma de las cajas podemos sugerir que en general, si bien, la diferencia de las medianas es estadísticamente significativa, no es mucha diferencia de edad entre los programadores profesionales de ambos países.
+Calculamos las medianas para asegurarnos que los promedios no están sesgados por valores atípicos y vemos que en efecto hay una diferencia. Con estos indicadores podemos sugerir que en general, si bien, la diferencia de las medianas es estadísticamente significativa, no es mucha diferencia de edad entre los programadores profesionales de ambos países.
 
 ```{r, comment=NA}
 round(median(DF_LA$Age, na.rm = TRUE), 2)
@@ -237,29 +247,29 @@ round(median(DF_USA$Age, na.rm = TRUE),2)
 #### Años programando
 
 ```{r, warning=FALSE, comment=NA}
-boxplot(as.numeric(DF_MIX$YearsCode)~DF_MIX$Region, na.rm= TRUE, ylab = "Región", xlab = "Años", notch = TRUE, horizontal = TRUE, main='Años codenado por región')
+boxplot(as.numeric(DF_MIX$YearsCode)~DF_MIX$Region, na.rm= TRUE, ylab = "Región", xlab = "Años", notch = TRUE, horizontal = TRUE, main='Años programando por región')
 abline(v=mean(as.numeric(DF_USA$YearsCode), na.rm = TRUE), col = "red")
 abline(v=mean(as.numeric(DF_LA$YearsCode), na.rm = TRUE), col = "blue")
 legend(25,1.7,legend=c("media EEUU", "media Latam"),col=c("red", "blue"),lwd=2)
 ```
 
-En el diagrama de cajas y bigotes podemos ver como los programadores profesionales de Estados Unidos llevan más años programando en total en comparación con los de América Latina. Sin embargo, esta diferencia es pequeña.
+Una vez más utilizamos el diagrama de cajas y bigotes para describir esta variable numérica por la gran cantidad de información que contiene. Aquí podemos ver como los programadores profesionales de Estados Unidos llevan más años programando en total en comparación con los de América Latina y que la diferencia de las medianas es estadísticamente significativa. Sin embargo, la diferencia es pequeña.
 
-También, es importante destacar la gran diferencia de 6 años que existe entre el tercer cuartil de ambas regiones. Esto implica que el 75% de los programadores profesionales de Estados Unidos cuentan a lo mucho con 22 años programando mientras que en América latina solo 16.
+También, es importante destacar la gran diferencia de 6 años que existe entre el tercer cuartil de ambas regiones. Usamos este indicador para ver que el 75% de los programadores profesionales de Estados Unidos cuentan a lo mucho con 22 años programando mientras que en América latina solo 16.
 
 ```{r, warning=FALSE, comment=NA}
 round(quantile(as.numeric(DF_LA$YearsCode), na.rm = TRUE), 2)
 round(quantile(as.numeric(DF_USA$YearsCode), na.rm = TRUE),2)
 ```
 
-Por último, si comparamos el coeficiente de variación, vemos que en ambas regiones la edad no varía mucho.
+Por último, podemos utilizar el coeficiente de variación para comparar la variabilidad de los datos, pues la forma de las cajas sugiere que la dispersión de los datos es bastante pronunciada. Sin embargo, vemos que en ambas regiones los datos varían de manera semejante en proporción al promedio de sus datos.
 
 ```{r, warning=FALSE, comment=NA}
 round(sd(as.numeric(DF_USA$YearsCode), na.rm = TRUE)/mean(as.numeric(DF_USA$YearsCode), na.rm = TRUE),2)
 round(sd(as.numeric(DF_LA$YearsCode), na.rm = TRUE)/mean(as.numeric(DF_LA$YearsCode), na.rm = TRUE), 2)
 ```
 
-#### Años codeado profesionalmente
+#### Años programando profesionalmente
 
 ```{r, warning=FALSE, comment=NA}
 boxplot(as.numeric(DF_MIX$YearsCodePro)~DF_MIX$Region, na.rm= TRUE, ylab = "Región", xlab = "Años", notch = TRUE, horizontal = TRUE, main='Años programando profesionalmente por región')
@@ -438,7 +448,6 @@ DF_TEMP <-DF_MIX[DF_MIX$Employment == "Employed full-time" & !is.na(DF_MIX$Emplo
 
 
 boxplot(DF_TEMP$WorkWeekHrs~DF_TEMP$Region, ylab = "Región", xlab = "Horas", main="Horas trabajadas por semana", notch = FALSE, horizontal = TRUE)
-
 
 ```
 
