@@ -71,7 +71,7 @@ En este estudio tenemos los siguientes objetivos:
 
     -   [Stack Overflow survey 2020 CSV y Cuestionario](https://insights.stackoverflow.com/survey/?_ga=2.142137586.1351526073.1621523165-1106211812.1621523165)
 
-```{r echo=FALSE, paged.print=FALSE, results=FALSE}
+```{r include=FALSE, paged.print=FALSE, results=FALSE}
 #install.packages("countrycode")
 #install.packages("modeest")
 library(readr)
@@ -97,7 +97,7 @@ Consideramos que la limpieza de datos fue suficiente puesto que aun contamos con
 **Segmentación del *Data Frame* original*:***
 
 ```{r, warning=FALSE}
-DFF <- select(df, MainBranch, Country,Gender,Age, YearsCode, YearsCodePro ,EdLevel,Employment, JobSat, OrgSize, WorkWeekHrs, NEWOvertime, NEWOnboardGood, JobSeek, NEWLearn, LanguageWorkedWith,PlatformWorkedWith)
+DFF <- select(df, MainBranch, Country,Gender,Age, ConvertedComp, YearsCodePro ,EdLevel,Employment, JobSat, OrgSize, WorkWeekHrs, NEWOvertime, NEWOnboardGood, JobSeek, NEWLearn, LanguageWorkedWith, Age1stCode)
 DF_USA <- DFF[DFF$Country == "United States" & !is.na(DFF$Country) & DFF$MainBranch == "I am a developer by profession" & !is.na(DFF$MainBranch), ][3:17]
 DF_LA <- cbind(region = as.character(countrycode(sourcevar = DFF$Country,
                             origin = "country.name",
@@ -154,7 +154,7 @@ A continuación, se especifican las variables con las que trabajaremos y su tipo
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
 | How frequently do you learn a new language or framework?                                                                                                                                                                                                                         | Frecuencia de aprendizaje de un nuevo lenguaje/framework | Ordinal          |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
-| Which platforms have you done extensive development work in over the past year, and which do you want to work in over the next year? (If you both worked with the platform and want to continue to do so, please check both boxes in that row.)                                  | Plataformas con las que trabajó                          | Nominal          |
+| At what age did you write your first line of code or program? (e.g., webpage, Hello World, Scratch project)                                                                                                                                                                      | Edad a la que realizó primer programa                    | Discreta         |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
 | how often do you work overtime or beyond the formal time expectation of your job?                                                                                                                                                                                                | Frecuencia de horas extra                                | Ordinal          |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
@@ -247,10 +247,12 @@ round(median(DF_USA$Age, na.rm = TRUE),2)
 #### Años programando
 
 ```{r, warning=FALSE, comment=NA}
-boxplot(as.numeric(DF_MIX$YearsCode)~DF_MIX$Region, na.rm= TRUE, ylab = "Región", xlab = "Años", notch = TRUE, horizontal = TRUE, main='Años programando por región')
-abline(v=mean(as.numeric(DF_USA$YearsCode), na.rm = TRUE), col = "red")
-abline(v=mean(as.numeric(DF_LA$YearsCode), na.rm = TRUE), col = "blue")
-legend(25,1.7,legend=c("media EEUU", "media Latam"),col=c("red", "blue"),lwd=2)
+#boxplot(as.numeric(DF_MIX$ConvertedComp)~DF_MIX$Region, na.rm= TRUE, ylab = "Región", xlab = "Años", notch = TRUE, horizontal = TRUE, main='Años programando por región')
+hist(DF_USA$ConvertedComp, breaks = 60, freq = TRUE, xlim = c(0, 2000000))
+hist(DF_LA$ConvertedComp, breaks = 60, freq = TRUE, xlim = c(0, 2000000))
+#abline(v=mean(as.numeric(DF_USA$ConvertedComp), na.rm = TRUE), col = "red")
+#abline(v=mean(as.numeric(DF_LA$ConvertedComp), na.rm = TRUE), col = "blue")
+#legend(25,1.7,legend=c("media EEUU", "media Latam"),col=c("red", "blue"),lwd=2)
 ```
 
 Una vez más utilizamos el diagrama de cajas y bigotes para describir esta variable numérica por la gran cantidad de información que contiene. Aquí podemos ver como los programadores profesionales de Estados Unidos llevan más años programando en total en comparación con los de América Latina y que la diferencia de las medianas es estadísticamente significativa. Sin embargo, la diferencia es pequeña.
@@ -442,8 +444,7 @@ plot.new()
 legend(x="center", ncol=3,legend=legend_text, fill=color_LA)
 ```
 
-Al igual que en el apartado anterior se utiliza la gráfica de barras, debido a que la diferencias entre las frecuencias relativas no son muy grandes por lo tanto visualmente no se aprecia barras muy pequeñas como si su valor fuera 0. Según las gráficas de barras de Estados Unidos la mayoría de los encuestados labora en un entorno con 10000 o más empleados (frecuencia absoluta de 1915), así mismo en América Latina la mayoría de encuestados labora en un entorno de 20 a 99 empleados.
-#### Horas trabajadas semanalmente
+Al igual que en el apartado anterior se utiliza la gráfica de barras, debido a que la diferencias entre las frecuencias relativas no son muy grandes por lo tanto visualmente no se aprecia barras muy pequeñas como si su valor fuera 0. Según las gráficas de barras de Estados Unidos la mayoría de los encuestados labora en un entorno con 10000 o más empleados (frecuencia absoluta de 1915), así mismo en América Latina la mayoría de encuestados labora en un entorno de 20 a 99 empleados. \#\#\#\# Horas trabajadas semanalmente
 
 ```{r, comment=NA}
 horas_LA <- table(DF_LA$WorkWeekHrs)
@@ -620,50 +621,54 @@ barplot(tabla_NEWLearn_LA, names.arg=tiemponames, xlab = 'Tiempo', ylab = 'Frecu
 
 Se observa que en US la mayoría de los programadores aprenden un nuevo lenguaje cada año, seguido de pocos meses, mientras que en LA la mayoría aprenden un nuevo lenguaje cada poco mes, seguido de un año.
 
-#### Plataformas con las que se trabajó
+#### Edad a la que realizó primer programa
 
-```{r, comment=NA}
-temp = DF_USA$PlatformWorkedWith[!is.na(DF_USA$PlatformWorkedWith)]
-PWW_vec_USA <- vector() #PWW(PlataformWorkedWith)
-for (pal in temp) {
-  for (sub_pal in strsplit(pal, ";")) {
-    PWW_vec_USA <- c(PWW_vec_USA, sub_pal)
-  }
-}
-temp = DF_LA$PlatformWorkedWith[!is.na(DF_LA$PlatformWorkedWith)]
-PWW_vec_LA <- vector()
-for (pal in temp) {
-  for (sub_pal in strsplit(pal, ";")) {
-    PWW_vec_LA <- c(PWW_vec_LA, sub_pal)
-  }
-}
-
-#USA
-tabla_PWW_USA_F <- table(PWW_vec_USA)
-tabla_PWW_USA_FR <- prop.table(tabla_PWW_USA_F)
-tabla_PWW_USA_o <- data.frame(names(tabla_PWW_USA_F), as.vector(tabla_PWW_USA_F), as.vector(tabla_PWW_USA_FR))
-
-names(tabla_PWW_USA_o) <- c('PlataformasSO','Frecuencia', 'Frencuencia Relativa')
-
-tabla_PWW_USA_o
-
-tabla_PWW_USA_or <- tabla_PWW_USA_o[order(tabla_PWW_USA_o$`Frencuencia Relativa`,decreasing = TRUE), ]
-
-barplot(tabla_PWW_USA_or$`Frencuencia Relativa`, names.arg = tabla_PWW_USA_or$PlataformasSO, main = "Estados Unidos", ylab = 'Frecuencias relativas', las=2, font.lab = 4, cex.names = 0.39)
-
-#LA
-tabla_PWW_LA_F <- table(PWW_vec_LA)
-tabla_PWW_LA_FR <- prop.table(tabla_PWW_LA_F)
-tabla_PWW_LA_o <- data.frame(names(tabla_PWW_LA_F), as.vector(tabla_PWW_LA_F), as.vector(tabla_PWW_LA_FR))
-
-names(tabla_PWW_LA_o) <- c('PlataformasSO','Frecuencia', 'Frencuencia Relativa')
-
-tabla_PWW_LA_o
-
-tabla_PWW_LA_or <- tabla_PWW_LA_o[order(tabla_PWW_LA_o$`Frencuencia Relativa`,decreasing = TRUE), ]
-
-
-barplot(tabla_PWW_LA_or$`Frencuencia Relativa`, names.arg = tabla_PWW_LA_or$PlataformasSO, ylab = 'Frecuencias relativas', las=2, font.lab = 4, main = "América Latina", cex.names = 0.39)
+```{r, comment=NA, warning= FALSE}
+par(mfrow=c(1,2))  
+hist(as.numeric(DF_USA$Age1stCode), probability = TRUE, xlim = c(0,80), ylim = c(0, 0.13), breaks = 30, main = "Edad 1er programa Estados Unidos", ylab = "Frecuencia relativa", xlab = "Edad", cex.main = 0.9)
+abline(v = median(as.numeric(DF_USA$Age1stCode), na.rm = TRUE), col = "red")
+hist(as.numeric(DF_LA$Age1stCode), probability = TRUE, xlim = c(0,80), ylim = c(0, 0.13), breaks = 30, main = "Edad 1er programa América Latina", ylab = "Frecuencia relativa", xlab = "Edad", cex.main = 0.9)
+abline(v = median(as.numeric(DF_LA$Age1stCode), na.rm = TRUE), col = "red")
 ```
 
-Se observa que en tanto en Estados Unidos como en Latinoamérica la plataforma más usada es Linux, seguido de Windows, no obstante, en general, hay un uso distribuido en cuanto la plataforma en los distintos sistemas operativos.
+Decidimos utilizar un histograma porque nos permite observar el comportamiento "normal" de la variable, o sea, una distribución gaussiana. Calculamos las medias para poder comparar la situación de Estados Unidos con la de América Latina. Podemos ver que esta sugiere que existe una diferencia de 2 años entre ambas regiones, sin embargo esta es pequeña y podría ser estadísticamente no significativa.
+
+```{r, warning=FALSE}
+median(as.numeric(DF_USA$Age1stCode), na.rm = TRUE)
+median(as.numeric(DF_LA$Age1stCode), na.rm = TRUE)
+```
+
+### Relaciones entre variables
+
+podemos realizar un análisis de interacción entre las variables de edad en la que realizó su primer programa y años programando profesionalmente
+
+```{r}
+DF_USA_T <- DF_USA
+#DF_USA_T[(as.numeric(DF_USA_T$Age) < as.numeric(DF_USA_T$Age1stCode) & !is.na(DF_USA_T$Age)),]
+DF_LA_T <- DF_LA
+plot(x = DF_USA_T$Age, y = DF_USA_T$ConvertedComp)
+plot(x = DF_LA_T$Age, y = DF_LA_T$ConvertedComp)
+?cov
+cor(x = DF_USA_T$Age,y = DF_USA_T$ConvertedComp, use = "complete.obs")
+cor(x = DF_LA_T$Age,y = DF_LA_T$ConvertedComp, use = "complete.obs")
+```
+```{r, warning=FALSE}
+DF_USA_T <- DF_USA
+#DF_USA_T[(as.numeric(DF_USA_T$Age) < as.numeric(DF_USA_T$Age1stCode) & !is.na(DF_USA_T$Age)),]
+DF_LA_T <- DF_LA
+plot(x = DF_USA_T$Age, y = DF_USA_T$Age1stCode)
+abline(lm(Age ~ Age1stCode, data = DF_USA_T))
+plot(x = DF_LA_T$Age, y = DF_LA_T$Age1stCode)
+abline(lm(DF_LA_T$Age ~ DF_LA_T$Age1stCode))
+DF_USA_T
+cor(y = as.double(DF_USA_T$YearsCodePro),x = as.double(DF_USA_T$Age1stCode), use = "complete.obs")
+cor(y = as.double(DF_LA_T$YearsCodePro),x = as.double(DF_LA_T$Age1stCode), use = "complete.obs")
+```
+```{r}
+DF_USA_T <- DF_USA
+#DF_USA_T[(as.numeric(DF_USA_T$Age) < as.numeric(DF_USA_T$Age1stCode) & !is.na(DF_USA_T$Age)),]
+DF_LA_T <- DF_LA
+plot(x = DF_USA_T$YearsCodePro, y = DF_USA_T$ConvertedComp, ylim = c (0,200000))
+plot(x = DF_LA_T$YearsCodePro, y = DF_LA_T$ConvertedComp, ylim = c (0,200000))
+abline(lm(DF_LA_T$YearsCodePro ~ DF_LA_T$ConvertedComp))
+```
