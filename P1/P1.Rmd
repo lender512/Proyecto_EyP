@@ -497,6 +497,7 @@ par(mai=c(0,0,0,0))
 plot.new()
 legend(x="center", legend = c("Nunca", "Ocasionalmente: 1-2 días por trimestre pero menos que al mes", "A Menudo: 1-2 días por semana o más", "Rara Vez: 1-2 días al año o menos", "A Veces: 1-2 días al mes pero menos de una semana"), fill=colors,ncol=1)
 ```
+Decidimos usar gráficos de barras con porcentajes en base al total de encuestados por región ya que ya que la diferencia del total era grande y estos gráficos nos permiten comparar fácilmente la frecuencia de horas extra de los programadores. El uso de porcentajes y colores hace que sea un gráfico fácil de comprender para el lector.
 
 Gracias a estos gráficos sabemos que en América Latina el 26.05% de empleados trabaja horas extra a menudo (de 1 a más días a la semana) y el 27.71% a veces (1 o 2 dos días al mes). En Estados Unidos, las 2 respuestas más votadas son "A veces" y "Ocasionalmente (1o 2 días por trimestre)", con 26.35% y 25.71% cada una. También podemos observar que la variable "Nunca" tiene mayor porcentaje en Estados Unidos. Todo esto nos dice claramente que en América Latina los desarrolladores trabajan más horas extra a comparación de Estados Unidos, y esto podría deberse a un mejor entorno laboral.
 
@@ -530,8 +531,9 @@ par(mai=c(0,0,0,0))
 plot.new()
 legend(x="center",c("Si","No","No Se"), fill=color,ncol=3)
 ```
+Se uso gráficos de tortas ya que representa de manera ordenada y fácil de entender el porcentaje de respuestas a la pregunta por cada región.
 
-En general, tanto en América Latina como en Estados Unidos, las empresas tienen un buen proceso de incorporación (no todas), pero es ligeramente mejor en Estados Unidos, lo que implica que en América Latina existen más empresas con un mal proceso de incorporación. Los programadores más jóvenes en su mayoría respondieron a estas preguntas, debido a que suelen incorporarse a esa edad a las empresas o se encargan también de incorporar gente nueva.
+De estos gráficos, podemos observar que tanto en América Latina como en Estados Unidos, las empresas tienen un buen proceso de incorporación (no todas), pero es ligeramente mejor en Estados Unidos, lo que implica que en América Latina existen más empresas con un mal proceso de incorporación. Los programadores más jóvenes en su mayoría respondieron a estas preguntas, debido a que suelen incorporarse a esa edad a las empresas o se encargan también de incorporar gente nueva.
 
 #### Situación de busqueda de empleo
 
@@ -560,8 +562,9 @@ legend(x="center", legend = et, fill=colors,ncol=1)
 
 
 ```
+Utilizamos gáficos de barra en base al total de encuestados por región ya que nos permite identificar claramente y de manera ordenada las diferencias de la situación de empleo de los programadores por región.
 
-En base a estos gráficos podemos ver que la cantidad de programadores que buscan empleo es mayor en América Latina, y la cantidad de programadores que no buscan empleo es mucho mayor en Estados Unidos. Esto puede deberse a que hay mayor disponibilidad de trabajos en Estados Unidos que en América Latina y también que los desarrolladores en Estados Unidos ya tienen estabilidad laboral.
+Podemos observar que la cantidad de programadores que buscan empleo es mayor en América Latina, y la cantidad de programadores que no buscan empleo es mucho mayor en Estados Unidos. Esto puede deberse a que hay mayor disponibilidad de trabajos en Estados Unidos que en América Latina y también que los desarrolladores en Estados Unidos ya tienen estabilidad laboral.
 
 #### Leguajes de programación
 
