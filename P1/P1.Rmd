@@ -269,7 +269,7 @@ round(median(DF_LA$Age, na.rm = TRUE), 2)
 round(median(DF_USA$Age, na.rm = TRUE),2)
 ```
 
-#### Años programando
+#### Compensación anual en dolares
 
 ```{r, warning=FALSE, comment=NA}
 #boxplot(as.numeric(DF_MIX$ConvertedComp)~DF_MIX$Region, na.rm= TRUE, ylab = "Región", xlab = "Años", notch = TRUE, horizontal = TRUE, main='Años programando por región')
@@ -279,22 +279,7 @@ hist(DF_LA$ConvertedComp, breaks = 60, freq = TRUE, xlim = c(0, 2000000))
 #abline(v=mean(as.numeric(DF_LA$ConvertedComp), na.rm = TRUE), col = "blue")
 #legend(25,1.7,legend=c("media EEUU", "media Latam"),col=c("red", "blue"),lwd=2)
 ```
-
-Una vez más utilizamos el diagrama de cajas y bigotes para describir esta variable numérica por la gran cantidad de información que contiene. Aquí podemos ver como los programadores profesionales de Estados Unidos llevan más años programando en total en comparación con los de América Latina y que la diferencia de las medianas es estadísticamente significativa. Sin embargo, la diferencia es pequeña.
-
-También, es importante destacar la gran diferencia de 6 años que existe entre el tercer cuartil de ambas regiones. Usamos este indicador para ver que el 75% de los programadores profesionales de Estados Unidos cuentan a lo mucho con 22 años programando mientras que en América latina solo 16.
-
-```{r, warning=FALSE, comment=NA}
-round(quantile(as.numeric(DF_LA$YearsCode), na.rm = TRUE), 2)
-round(quantile(as.numeric(DF_USA$YearsCode), na.rm = TRUE),2)
-```
-
-Por último, podemos utilizar el coeficiente de variación para comparar la variabilidad de los datos, pues la forma de las cajas sugiere que la dispersión de los datos es bastante pronunciada. Sin embargo, vemos que en ambas regiones los datos varían de manera semejante en proporción al promedio de sus datos.
-
-```{r, warning=FALSE, comment=NA}
-round(sd(as.numeric(DF_USA$YearsCode), na.rm = TRUE)/mean(as.numeric(DF_USA$YearsCode), na.rm = TRUE),2)
-round(sd(as.numeric(DF_LA$YearsCode), na.rm = TRUE)/mean(as.numeric(DF_LA$YearsCode), na.rm = TRUE), 2)
-```
+blablalbla
 
 #### Años programando profesionalmente
 
