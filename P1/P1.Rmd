@@ -53,7 +53,7 @@ Son muchas las personas que se dedican profesionalmente a programar en todo el m
 
 En este estudio tenemos los siguientes objetivos:
 
--   Identificar la existencia de diferencias en el aspecto educativo y laboral entre programadores profresionales de América Latina y Estados Unidos.
+-   Identificar la existencia de diferencias en el aspecto educativo y laboral entre programadores profesionales de América Latina y Estados Unidos.
 
 -   Identificar el grado de las diferencias, así como cuales son las que presentan mayor brecha
 
@@ -118,8 +118,16 @@ Cargamos la base de datos original y procedimos a revisar los datos de las perso
 
 **Segmentación del *Data Frame* original*:***
 
-```{r, warning=FALSE}
+```{r warning=FALSE}
 DFF <- select(df, MainBranch, Country,Gender,Age, ConvertedComp, YearsCodePro ,EdLevel,Employment, JobSat, OrgSize, WorkWeekHrs, NEWOvertime, NEWOnboardGood, JobSeek, NEWLearn, LanguageWorkedWith, Age1stCode)
+
+DFF$YearsCodePro[DFF$YearsCodePro == "Less than 1 year"] <- NA
+DFF$YearsCodePro[DFF$YearsCodePro == "More than 50 years"] <- NA
+
+
+DFF$Age1stCode[DFF$Age1stCode == "Older than 85"] <- NA
+DFF$Age1stCode[DFF$Age1stCode == "Younger than 5 years"] <- NA
+
 DFF$YearsCodePro <- as.double(DFF$YearsCodePro)
 DFF$Age1stCode <- as.double(DFF$Age1stCode)
 
@@ -135,7 +143,6 @@ DF_MIX <- DF_MIX[((DF_MIX$region == "Latin America & Caribbean" & !is.na(DF_MIX$
 DF_MIX$Country[DF_MIX$Country != "United States"] <- "América Latina"
 DF_MIX$Country[DF_MIX$Country == "United States"] <- "Estados Unidos"
 colnames(DF_MIX)[which(names(DF_MIX) == "Country")] <- "Region"
-
 ```
 
 Creamos 2 *data frames*: DF_USA para guardar los datos de los programadores profesionales de Estados Unidos con 9452 observaciones y DF_LA para los datos de los de América Latina con 3032 observaciones. El estudio original contenía 61 variables, entre las cuales se encontraban múltiples relacionadas con el uso del foro y que no nos interesaban para este estudio, respecto a las demás variables, decidimos quedarnos con 15 que consideramos claves para describir la situación educativa y laboral de los programadores profesionales. Por último, decidimos crear un tercer *data frame*, DF_MIX para que sea la unión de los dos anteriores con una variable más, "Región" para distinguirlos entre los que son de Estados Unidos y de América Latina, con el objetivo de simplificar el calculo de algunos descriptores en el futuro.
@@ -194,9 +201,11 @@ A continuación, se especifican las variables con las que trabajaremos y su tipo
 | On average, how many hours per week do you work? Please enter a whole number in the box.                                                                                                                                                                                         | Horas de trabajo semanales                               | Continua         |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------+------------------+
 
-### Análisis de variables
+### Respondiendo a las preguntas de investigación
 
-#### Género
+#### ¿Cual es la diferencia entre el género y las edades de los desarrolladores profesionales según la región en la que viven?
+
+##### Género
 
 ```{r}
 
@@ -239,9 +248,10 @@ legend(x="center", ncol=3,legend=c("Hombre","Otros","Mujer"),
 
 Decidimos usar el gráfico de pie porque contamos con pocas categorías y las diferencias entre estas resaltan bastante. Podemos ver como si bien, la proporción de mujeres que se dedican en Estados Unidos es el doble que la proporción en América Latina, en ambas regiones la brecha de género es bastante grande lo que significa que la gran mayoría de los programadores profesionales son hombres.
 
-#### Edad
+##### Edad
 
 ```{r, warning=FALSE, comment=NA}
+
 boxplot(DF_MIX$Age~DF_MIX$Region, na.rm= T, xlab = "Edad", ylab = "Región", notch=TRUE, horizontal = TRUE, main='Edad de programadores por región')
 abline(v=mean(DF_USA$Age, na.rm = TRUE), col = "red", lwd=2)
 abline(v=mean(DF_LA$Age, na.rm = TRUE), col = "blue",lwd=2)
@@ -269,44 +279,12 @@ round(median(DF_LA$Age, na.rm = TRUE), 2)
 round(median(DF_USA$Age, na.rm = TRUE),2)
 ```
 
-#### Compensación anual en dolares
+#### ¿Cómo influye la región en la que viven los desarrolladores profesionales en su educación?
 
-```{r, warning=FALSE, comment=NA}
-#boxplot(as.numeric(DF_MIX$ConvertedComp)~DF_MIX$Region, na.rm= TRUE, ylab = "Región", xlab = "Años", notch = TRUE, horizontal = TRUE, main='Años programando por región')
-hist(DF_USA$ConvertedComp, breaks = 60, freq = TRUE, xlim = c(0, 2000000))
-hist(DF_LA$ConvertedComp, breaks = 60, freq = TRUE, xlim = c(0, 2000000))
-#abline(v=mean(as.numeric(DF_USA$ConvertedComp), na.rm = TRUE), col = "red")
-#abline(v=mean(as.numeric(DF_LA$ConvertedComp), na.rm = TRUE), col = "blue")
-#legend(25,1.7,legend=c("media EEUU", "media Latam"),col=c("red", "blue"),lwd=2)
-```
-blablalbla
+##### ¿Cómo influye la región en la que viven los desarrolladores profesionales en su grado educativo?
 
-#### Años programando profesionalmente
+##### Grado educativo
 
-```{r, warning=FALSE, comment=NA}
-boxplot(as.numeric(DF_MIX$YearsCodePro)~DF_MIX$Region, na.rm= TRUE, ylab = "Región", xlab = "Años", notch = TRUE, horizontal = TRUE, main='Años programando profesionalmente por región')
-abline(v=mean(as.numeric(DF_USA$YearsCodePro), na.rm = TRUE), col = "red")
-abline(v=mean(as.numeric(DF_LA$YearsCodePro), na.rm = TRUE), col = "blue")
-legend(25,1.7,legend=c("media EEUU", "media Latam"),col=c("red", "blue"),lwd=2)
-```
-
-En este diagrama de cajas y bigotes se observa que los programadores de Estados Unidos tienen más años programando profesionalmente en total en comparación con los programadores de América Latina.
-
-Existe una diferencia de 4 años en el tercer cuartil de ambas regiones; es decir, el 75% de los programadores estadounidenses cuentan a los mucho con 15 años programando profesionalmente y los latinoamericanos con 11 años.
-
-**Programadores latinoamericanos**
-
-```{r, warning=FALSE, comment=NA}
-round(quantile(as.numeric(DF_LA$YearsCodePro), na.rm = TRUE), 2)
-```
-
-**Programadores estadounidenses**
-
-```{r, warning=FALSE, comment=NA}
-round(quantile(as.numeric(DF_USA$YearsCodePro), na.rm = TRUE),2)
-```
-
-#### Grado educativo
 
 ```{r, warning=FALSE, comment=NA}
 
@@ -354,7 +332,309 @@ mlv(DF_USA$EdLevel)
 mlv(DF_LA$EdLevel)
 ```
 
-#### Tipo de empleo
+##### ¿Cómo influye la región en la que los desarrolladores profesionales viven en la edad a la que escribieron su primer programa?
+
+##### Edad a la que realizó primer programa
+
+Para la limpieza de datos descartamos aquellos datos en donde la edad de primer programa de algún programador era mayor que la edad actual del mismo, ya que no tendría sentido que la edad a la que escribió su primer código sea mayor que la edad actual de algún programador.
+
+```{r, comment=NA, warning= FALSE}
+
+DF_MIX <- DF_MIX[!(DF_MIX$Age1stCode > DF_MIX$Age) & !is.na(DF_MIX$Age1stCode) & !is.na(DF_MIX$Age),]
+DF_USA <- DF_USA[!(DF_USA$Age1stCode > DF_USA$Age) & !is.na(DF_USA$Age1stCode) & !is.na(DF_USA$Age),]
+DF_LA <- DF_LA[!(DF_LA$Age1stCode > DF_LA$Age) & !is.na(DF_LA$Age1stCode) & !is.na(DF_LA$Age),]
+
+
+
+boxplot(as.numeric(DF_MIX$Age1stCode)~DF_MIX$Region, na.rm= TRUE, ylab = "Region", xlab = "Años", notch = TRUE, horizontal = TRUE, main='Edad primer programa por region')
+abline(v=mean(as.numeric(DF_USA$Age1stCode), na.rm = TRUE), col = "red")
+abline(v=mean(as.numeric(DF_LA$Age1stCode), na.rm = TRUE), col = "blue")
+
+legend(25, 1.7, legend=c("media EEUU", "media Latam"), col=c("red", "blue"),lwd=2 )
+```
+
+Decidimos utilizar un boxplot ya que nos permite ver múltiples descriptores de manera eficiente. Nos fijamos en que la diferencia de las medianas para comparar los valores y vemos que son estadísticamente significativas y que se diferencian en 2 años. Además calculamos la media para ver el sesgo de la gráfica y vemos que al coincidir con la media en el caso de América Latina, significa que la distribución es simétrica
+
+```{r, warning=FALSE}
+median(DF_USA$Age1stCode, na.rm = TRUE)
+median(DF_LA$Age1stCode, na.rm = TRUE)
+```
+##### ¿Cómo influye la región en la que los desarrolladores profesionales viven en la frecuencia con la que aprenden un nuevo lenguaje? 
+
+##### Frecuencia de aprendizaje de un nuevo lenguaje
+
+```{r, comment=NA}
+#usa
+temp = DF_USA$NEWLearn[!is.na(DF_USA$NEWLearn)]
+
+tiemponames <- c("Pocos meses", "Una por década", "Una vez al año", "Pocos años")
+
+tabla_NEWLearn_USA_F = table(temp)
+tabla_NEWLearn_USA_FR = prop.table(tabla_NEWLearn_USA_F)
+tabla_NEWLearn_USA_P = data.frame(tiemponames, as.vector(tabla_NEWLearn_USA_F), as.vector(tabla_NEWLearn_USA_FR))
+
+names(tabla_NEWLearn_USA_P) <- c('Frecuencia de aprendizaje USA', 'Frecuencia de aprendizaje', 'Frecuencia Relativa')
+tabla_NEWLearn_USA_P
+
+
+par(mfrow=c(1, 2))
+
+barplot(tabla_NEWLearn_USA_FR, names.arg=tiemponames, xlab = 'Frecuencia de aprendizaje', ylab = 'Frecuencias Relativas', main="Frecuencia de aprendizaje USA", col=c("skyblue","orange","red","beige"), ylim = c(0,0.5), cex.names = 0.4, las =0.7)
+#LA
+temp2 = DF_LA$NEWLearn[!is.na(DF_LA$NEWLearn)]
+tabla_NEWLearn_LA_F= table(temp2)
+tabla_NEWLearn_LA_FR = prop.table(tabla_NEWLearn_LA_F)
+
+tabla_NEWLearn_LA_P = data.frame(tiemponames, as.vector(tabla_NEWLearn_LA_F), as.vector(tabla_NEWLearn_LA_FR))
+
+names(tabla_NEWLearn_LA_P) <- c('Frecuencia de aprendizaje Latinoamérica', 'Frecuencia', 'Frecuencia Relativa')
+tabla_NEWLearn_LA_P
+
+barplot(tabla_NEWLearn_LA_FR, names.arg=tiemponames, xlab = 'Frecuencia de aprendizaje', ylab = 'Frecuencias Relativas', main="Frecuencia de aprendizaje LA", col=c("skyblue","orange","red","beige"), ylim = c(0,0.5), cex.names = 0.4, las =0.7)
+
+```
+
+Para esta variable también se hace uso de un gráfico de barras ya que nos permite ver que "tiempo de aprendizaje" es más común, asimismo esto nos permite una comparación rápida entre ambas regiones para un mejor análisis.
+
+Se observa que en USA la mayoría de los programadores aprenden un nuevo lenguaje cada año, seguido de pocos meses, mientras que en Latinoamérica la mayoría aprenden un nuevo lenguaje cada pocos meses, seguido de un año. Resaltando que en Latinoamérica hay un mayor ritmo de aprednizaje de un nuevo lenguaje.
+
+#### ¿Cómo influye la región en la que los desarrolladores profesionales viven en su **trabajo**?
+
+##### ¿Cómo influye la región en la que los desarrolladores profesionales viven en las empresas en las que trabajan?
+
+##### Tamaño de organización en la que trabaja
+
+```{r, comment=NA}
+empleados_LA <- table(DF_LA$OrgSize)
+empleados_LA <- empleados_LA[c(9, 5, 2, 6, 4, 8, 1, 7, 3)]
+empleados_USA <- table(DF_USA$OrgSize)
+empleados_USA <- empleados_USA[c(9, 5, 2, 6, 4, 8, 1, 7, 3)]
+legend_text <- c("1000 a 4999 empleados","10 a 19 eempleados", "10000 o más empleados", "100 a 499 empleados", "2 a 9 empleados", "20 a 99 empleados", "5000 a 9999 empleados", "500 a 999 empleados", "Solo yo")
+legend_text <- legend_text[c(9, 5, 2, 6, 4, 8, 1, 7, 3)]
+color_LA <- c("red", "yellow", "pink", "blue", "green", "orange", "black", "purple", "gray")
+variables <- c(" "," "," "," "," "," "," "," "," ")
+
+layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(7, 1))
+par(mai=rep(0.8, 4))
+
+barplot(empleados_LA/sum(empleados_LA), names.arg = variables, col = color_LA, ylab ="Frecuencias Relativas", las=2, ylim=c(0,0.4), xlim = c(0, 10), main = "Tamaño de las organizaciones o empresas en América Latina", cex.main=0.8)
+
+barplot(empleados_USA/sum(empleados_USA), names.arg = variables, col = color_LA, ylab ="Frecuencias Relativas", las=2, ylim=c(0,0.4), xlim = c(0, 10), main = "Tamaño de las organizaciones o empresas en Estados Unidos", cex.main=0.8)
+
+par(mai=c(0,0,0,0))
+plot.new()
+legend(x="center", ncol=3,legend=legend_text, fill=color_LA)
+```
+
+Al igual que en el apartado anterior se utiliza la gráfica de barras, debido a que la diferencias entre las frecuencias relativas no son muy grandes por lo tanto visualmente no se aprecia barras muy pequeñas como si su valor fuera 0. Según las gráficas de barras de Estados Unidos la mayoría de los encuestados labora en un entorno con 10000 o más empleados (frecuencia absoluta de 1915), así mismo en América Latina la mayoría de encuestados labora en un entorno de 20 a 99 empleados.
+
+##### Satisfacción con empleo
+
+```{r, comment=NA}
+variables1 <- c("MS", "AS", "NSN", "AI", "MI")
+temp = DF_USA$JobSat[!is.na(DF_USA$JobSat)]
+satis_vector_USA <- vector()
+satis_vector_LA <- vector()
+for (pal in temp) {
+  for (sub_pal in strsplit(pal, ";")) {
+    satis_vector_USA <- c(satis_vector_USA, sub_pal)
+  }
+}
+temp = DF_LA$JobSat[!is.na(DF_LA$JobSat)]
+satis_vector <- vector()
+for (pal in temp) {
+  for (sub_pal in strsplit(pal, ";")) {
+    satis_vector_LA <- c(satis_vector_LA, sub_pal)
+  }
+}
+
+layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(7, 1))
+par(mai=rep(0.8, 4))
+
+
+barplot(table(satis_vector_USA)/sum(table(satis_vector_USA)), main = "Estados Unidos", names.arg = variables1, col = c("blue","orange","yellow", "green", "red"), ylab ="Frecuencias Relativas", xlab = "Grado de satisfacción")
+
+
+
+barplot(table(satis_vector_LA)/sum(table(satis_vector_LA)), names.arg = variables1 , main = "América Latina", col = c("blue","orange","yellow", "green", "red"), ylab ="Frecuencias Relativas", xlab = "Grado de satisfacción", ylim = c(0, 0.4))
+
+par(mai=c(0,0,0,0))
+plot.new()
+legend(x="center", ncol=2,legend=c("Muy Satisfecho","Algo Satisfecho","Ni Satisfecho Ni insatisfecho", "Algo Insatisfecho", "Muy Insatisfecho"), fill=c("blue","orange","yellow", "green", "red"))
+```
+
+Los grados de satisfacción son 5 y la diferencia entre las frecuencias relativas no son grandes, por lo tanto, es visualmente mejor comparar la frecuencia relativa de los grados de satisfacción mediante barras rectangulares, de modo que en este apartado se utiliza el grafico de barras. En la gráfica podemos ver que América Latina tiene un nivel de satisfacción mayor con su trabajo que Estado Unidos. Así mismo, en Estados Unidos el 48.18% de los encuestados están insatisfechos con su empleo. Además, la mayoría de los programadores en América Latina se encuentra ni satisfechos ni insatisfechos con su empleo.
+
+##### Proceso de incorporación
+
+```{r echo=FALSE, comment=NA}
+layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(6, 1))
+x_LA_s<-length(which(DF_LA$NEWOnboardGood=="Yes"))
+x_LA_n<-length(which(DF_LA$NEWOnboardGood=="No"))
+x_LA_m<-length(which(DF_LA$NEWOnboardGood=="Onboarding? What onboarding?"))
+tot_x<-(sum(!is.na(DF_LA$NEWOnboardGood)))
+x_LA_s<-round(x_LA_s*100/tot_x,2)
+x_LA_n<-round(x_LA_n*100/tot_x,2)
+x_LA_m<-round(x_LA_m*100/tot_x,2)
+porc_LA<-c(x_LA_s,x_LA_n,x_LA_m)
+x_LA_s<-length(which(DF_USA$NEWOnboardGood=="Yes"))
+x_LA_n<-length(which(DF_USA$NEWOnboardGood=="No"))
+x_LA_m<-length(which(DF_USA$NEWOnboardGood=="Onboarding? What onboarding?"))
+tot_x<-(sum(!is.na(DF_USA$NEWOnboardGood)))
+x_LA_s<-round(x_LA_s*100/tot_x,2)
+x_LA_n<-round(x_LA_n*100/tot_x,2)
+x_LA_m<-round(x_LA_m*100/tot_x,2)
+porc_usa<-c(x_LA_s,x_LA_n,x_LA_m)
+label<-paste(porc_LA,"%",sep=" ")
+
+color<-c("yellow", "blue", "cadetblue")
+pie(porc_LA, labels = label, clockwise=TRUE, main="America Latina",col=color)
+label<-paste(porc_usa,"%",sep=" ")
+pie(porc_usa, labels = label, clockwise=TRUE, main="Estados Unidos",col=color)
+par(mai=c(0,0,0,0))
+plot.new()
+legend(x="center",c("Si","No","No Se"), fill=color,ncol=3)
+```
+
+Se uso gráficos de tortas ya que representa de manera ordenada y fácil de entender el porcentaje de respuestas a la pregunta por cada región y contamos con pocas categorias.
+
+De estos gráficos, podemos observar que tanto en América Latina como en Estados Unidos, las empresas tienen un buen proceso de incorporación (no todas), pero es ligeramente mejor en Estados Unidos, lo que implica que en América Latina existen más empresas con un mal proceso de incorporación. Los programadores más jóvenes en su mayoría respondieron a estas preguntas, debido a que suelen incorporarse a esa edad a las empresas o se encargan también de incorporar gente nueva.
+
+##### ¿Existe diferencia entre los años que llevan programando de manera profesional los desarrolladores de Estados Unidos y los de América Latina? 
+
+#### Años programando profesionalmente
+
+Para la limpieza de datos se utilizó el criterio de que una persona no puede tener más años codeando como profesional que años de vida, porque sería ilógico que alguien tenga más años codeando profesionalmente que años de vida.
+
+
+```{r, warning=FALSE, comment=NA}
+
+DF_MIX$YearsCodePro[(DF_MIX$YearsCodePro > DF_MIX$Age) & !is.na(DF_MIX$YearsCodePro) & !is.na(DF_MIX$Age)]  <- NA
+
+boxplot(as.numeric(DF_MIX$YearsCodePro)~DF_MIX$Region, na.rm= TRUE, ylab = "Región", xlab = "Años", notch = TRUE, horizontal = TRUE, main='Años programando profesionalmente por región')
+abline(v=mean(as.numeric(DF_USA$YearsCodePro), na.rm = TRUE), col = "red")
+abline(v=mean(as.numeric(DF_LA$YearsCodePro), na.rm = TRUE), col = "blue")
+legend(25,1.7,legend=c("media EEUU", "media Latam"),col=c("red", "blue"),lwd=2)
+```
+
+En este diagrama de cajas y bigotes se observa que los programadores de Estados Unidos tienen más años programando profesionalmente en total en comparación con los programadores de América Latina.
+
+Existe una diferencia de 4 años en el tercer cuartil de ambas regiones; es decir, el 75% de los programadores estadounidenses cuentan a los mucho con 15 años programando profesionalmente y los latinoamericanos con 11 años.
+
+
+##### ¿Cómo influye la región en la que los desarrolladores profesionales viven en su situación de búsqueda laboral?
+
+##### Situación de búsqueda de empleo
+
+```{r echo=FALSE, comment=NA}
+
+layout(matrix(c(1,2,3,3), nrow=2,byrow=TRUE), heights=c(3, 1))
+m<-prop.table(table(DF_LA$JobSeek[!is.na(DF_LA$JobSeek)]))*100
+n<-prop.table(table(DF_USA$JobSeek[!is.na(DF_USA$JobSeek)]))*100
+et<-c("Estoy buscando activamente un trabajo","No estoy interesado en nuevas oportunidades de trabajo", "No estoy buscando activamente, pero estoy abierto a nuevas oportunidades" )
+ar<-c("busco","no busco", "no busco/\ndisponible")
+colors<-c('blue','yellow','green')
+c1<-barplot(m,xlab='Frecuencia', ylab = "Porcentaje(%)", main='Situacion de Empleo\nAmerica Latina', width = 5,names.arg=ar,
+col=colors,cex.names=0.8, ylim = c(0,70))
+text(c1, m-2, labels = round(m,2))
+
+
+
+
+c2<-barplot(n, xlab='Frecuencia',ylab = "Porcentaje(%)", main='Situacion de Empleo\nEstados Unidos', width = 5,
+col=colors,cex.names=0.8,names.arg=ar, ylim = c(0,70))
+text(c2, n-2, labels = round(n,2))
+ 
+par(mai=c(0,0,0,0))
+plot.new()
+legend(x="center", legend = et, fill=colors,ncol=1)
+
+
+```
+
+Utilizamos gráficos de barra en base al total de encuestados por región ya que nos permite identificar claramente y de manera ordenada las diferencias de la situación de empleo de los programadores por región.
+
+Podemos observar que la cantidad de programadores que buscan empleo es mayor en América Latina, y la cantidad de programadores que no buscan empleo es mucho mayor en Estados Unidos. Esto puede deberse a que hay mayor disponibilidad de trabajos en Estados Unidos que en América Latina y también que los desarrolladores en Estados Unidos ya tienen estabilidad laboral.
+
+##### ¿Cómo influye la región en la que los desarrolladores profesionales viven en la forma en la que trabajan? 
+
+#### Horas trabajadas semanalmente  
+Según la instancia federal del gobierno estadounidense (Internal Revenue Services) para que un trabajo sea considerado a tiempo completo mínimo tiene que cumplir 30 horas semanales, o 130 horas de servicio por mes y no hay un límite máximo de horas semanales. Por otra parte, en Latinoamérica según BBC new en ciertos países existen límites de 48 horas semanales  y en otros países en rango de horas es de 40 a 47 horas semanales. 
+Por ende, se decidió limpiar algunos datos debido a que se encontró valores imposibles, como 168 horas a la semana. Por lo cual decidimos que el rango normal de horas semanales considerando 5 días laborales a la semana va de  30 (horas mínimas en estados unidos) a 50 (rango máximo  en latinoamerica añadiendo algunas horas extras) horas.
+
+```{r, comment=NA}
+horas_LA <- table(DF_LA$WorkWeekHrs)
+DF_LA$WorkWeekHrs[DF_LA$WorkWeekHrs < 30] <- NA
+DF_LA$WorkWeekHrs[DF_LA$WorkWeekHrs > 50] <- NA
+
+DF_USA$WorkWeekHrs[DF_USA$WorkWeekHrs < 30] <- NA
+DF_USA$WorkWeekHrs[DF_USA$WorkWeekHrs > 50] <- NA
+
+DF_MIX$WorkWeekHrs[DF_MIX$WorkWeekHrs > 50] <- NA
+DF_MIX$WorkWeekHrs[DF_MIX$WorkWeekHrs < 30] <- NA
+
+horas_USA <- table(DF_USA$WorkWeekHrs)
+
+
+mean(DF_LA$WorkWeekHrs, na.rm = TRUE)
+mean(DF_USA$WorkWeekHrs, na.rm = TRUE)
+
+color = c("darkblue", "skyblue")
+y_LA_median <- mean(DF_LA$WorkWeekHrs, na.rm = TRUE)
+y_USA_median <- mean(DF_USA$WorkWeekHrs, na.rm = TRUE)
+
+x_general <- c("Latino América", "Estados Unidos")
+y_general <- c(y_LA_median, y_USA_median)
+
+DF_TEMP <-DF_MIX[DF_MIX$Employment == "Employed full-time" & !is.na(DF_MIX$Employment),]
+
+
+boxplot(DF_TEMP$WorkWeekHrs~DF_TEMP$Region, ylab = "Región", xlab = "Horas", main="Horas trabajadas por semana", notch = FALSE, horizontal = TRUE)
+
+```
+
+Para este apartado se utiliza la gráfica de caja porque ayuda a representar gráficamente variables cuantitativas mediante la distribución de sus cuartiles, además de que permite incluir los datos atípicos. Para la gráfica se consideró a los desarrolladores que trabajan a tiempo completo para que las unidades muestrales sean comparables. Según la gráfica, la media de horas que trabajan los encuestados por semana en América Latina es de 41.05 horas y en Estados Unidos es de 41.03 
+```{r}
+mean(DF_LA$WorkWeekHrs, na.rm = TRUE)
+mean(DF_USA$WorkWeekHrs, na.rm = TRUE)
+```
+
+Para confirmar esta similitud, podemos ver que las medias en el boxplot son iguales 40. Por otro lado también podemos utilizar el coeficiente de variación para ver si los datos están distribuidos de manera similar en proporción a su promedio y vemos que para ambos casos es prácticamente la misma.
+
+```{r, comment=NA}
+sd(DF_USA$WorkWeekHrs, na.rm = TRUE)/mean(DF_USA$WorkWeekHrs, na.rm = TRUE)
+sd(DF_LA$WorkWeekHrs, na.rm = TRUE)/mean(DF_LA$WorkWeekHrs, na.rm = TRUE)
+```
+
+
+##### Frecuencia de horas extra en el trabajo
+
+```{r echo=FALSE, comment=NA}
+
+layout(matrix(c(1,2,3,3), nrow=2,byrow=TRUE), heights=c(3, 1))
+m<-prop.table(table(DF_LA$NEWOvertime[!is.na(DF_LA$NEWOvertime)]))*100
+colors<-c('blue','yellow','green','orange','brown')
+b1<-barplot(m, xlab='Frecuencia',ylab = "Porcentaje(%)", main='Frecuencia de horas extra\nLatinoamérica', width = 5, col.lab="darkgreen",names.arg=c("N","O","AM","RV","AV"),beside=TRUE,
+col=colors,cex.names=0.8, ylim = c(0,30))
+text(b1, m-1, labels = round(m,2))
+
+
+
+n<-prop.table(table(DF_USA$NEWOvertime[!is.na(DF_USA$NEWOvertime)]))*100
+b2<-barplot(n, xlab='Frecuencia',ylab = "Porcentaje(%)", main='Frecuencia de horas extra\nEstados Unidos', width = 5, col.lab="darkgreen",names.arg=c("N","O","AM","RV","AV"),
+col=colors,cex.names=0.8, ylim = c(0,30))
+text(b2, n-1, labels = round(n,2))
+ 
+par(mai=c(0,0,0,0))
+plot.new()
+legend(x="center", legend = c("Nunca", "Ocasionalmente: 1-2 días por trimestre pero menos que al mes", "A Menudo: 1-2 días por semana o más", "Rara Vez: 1-2 días al año o menos", "A Veces: 1-2 días al mes pero menos de una semana"), fill=colors,ncol=1)
+```
+
+Decidimos usar gráficos de barras con porcentajes en base al total de encuestados por región ya que ya que la diferencia del total era grande y estos gráficos nos permiten comparar fácilmente la frecuencia de horas extra de los programadores. El uso de porcentajes y colores hace que sea un gráfico fácil de comprender para el lector.
+
+Gracias a estos gráficos sabemos que en América Latina el 26.05% de empleados trabaja horas extra a menudo (de 1 a más días a la semana) y el 27.71% a veces (1 o 2 dos días al mes). En Estados Unidos, las 2 respuestas más votadas son "A veces" y "Ocasionalmente (1o 2 días por trimestre)", con 26.35% y 25.71% cada una. También podemos observar que la variable "Nunca" tiene mayor porcentaje en Estados Unidos. Todo esto nos dice claramente que en América Latina los desarrolladores trabajan más horas extra a comparación de Estados Unidos, y esto podría deberse a un mejor entorno laboral.
+
+##### Tipo de empleo
 
 ```{r, comment=NA}
 tableEmpleoUSA_WFR <- table(DF_USA$Employment)
@@ -393,198 +673,8 @@ Los gráficos de barras muestran que la mayoría de los programadores tanto esta
 
 También se puede observar que existe mayor frecuencia relativa de latinoamericanos trabajando a medio tiempo y de manera independiente que los estadounidenses.
 
-#### Satisfacción con empleo
 
-```{r, comment=NA}
-variables1 <- c("MS", "AS", "NSN", "AI", "MI")
-temp = DF_USA$JobSat[!is.na(DF_USA$JobSat)]
-satis_vector_USA <- vector()
-satis_vector_LA <- vector()
-for (pal in temp) {
-  for (sub_pal in strsplit(pal, ";")) {
-    satis_vector_USA <- c(satis_vector_USA, sub_pal)
-  }
-}
-temp = DF_LA$JobSat[!is.na(DF_LA$JobSat)]
-satis_vector <- vector()
-for (pal in temp) {
-  for (sub_pal in strsplit(pal, ";")) {
-    satis_vector_LA <- c(satis_vector_LA, sub_pal)
-  }
-}
-
-layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(7, 1))
-par(mai=rep(0.8, 4))
-
-
-barplot(table(satis_vector_USA)/sum(table(satis_vector_USA)), main = "Estados Unidos", names.arg = variables1, col = c("blue","orange","yellow", "green", "red"), ylab ="Frecuencias Relativas", xlab = "Grado de satisfacción")
-
-
-
-barplot(table(satis_vector_LA)/sum(table(satis_vector_LA)), names.arg = variables1 , main = "América Latina", col = c("blue","orange","yellow", "green", "red"), ylab ="Frecuencias Relativas", xlab = "Grado de satisfacción", ylim = c(0, 0.4))
-
-par(mai=c(0,0,0,0))
-plot.new()
-legend(x="center", ncol=2,legend=c("Muy Satisfecho","Algo Satisfecho","Ni Satisfecho Ni insatisfecho", "Algo Insatisfecho", "Muy Insatisfecho"), fill=c("blue","orange","yellow", "green", "red"))
-```
-
-Los grados de satisfacción son 5 y la diferencia entre las frecuencias relativas no son grandes, por lo tanto, es visualmente mejor comparar la frecuencia relativa de los grados de satisfacción mediante barras rectangulares, de modo que en este apartado se utiliza el grafico de barras. En la gráfica podemos ver que América Latina tiene un nivel de satisfacción mayor con su trabajo que Estado Unidos. Así mismo, en Estados Unidos el 48.18% de los encuestados están insatisfechos con su empleo. Además, la mayoría de los programadores en América Latina se encuentra ni satisfechos ni insatisfechos con su empleo.
-
-#### Tamaño de organización en la que trabaja
-
-```{r, comment=NA}
-empleados_LA <- table(DF_LA$OrgSize)
-empleados_LA <- empleados_LA[c(9, 5, 2, 6, 4, 8, 1, 7, 3)]
-empleados_USA <- table(DF_USA$OrgSize)
-empleados_USA <- empleados_USA[c(9, 5, 2, 6, 4, 8, 1, 7, 3)]
-legend_text <- c("1000 a 4999 empleados","10 a 19 eempleados", "10000 o más empleados", "100 a 499 empleados", "2 a 9 empleados", "20 a 99 empleados", "5000 a 9999 empleados", "500 a 999 empleados", "Solo yo")
-legend_text <- legend_text[c(9, 5, 2, 6, 4, 8, 1, 7, 3)]
-color_LA <- c("red", "yellow", "pink", "blue", "green", "orange", "black", "purple", "gray")
-variables <- c(" "," "," "," "," "," "," "," "," ")
-
-layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(7, 1))
-par(mai=rep(0.8, 4))
-
-barplot(empleados_LA/sum(empleados_LA), names.arg = variables, col = color_LA, ylab ="Frecuencias Relativas", las=2, ylim=c(0,0.4), xlim = c(0, 10), main = "Tamaño de las organizaciones o empresas en América Latina", cex.main=0.8)
-
-barplot(empleados_USA/sum(empleados_USA), names.arg = variables, col = color_LA, ylab ="Frecuencias Relativas", las=2, ylim=c(0,0.4), xlim = c(0, 10), main = "Tamaño de las organizaciones o empresas en Estados Unidos", cex.main=0.8)
-
-par(mai=c(0,0,0,0))
-plot.new()
-legend(x="center", ncol=3,legend=legend_text, fill=color_LA)
-```
-
-Al igual que en el apartado anterior se utiliza la gráfica de barras, debido a que la diferencias entre las frecuencias relativas no son muy grandes por lo tanto visualmente no se aprecia barras muy pequeñas como si su valor fuera 0. Según las gráficas de barras de Estados Unidos la mayoría de los encuestados labora en un entorno con 10000 o más empleados (frecuencia absoluta de 1915), así mismo en América Latina la mayoría de encuestados labora en un entorno de 20 a 99 empleados.
-
-#### Horas trabajadas semanalmente
-
-```{r, comment=NA}
-horas_LA <- table(DF_LA$WorkWeekHrs)
-DF_USA$WorkWeekHrs[DF_USA$WorkWeekHrs > 50] <- NA
-DF_MIX$WorkWeekHrs[DF_MIX$WorkWeekHrs > 50] <- NA
-DF_MIX$WorkWeekHrs[DF_MIX$WorkWeekHrs < 30] <- NA
-horas_USA <- table(DF_USA$WorkWeekHrs)
-
-
-mean(DF_LA$WorkWeekHrs, na.rm = TRUE)
-mean(DF_USA$WorkWeekHrs, na.rm = TRUE)
-
-color = c("darkblue", "skyblue")
-y_LA_median <- mean(DF_LA$WorkWeekHrs, na.rm = TRUE)
-y_USA_median <- mean(DF_USA$WorkWeekHrs, na.rm = TRUE)
-
-x_general <- c("Latino América", "Estados Unidos")
-y_general <- c(y_LA_median, y_USA_median)
-
-DF_TEMP <-DF_MIX[DF_MIX$Employment == "Employed full-time" & !is.na(DF_MIX$Employment),]
-
-
-boxplot(DF_TEMP$WorkWeekHrs~DF_TEMP$Region, ylab = "Región", xlab = "Horas", main="Horas trabajadas por semana", notch = FALSE, horizontal = TRUE)
-
-```
-
-Para este apartado se utiliza la gráfica de caja porque ayuda a representar gráficamente variables cuantitativas mediante la distribución de sus cuartiles, además de que permite incluir los datos atípicos, que en este caso son varios. Para la gráfica se consideró a los desarrolladores que trabajan a tiempo completo para que las unidades muestrales sean comparables. Según la gráfica, la media de horas que trabajan los encuestados por semana en América Latina es de 38.38 horas y en Estados Unidos es de 41.57. Sin embargo, si nos fijamos en que las medianas son iguales, esta diferencia no es estadísticamente significativa, por lo que podemos concluir que las horas de trabajo semanales no tienen relación con la región.
-
-```{r, comment=NA}
-sd(DF_USA$WorkWeekHrs, na.rm = TRUE)/mean(DF_USA$WorkWeekHrs, na.rm = TRUE)
-sd(DF_LA$WorkWeekHrs, na.rm = TRUE)/mean(DF_LA$WorkWeekHrs, na.rm = TRUE)
-```
-
-#### Frecuencia de horas extra en el trabajo
-
-```{r echo=FALSE, comment=NA}
-
-layout(matrix(c(1,2,3,3), nrow=2,byrow=TRUE), heights=c(3, 1))
-m<-prop.table(table(DF_LA$NEWOvertime[!is.na(DF_LA$NEWOvertime)]))*100
-colors<-c('blue','yellow','green','orange','brown')
-b1<-barplot(m, xlab='Frecuencia',ylab = "Porcentaje(%)", main='Frecuencia de horas extra\nLatinoamérica', width = 5, col.lab="darkgreen",names.arg=c("N","O","AM","RV","AV"),beside=TRUE,
-col=colors,cex.names=0.8, ylim = c(0,30))
-text(b1, m-1, labels = round(m,2))
-
-
-
-n<-prop.table(table(DF_USA$NEWOvertime[!is.na(DF_USA$NEWOvertime)]))*100
-b2<-barplot(n, xlab='Frecuencia',ylab = "Porcentaje(%)", main='Frecuencia de horas extra\nEstados Unidos', width = 5, col.lab="darkgreen",names.arg=c("N","O","AM","RV","AV"),
-col=colors,cex.names=0.8, ylim = c(0,30))
-text(b2, n-1, labels = round(n,2))
- 
-par(mai=c(0,0,0,0))
-plot.new()
-legend(x="center", legend = c("Nunca", "Ocasionalmente: 1-2 días por trimestre pero menos que al mes", "A Menudo: 1-2 días por semana o más", "Rara Vez: 1-2 días al año o menos", "A Veces: 1-2 días al mes pero menos de una semana"), fill=colors,ncol=1)
-```
-
-Decidimos usar gráficos de barras con porcentajes en base al total de encuestados por región ya que ya que la diferencia del total era grande y estos gráficos nos permiten comparar fácilmente la frecuencia de horas extra de los programadores. El uso de porcentajes y colores hace que sea un gráfico fácil de comprender para el lector.
-
-Gracias a estos gráficos sabemos que en América Latina el 26.05% de empleados trabaja horas extra a menudo (de 1 a más días a la semana) y el 27.71% a veces (1 o 2 dos días al mes). En Estados Unidos, las 2 respuestas más votadas son "A veces" y "Ocasionalmente (1o 2 días por trimestre)", con 26.35% y 25.71% cada una. También podemos observar que la variable "Nunca" tiene mayor porcentaje en Estados Unidos. Todo esto nos dice claramente que en América Latina los desarrolladores trabajan más horas extra a comparación de Estados Unidos, y esto podría deberse a un mejor entorno laboral.
-
-#### Proceso de incorporación
-
-```{r echo=FALSE, comment=NA}
-layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(6, 1))
-x_LA_s<-length(which(DF_LA$NEWOnboardGood=="Yes"))
-x_LA_n<-length(which(DF_LA$NEWOnboardGood=="No"))
-x_LA_m<-length(which(DF_LA$NEWOnboardGood=="Onboarding? What onboarding?"))
-tot_x<-(sum(!is.na(DF_LA$NEWOnboardGood)))
-x_LA_s<-round(x_LA_s*100/tot_x,2)
-x_LA_n<-round(x_LA_n*100/tot_x,2)
-x_LA_m<-round(x_LA_m*100/tot_x,2)
-porc_LA<-c(x_LA_s,x_LA_n,x_LA_m)
-x_LA_s<-length(which(DF_USA$NEWOnboardGood=="Yes"))
-x_LA_n<-length(which(DF_USA$NEWOnboardGood=="No"))
-x_LA_m<-length(which(DF_USA$NEWOnboardGood=="Onboarding? What onboarding?"))
-tot_x<-(sum(!is.na(DF_USA$NEWOnboardGood)))
-x_LA_s<-round(x_LA_s*100/tot_x,2)
-x_LA_n<-round(x_LA_n*100/tot_x,2)
-x_LA_m<-round(x_LA_m*100/tot_x,2)
-porc_usa<-c(x_LA_s,x_LA_n,x_LA_m)
-label<-paste(porc_LA,"%",sep=" ")
-
-color<-c("yellow", "blue", "cadetblue")
-pie(porc_LA, labels = label, clockwise=TRUE, main="America Latina",col=color)
-label<-paste(porc_usa,"%",sep=" ")
-pie(porc_usa, labels = label, clockwise=TRUE, main="Estados Unidos",col=color)
-par(mai=c(0,0,0,0))
-plot.new()
-legend(x="center",c("Si","No","No Se"), fill=color,ncol=3)
-```
-
-Se uso gráficos de tortas ya que representa de manera ordenada y fácil de entender el porcentaje de respuestas a la pregunta por cada región y contamos con pocas categorias.
-
-De estos gráficos, podemos observar que tanto en América Latina como en Estados Unidos, las empresas tienen un buen proceso de incorporación (no todas), pero es ligeramente mejor en Estados Unidos, lo que implica que en América Latina existen más empresas con un mal proceso de incorporación. Los programadores más jóvenes en su mayoría respondieron a estas preguntas, debido a que suelen incorporarse a esa edad a las empresas o se encargan también de incorporar gente nueva.
-
-#### Situación de búsqueda de empleo
-
-```{r echo=FALSE, comment=NA}
-
-layout(matrix(c(1,2,3,3), nrow=2,byrow=TRUE), heights=c(3, 1))
-m<-prop.table(table(DF_LA$JobSeek[!is.na(DF_LA$JobSeek)]))*100
-n<-prop.table(table(DF_USA$JobSeek[!is.na(DF_USA$JobSeek)]))*100
-et<-c("Estoy buscando activamente un trabajo","No estoy interesado en nuevas oportunidades de trabajo", "No estoy buscando activamente, pero estoy abierto a nuevas oportunidades" )
-ar<-c("busco","no busco", "no busco/\ndisponible")
-colors<-c('blue','yellow','green')
-c1<-barplot(m,xlab='Frecuencia', ylab = "Porcentaje(%)", main='Situacion de Empleo\nAmerica Latina', width = 5,names.arg=ar,
-col=colors,cex.names=0.8, ylim = c(0,70))
-text(c1, m-2, labels = round(m,2))
-
-
-
-
-c2<-barplot(n, xlab='Frecuencia',ylab = "Porcentaje(%)", main='Situacion de Empleo\nEstados Unidos', width = 5,
-col=colors,cex.names=0.8,names.arg=ar, ylim = c(0,70))
-text(c2, n-2, labels = round(n,2))
- 
-par(mai=c(0,0,0,0))
-plot.new()
-legend(x="center", legend = et, fill=colors,ncol=1)
-
-
-```
-
-Utilizamos gáficos de barra en base al total de encuestados por región ya que nos permite identificar claramente y de manera ordenada las diferencias de la situación de empleo de los programadores por región.
-
-Podemos observar que la cantidad de programadores que buscan empleo es mayor en América Latina, y la cantidad de programadores que no buscan empleo es mucho mayor en Estados Unidos. Esto puede deberse a que hay mayor disponibilidad de trabajos en Estados Unidos que en América Latina y también que los desarrolladores en Estados Unidos ya tienen estabilidad laboral.
-
-#### Lenguajes de programación
+##### Lenguajes de programación
 
 ```{r echo=FALSE, comment=NA}
 temp = DF_USA$LanguageWorkedWith[!is.na(DF_USA$LanguageWorkedWith)]
@@ -621,88 +711,70 @@ Para esta variable se hizo uso de un barplot por separado para cada región, deb
 
 Se destaca que entre los lenguajes más usados tanto en Estados Unidos como en América Latina son JavaScript, HTML/CSS, SQL. Es importante resaltar que en Estados Unidos hay un mayor uso de Python que en América Latina.
 
-#### Frecuencia de aprendizaje de un nuevo lenguaje
+##### ¿Existe una relación entre la remuneración anual total y la región en la que los desarrolladores viven?
 
-```{r, comment=NA}
-#usa
-temp = DF_USA$NEWLearn[!is.na(DF_USA$NEWLearn)]
+#### Compensación anual en dolares
 
-tiemponames <- c("Pocos meses", "Una por década", "Una vez al año", "Pocos años")
+Según la pagina ZipRecruiter el mínimo Salario anual de un desarrollador en 2020 fue de 33,500 USD y el más alto fue de 138,000 USD
 
-tabla_NEWLearn_USA_F = table(temp)
-tabla_NEWLearn_USA_FR = prop.table(tabla_NEWLearn_USA_F)
-tabla_NEWLearn_USA_P = data.frame(tiemponames, as.vector(tabla_NEWLearn_USA_F), as.vector(tabla_NEWLearn_USA_FR))
+Según la pagina Evalart, un desarrollador en Latinoamérica en el país menos pagado (Argentina) percibe mensualmente 715 USD, para la limpieza se considerara anualmente un salario de 8000 USD, mientras que el país mejor pagado (Panamá) un desarrollador en su máximo nivel (Master) percibe 3500 USD mensuales, anualmente se usara 42000 usd. Se consideró solo a los que trabajan tiempo completo.
 
-names(tabla_NEWLearn_USA_P) <- c('Tiempo de aprendizaje USA', 'Frecuencia', 'Frecuencia Relativa')
-tabla_NEWLearn_USA_P
+Para el DF_MIX se uso el salario anual mínimo de Latinoamérica y el salario máximo de USA.
 
+```{r, warning=FALSE, comment=NA}
+DF_USA$ConvertedComp[DF_USA$ConvertedComp > 138000] <- NA
+DF_USA$ConvertedComp[DF_USA$ConvertedComp < 33500] <- NA
+DF_LA$ConvertedComp[DF_LA$ConvertedComp > 42000] <- NA
+DF_LA$ConvertedComp[DF_LA$ConvertedComp < 8000] <- NA
+DF_MIX$ConvertedComp[DF_MIX$ConvertedComp > 138000] <- NA
+DF_MIX$ConvertedComp[DF_MIX$ConvertedComp < 8000] <- NA
 
-par(mfrow=c(1, 2))
+DF_TEMP_LA <-DF_LA[DF_LA$Employment == "Employed full-time" & !is.na(DF_LA$Employment),]
+DF_TEMP_USA <-DF_USA[DF_USA$Employment == "Employed full-time" & !is.na(DF_USA$Employment),]
 
-barplot(tabla_NEWLearn_USA_FR, names.arg=tiemponames, xlab = 'Tiempo', ylab = 'Frecuencias Relativas', main="Tiempo de aprendizaje USA", col=c("skyblue","orange","red","beige"), ylim = c(0,0.5), cex.names = 0.4, las =0.7)
-#LA
-temp2 = DF_LA$NEWLearn[!is.na(DF_LA$NEWLearn)]
-tabla_NEWLearn_LA_F= table(temp2)
-tabla_NEWLearn_LA_FR = prop.table(tabla_NEWLearn_LA_F)
-
-tabla_NEWLearn_LA_P = data.frame(tiemponames, as.vector(tabla_NEWLearn_LA_F), as.vector(tabla_NEWLearn_LA_FR))
-
-names(tabla_NEWLearn_LA_P) <- c('Tiempo de aprendizaje Latinoamérica', 'Frecuencia', 'Frecuencia Relativa')
-tabla_NEWLearn_LA_P
-
-barplot(tabla_NEWLearn_LA_FR, names.arg=tiemponames, xlab = 'Tiempo', ylab = 'Frecuencias Relativas', main="Tiempo de aprendizaje LA", col=c("skyblue","orange","red","beige"), ylim = c(0,0.5), cex.names = 0.4, las =0.7)
-
+hist(DF_TEMP_USA$ConvertedComp, breaks = 30, freq = TRUE, main = "Histograma del salario anual USA", ylab = "Frecuencia", xlab = "Salario anual en dolares")
+abline(v=mean(as.numeric(DF_USA$ConvertedComp), na.rm = TRUE), col = "red")
+hist(DF_TEMP_LA$ConvertedComp, breaks = 30, freq = TRUE, main = "Histograma del salario anual Latinoamerica", ylab = "Frecuencia", xlab = "Salario anual en dolares")
+abline(v=mean(as.numeric(DF_LA$ConvertedComp), na.rm = TRUE), col = "blue")
 ```
 
-Para esta variable también se hace uso de un gráfico de barras ya que nos permite ver que "tiempo de aprendizaje" es más común, asimismo esto nos permite una comparación rápida entre ambas regiones para un mejor análisis.
 
-Se observa que en USA la mayoría de los programadores aprenden un nuevo lenguaje cada año, seguido de pocos meses, mientras que en Latinoamérica la mayoría aprenden un nuevo lenguaje cada pocos meses, seguido de un año. Resaltando que en Latinoamérica hay un mayor ritmo de aprednizaje de un nuevo lenguaje.
+Para esta variable se hizo uso de histogramas debido a que nos permiten observar la distribución de los desarrolladores por salario, además, nos permite marcar la media, y como estan distribuidos los salarios alrededor de esta, lo que permite un análisis pertinente. 
 
-#### Edad a la que realizó primer programa
-
-```{r, comment=NA, warning= FALSE}
-#par(mfrow=c(1,2))
-DF_MIX[DF_MIX$Age1stCode > 80 & !is.na(DF_MIX$Age1stCode),]
-boxplot(as.numeric(DF_MIX$Age1stCode) ~ DF_MIX$Region, probability = TRUE, main = "Edad 1er programa Estados Unidos", ylab = "Frecuencia relativa", xlab = "Region", cex.main = 0.9, horizontal = TRUE)
-
-#hist(as.numeric(DF_USA$Age1stCode), probability = TRUE, xlim = c(0,80), ylim = c(0, 0.13), breaks = 30, main = "Edad 1er programa Estados Unidos", ylab = "Frecuencia relativa", xlab = "Edad", cex.main = 0.9)
-#abline(v = median(as.numeric(DF_USA$Age1stCode), na.rm = TRUE), col = "red")
-#hist(as.numeric(DF_LA$Age1stCode), probability = TRUE, xlim = c(0,80), ylim = c(0, 0.13), breaks = 30, main = "Edad 1er programa América Latina", ylab = "Frecuencia relativa", xlab = "Edad", cex.main = 0.9)
-#abline(v = median(as.numeric(DF_LA$Age1stCode), na.rm = TRUE), col = "red")
+```{r}
+round(mean(DF_LA$ConvertedComp, na.rm = TRUE), 2)
+round(mean(DF_USA$ConvertedComp, na.rm = TRUE),2)
 ```
 
-Decidimos utilizar un histograma porque nos permite observar el comportamiento "normal" de la variable, o sea, una distribución gaussiana. Calculamos las medias para poder comparar la situación de Estados Unidos con la de América Latina. Podemos ver que esta sugiere que existe una diferencia de 2 años entre ambas regiones, sin embargo esta es pequeña y podría ser estadísticamente no significativa.
+En usa se observa una distribución normal respecto a la media, es decir que la mayoría de programadores gana alrededor de 94136 dolares anuales. Por otro lado, en América Latina no existe una distribución muy atípica, pero sí hay más variación respecto a la media, a comparación de USA. Asimismo, se resalta la diferencia entre la media de USA y Latinoamérica, que en USA es un 465.64% mayor.
 
-```{r, warning=FALSE}
-median(as.numeric(DF_USA$Age1stCode), na.rm = TRUE)
-median(as.numeric(DF_LA$Age1stCode), na.rm = TRUE)
-```
-
-### Relaciones entre variables
+### Relaciones entre variables (TODO)
 
 podemos realizar un análisis de interacción entre las variables de edad en la que realizó su primer programa y años programando profesionalmente
 
 ```{r}
-DF_USA_T <- DF_USA
+DF_USA_T <-DF_USA[DF_USA$Employment == "Employed full-time" & !is.na(DF_USA$Employment) & !is.na(DF_USA$Age) & !is.na(DF_USA$ConvertedComp),]
+
 #DF_USA_T[(as.numeric(DF_USA_T$Age) < as.numeric(DF_USA_T$Age1stCode) & !is.na(DF_USA_T$Age)),]
-DF_LA_T <- DF_LA
+DF_LA_T <-DF_LA[DF_LA$Employment == "Employed full-time" & !is.na(DF_LA$Employment) & !is.na(DF_LA$Age) & !is.na(DF_LA$ConvertedComp),]
 plot(x = DF_USA_T$Age, y = DF_USA_T$ConvertedComp)
+abline(lm(DF_USA_T$Age ~ DF_USA_T$ConvertedComp), col = "red")
 plot(x = DF_LA_T$Age, y = DF_LA_T$ConvertedComp)
-?cov
+DF_LA_T
+abline(lm(DF_LA_T$Age ~ DF_LA_T$ConvertedComp), col = "red")
+
 cor(x = DF_USA_T$Age,y = DF_USA_T$ConvertedComp, use = "complete.obs")
 cor(x = DF_LA_T$Age,y = DF_LA_T$ConvertedComp, use = "complete.obs")
 ```
 
 ```{r, warning=FALSE}
 DF_USA_T <- DF_USA
-#DF_USA_T[(as.numeric(DF_USA_T$Age) < as.numeric(DF_USA_T$Age1stCode) & !is.na(DF_USA_T$Age)),]
 DF_LA_T <- DF_LA
 DF_LA_T
-plot(x = DF_USA_T$Age, y = as.double(DF_USA_T$Age1stCode))
-abline(lm(Age ~ as.double(Age1stCode), data = DF_USA_T))
-plot(x = DF_LA_T$Age, y = as.double(DF_LA_T$Age1stCode))
-abline(lm(DF_LA_T$Age ~ as.double(DF_LA_T$Age1stCode)))
-DF_USA_T
+plot(x = DF_USA_T$Age, y = as.double(DF_USA_T$Age1stCode), xlab = "Edad", ylab = "")
+abline(lm(Age ~ Age1stCode, data = DF_USA_T))
+plot(x = DF_LA_T$Age, y = DF_LA_T$Age1stCode)
+abline(lm(DF_LA_T$Age ~ DF_LA_T$Age1stCode))
 cor(y = DF_USA_T$Age, x = DF_USA_T$Age1stCode, use = "complete.obs")
 cor(y = DF_LA_T$Age, x = DF_LA_T$Age1stCode, use = "complete.obs")
 ```
@@ -712,9 +784,18 @@ DF_USA_T <- DF_USA
 #DF_USA_T[(as.numeric(DF_USA_T$Age) < as.numeric(DF_USA_T$Age1stCode) & !is.na(DF_USA_T$Age)),]
 DF_LA_T <- DF_LA
 plot(x = DF_USA_T$YearsCodePro, y = DF_USA_T$ConvertedComp)
+abline(lm(YearsCodePro ~ ConvertedComp, data = DF_USA_T))
 plot(x = DF_LA_T$YearsCodePro, y = DF_LA_T$ConvertedComp)
+abline(lm(YearsCodePro ~ ConvertedComp, data = DF_LA_T))
 cov(x = as.double(DF_USA_T$YearsCodePro),y = as.double(DF_USA_T$ConvertedComp), use = "complete.obs")
 cov(x = as.double(DF_LA_T$YearsCodePro),y = as.double(DF_LA_T$ConvertedComp), use = "complete.obs")
 cor(x = as.double(DF_USA_T$YearsCodePro),y = as.double(DF_USA_T$ConvertedComp), use = "complete.obs")
 cor(x = as.double(DF_LA_T$YearsCodePro),y = as.double(DF_LA_T$ConvertedComp), use = "complete.obs")
 ```
+
+### Bibliografía
+-   BBC new. (2019). Cuáles son los países donde la gente trabaja más y menos horas semanales (y qué quieren cambiar en Chile). Recuperado de https://www.bbc.com/mundo/noticias-49411425.
+-   Internal Revenue Service. (2021). Identifying Full-time Employees. Recuperado de https://www.irs.gov/affordable-care-act/employers/identifying-full-time-employees
+-   ZipRecruiter (2020). Software Developer Salary. Recuperado de: https://www.ziprecruiter.com/Salaries/Software-Developer-Salary
+
+-   Evalart (2019). Cuánto ganan los desarrolladores en América Latina. Recuperado de: https://evalart.com/es/blog/cuanto-ganan-los-desarrolladores-en-america-latina/#:~:text=Por%20%C3%BAltimos%20se%20encuentran%20los,ganar%20hasta%203.170%2C00%20USD.
