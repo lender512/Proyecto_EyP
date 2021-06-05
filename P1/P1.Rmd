@@ -205,8 +205,10 @@ A continuación, se especifican las variables con las que trabajaremos y su tipo
 
 #### ¿Cual es la diferencia entre el género y las edades de los desarrolladores profesionales según la región en la que viven?
 
-##### Género
+Se decidió realizar un analistas de aspectos generales como lo son la edad y el género de los desarrolladores previo al del aspecto educativo y laboral para poder mostrar otras variables que también se consideraron importantes pero no se podían clasificar en esas dos categorías. 
 
+##### Género
+Se procederá a analizar la variable de género, pues esta permitirá ver si es que existe una brecha de género entre las personas que son desarrolladores profesionales y si esta depende de la región en la que viven.
 ```{r}
 
 temp = DF_USA$Gender[!is.na(DF_USA$Gender)]
@@ -246,10 +248,10 @@ legend(x="center", ncol=3,legend=c("Hombre","Otros","Mujer"),
 
 ```
 
-Decidimos usar el gráfico de pie porque contamos con pocas categorías y las diferencias entre estas resaltan bastante. Podemos ver como si bien, la proporción de mujeres que se dedican en Estados Unidos es el doble que la proporción en América Latina, en ambas regiones la brecha de género es bastante grande lo que significa que la gran mayoría de los programadores profesionales son hombres.
+Se decidió utilizar el gráfico de pie porque se cuenta con pocas categorías y las diferencias entre estas resaltan bastante. Se puede observar como, si bien la proporción de mujeres que se dedican en Estados Unidos es el doble que la proporción en América Latina, en ambas regiones la brecha de género es bastante grande lo que lleva a la hipótesis, al analizar el indicador, de que la gran mayoría de los programadores profesionales y que esto no depende la región en la que viven.
 
 ##### Edad
-
+A continuación, se analizará la variable edad, para identificar si es que hay diferencia entre las edades de las personas que se dedican profesionalmente a la programacion en Estados Unidos y América Latina
 ```{r, warning=FALSE, comment=NA}
 
 boxplot(DF_MIX$Age~DF_MIX$Region, na.rm= T, xlab = "Edad", ylab = "Región", notch=TRUE, horizontal = TRUE, main='Edad de programadores por región')
@@ -258,26 +260,25 @@ abline(v=mean(DF_LA$Age, na.rm = TRUE), col = "blue",lwd=2)
 legend(60,1.7,legend=c("media EEUU", "media Latam"),col=c("red", "blue"),lwd=2)
 ```
 
-Decidimos utilizar un gráfico de cajas y bigotes porque nos permite observar múltiples indicadores numéricos a la vez y utilizando el parámetro "notch" nos permite ver si la diferencia de las medianas son estadísticamente significativas. Podemos observar que las edades de los programadores profesionales están más concentradas en América Latina comparando los rangos intercuartílicos para ver la dispersión de los datos:
+Se decidió usar un gráfico de cajas y bigotes porque este permite observar múltiples indicadores numéricos a la vez. Se puede apreciar en este indicador gráfico que las edades de los programadores profesionales están más concentradas en América Latina, para comprobar esto se hacer uso del indicador de rango intercuartílico y se ve que en efecto, hay una diferencia de 3 años:
 
 ```{r}
 IQR(DF_LA$Age, na.rm = TRUE)
 IQR(DF_USA$Age, na.rm = TRUE)
 ```
-
-Además, podemos usar el promedio de la edad de los programadores para comparar fácilmente un representante de los programadores de cada región. Podemos ver que la edad de los profesionales de América Latina es de 30.14 mientras que en Estados Unidos es de 34.33.
+Continuando con el análisis de la variable, se puede usar el promedio de la edad de los programadores para comparar fácilmente un representante de los programadores de cada región y ver si hay diferencia. Se puede notar que la edad de los profesionales de América Latina es de 30.14 mientras que en Estados Unidos es de 34.33, poco más que 4 años de diferencia.
 
 ```{r, comment=NA}
 round(mean(DF_LA$Age, na.rm = TRUE), 2)
 round(mean(DF_USA$Age, na.rm = TRUE),2)
 ```
 
-Calculamos las medianas para asegurarnos que los promedios no están sesgados por valores atípicos y vemos que en efecto hay una diferencia. Con estos indicadores podemos sugerir que en general, si bien, la diferencia de las medianas es estadísticamente significativa, no es mucha diferencia de edad entre los programadores profesionales de ambos países.
-
+Para finalizar con confirmacion de una diferencia real, se hace uso del parámetro *notch* del gráfico de cajas y bigotes para ver si la diferencia entre las medianas es estadísticamente significativas con un 95% de intervalo de confianza, si estas se sobreponen, significa que practicamente no hay diferencia de medianas, por el otro lado, si no se sobreponen si existe dicha diferencia. Este parámetro se seguirá utilizando a lo largo del estudio. En esta caso se aprecia que las muescas no se superponen, por lo que podemos calcular las medianas y determinar cual es la diferencia real, pues puede que los promedios estén sesgados por valores atípicos. Existe una diferencia de 3 años.
 ```{r, comment=NA}
 round(median(DF_LA$Age, na.rm = TRUE), 2)
 round(median(DF_USA$Age, na.rm = TRUE),2)
 ```
+Luego del análisis de la variable utilizando descriptores, se llega a la hipótesis de que si hay una diferencia entre la edad de los desarrolladores de Estados Unidos y la de los de América Latina. Sin embargo, esta no es abismal pues solo ronda los 3 y 4 años.
 
 #### ¿Cómo influye la región en la que viven los desarrolladores profesionales en su educación?
 
@@ -564,14 +565,14 @@ Por ende, se decidió limpiar algunos datos debido a que se encontró valores im
 
 ```{r, comment=NA}
 horas_LA <- table(DF_LA$WorkWeekHrs)
-DF_LA$WorkWeekHrs[DF_LA$WorkWeekHrs < 30] <- NA
-DF_LA$WorkWeekHrs[DF_LA$WorkWeekHrs > 50] <- NA
+DF_LA$WorkWeekHrs[DF_LA$WorkWeekHrs < 30 & (DF_LA$Employment == "Employed full-time")] <- NA
+DF_LA$WorkWeekHrs[DF_LA$WorkWeekHrs > 50  & (DF_LA$Employment == "Employed full-time")] <- NA
 
-DF_USA$WorkWeekHrs[DF_USA$WorkWeekHrs < 30] <- NA
-DF_USA$WorkWeekHrs[DF_USA$WorkWeekHrs > 50] <- NA
+DF_USA$WorkWeekHrs[DF_USA$WorkWeekHrs < 30 & DF_USA$Employment == "Employed full-time"] <- NA
+DF_USA$WorkWeekHrs[DF_USA$WorkWeekHrs > 50 & DF_USA$Employment == "Employed full-time"] <- NA
 
-DF_MIX$WorkWeekHrs[DF_MIX$WorkWeekHrs > 50] <- NA
-DF_MIX$WorkWeekHrs[DF_MIX$WorkWeekHrs < 30] <- NA
+DF_MIX$WorkWeekHrs[DF_MIX$WorkWeekHrs < 30 & DF_MIX$Employment == "Employed full-time"] <- NA
+DF_MIX$WorkWeekHrs[DF_MIX$WorkWeekHrs > 50 & DF_MIX$Employment == "Employed full-time"] <- NA
 
 horas_USA <- table(DF_USA$WorkWeekHrs)
 
@@ -722,12 +723,12 @@ Según la pagina Evalart, un desarrollador en Latinoamérica en el país menos p
 Para el DF_MIX se uso el salario anual mínimo de Latinoamérica y el salario máximo de USA.
 
 ```{r, warning=FALSE, comment=NA}
-DF_USA$ConvertedComp[DF_USA$ConvertedComp > 138000] <- NA
-DF_USA$ConvertedComp[DF_USA$ConvertedComp < 33500] <- NA
-DF_LA$ConvertedComp[DF_LA$ConvertedComp > 42000] <- NA
-DF_LA$ConvertedComp[DF_LA$ConvertedComp < 8000] <- NA
-DF_MIX$ConvertedComp[DF_MIX$ConvertedComp > 138000] <- NA
-DF_MIX$ConvertedComp[DF_MIX$ConvertedComp < 8000] <- NA
+#DF_USA$ConvertedComp[DF_USA$ConvertedComp > 138000] <- NA
+#DF_USA$ConvertedComp[DF_USA$ConvertedComp < 33500] <- NA
+#DF_LA$ConvertedComp[DF_LA$ConvertedComp > 42000] <- NA
+#DF_LA$ConvertedComp[DF_LA$ConvertedComp < 8000] <- NA
+#DF_MIX$ConvertedComp[DF_MIX$ConvertedComp > 138000] <- NA
+#DF_MIX$ConvertedComp[DF_MIX$ConvertedComp < 8000] <- NA
 
 DF_TEMP_LA <-DF_LA[DF_LA$Employment == "Employed full-time" & !is.na(DF_LA$Employment),]
 DF_TEMP_USA <-DF_USA[DF_USA$Employment == "Employed full-time" & !is.na(DF_USA$Employment),]
@@ -763,11 +764,12 @@ plot(x = DF_LA_T$Age, y = DF_LA_T$ConvertedComp)
 DF_LA_T
 abline(lm(DF_LA_T$Age ~ DF_LA_T$ConvertedComp), col = "red")
 
-cor(x = DF_USA_T$Age,y = DF_USA_T$ConvertedComp, use = "complete.obs")
-cor(x = DF_LA_T$Age,y = DF_LA_T$ConvertedComp, use = "complete.obs")
+cor(x = DF_USA_T$Age,y = DF_USA_T$YearsCodePro, use = "complete.obs")
+cor(x = DF_LA_T$Age,y = DF_LA_T$YearsCodePro, use = "complete.obs")
 ```
 
 ```{r, warning=FALSE}
+DF_caros <- DF_USA[DF_USA$ConvertedComp > 1000000 & !is.na(DF_USA$ConvertedComp), ]
 DF_USA_T <- DF_USA
 DF_LA_T <- DF_LA
 DF_LA_T
@@ -780,18 +782,87 @@ cor(y = DF_LA_T$Age, x = DF_LA_T$Age1stCode, use = "complete.obs")
 ```
 
 ```{r, warning=FALSE}
-DF_USA_T <- DF_USA
+DF_USA_T <- DF_USA[DF_USA$Employment == "Independent contractor, freelancer, or self-employed" & !is.na(DF_USA$Employment),]
 #DF_USA_T[(as.numeric(DF_USA_T$Age) < as.numeric(DF_USA_T$Age1stCode) & !is.na(DF_USA_T$Age)),]
-DF_LA_T <- DF_LA
-plot(x = DF_USA_T$YearsCodePro, y = DF_USA_T$ConvertedComp)
+DF_LA_T <- DF_LA[DF_USA$Employment == "Independent contractor, freelancer, or self-employed" & !is.na(DF_LA$Employment),]
+#DF_MIX$ConvertedComp[DF_MIX$ConvertedComp > 200000 & !is.na(DF_MIX$ConvertedComp)] <- NA
+DF_USA_T$ConvertedComp[DF_USA_T$ConvertedComp > 200000 & !is.na(DF_USA_T$ConvertedComp)] <- NA
+DF_LA_T$ConvertedComp[DF_LA_T$ConvertedComp > 200000 & !is.na(DF_LA_T$ConvertedComp)] <- NA
+plot(x = DF_USA_T$YearsCodePro, y = DF_USA_T$ConvertedComp, col = "red")
 abline(lm(YearsCodePro ~ ConvertedComp, data = DF_USA_T))
-plot(x = DF_LA_T$YearsCodePro, y = DF_LA_T$ConvertedComp)
+#plot(x = DF_LA_T$YearsCodePro, y = DF_LA_T$ConvertedComp)
+points(x = DF_LA_T$YearsCodePro, y = DF_LA_T$ConvertedComp, col = "blue")
 abline(lm(YearsCodePro ~ ConvertedComp, data = DF_LA_T))
-cov(x = as.double(DF_USA_T$YearsCodePro),y = as.double(DF_USA_T$ConvertedComp), use = "complete.obs")
-cov(x = as.double(DF_LA_T$YearsCodePro),y = as.double(DF_LA_T$ConvertedComp), use = "complete.obs")
-cor(x = as.double(DF_USA_T$YearsCodePro),y = as.double(DF_USA_T$ConvertedComp), use = "complete.obs")
-cor(x = as.double(DF_LA_T$YearsCodePro),y = as.double(DF_LA_T$ConvertedComp), use = "complete.obs")
+cor(x = DF_USA_T$YearsCodePro,y = DF_USA_T$ConvertedComp, use = "pairwise.complete.obs")
+cor(x = DF_LA_T$YearsCodePro, y = DF_LA_T$ConvertedComp, use = "pairwise.complete.obs")
+
 ```
+
+```{r}
+#cor(x = DF_USA_T$WorkWeekHrs,y = DF_USA_T$Age, use = "complete.obs")
+#cor(x = DF_LA_T$WorkWeekHrs,y = DF_LA_T$Age, use = "complete.obs")
+#cor(x = DF_USA_T$WorkWeekHrs,y = DF_USA_T$Age1stCode, use = "complete.obs")
+#cor(x = DF_LA_T$WorkWeekHrs,y = DF_LA_T$Age1stCode, use = "complete.obs")
+#cor(x = DF_USA_T$WorkWeekHrs,y = DF_USA_T$ConvertedComp, use = "complete.obs")
+#cor(x = DF_LA_T$WorkWeekHrs,y = DF_LA_T$ConvertedComp, use = "complete.obs")
+#cor(x = DF_USA_T$WorkWeekHrs,y = DF_USA_T$YearsCodePro, use = "complete.obs")
+#cor(x = DF_LA_T$WorkWeekHrs,y = DF_LA_T$YearsCodePro, use = "complete.obs")
+#cor(x = DF_USA_T$Age1stCode,y = DF_USA_T$Age, use = "complete.obs")
+#cor(x = DF_LA_T$Age1stCode,y = DF_LA_T$Age, use = "complete.obs")
+#cor(x = DF_USA_T$Age1stCode,y = DF_USA_T$ConvertedComp, use = "complete.obs")
+#cor(x = DF_LA_T$Age1stCode,y = DF_LA_T$ConvertedComp, use = "complete.obs")
+#cor(x = DF_USA_T$Age1stCode,y = DF_USA_T$YearsCodePro, use = "complete.obs")
+#cor(x = DF_LA_T$Age1stCode,y = DF_LA_T$YearsCodePro, use = "complete.obs")
+#cor(x = DF_USA_T$Age,y = DF_USA_T$ConvertedComp, use = "complete.obs")
+#cor(x = DF_LA_T$Age, y = DF_LA_T$ConvertedComp, use = "complete.obs")
+#cor(x = DF_USA_T$Age,y = DF_USA_T$YearsCodePro, use = "complete.obs")
+#cor(x = DF_LA_T$Age, y = DF_LA_T$YearsCodePro, use = "complete.obs")
+#cor(x = DF_USA_T$YearsCodePro,y = DF_USA_T$Age1stCode, use = "complete.obs")
+#cor(x = DF_LA_T$YearsCodePro, y = DF_LA_T$Age1stCode, use = "complete.obs")
+
+
+#DF_TEMP <- DF_MIX[DF_MIX$Region == "América Latina" & !is.na(DF_MIX$Region), ]
+#cor(x = DF_TEMP$WorkWeekHrs,y = DF_TEMP$Age, use = "complete.obs")
+#cor(x = DF_TEMP$WorkWeekHrs,y = DF_TEMP$Age1stCode, use = "complete.obs")
+#cor(x = DF_TEMP$WorkWeekHrs,y = DF_TEMP$ConvertedComp, use = "complete.obs")
+#cor(x = DF_TEMP$WorkWeekHrs,y = DF_TEMP$YearsCodePro, use = "complete.obs")
+#cor(x = DF_TEMP$Age1stCode,y = DF_TEMP$Age, use = "complete.obs")
+#cor(x = DF_TEMP$Age1stCode,y = DF_TEMP$ConvertedComp, use = "complete.obs")
+#cor(x = DF_TEMP$Age1stCode,y = DF_TEMP$YearsCodePro, use = "complete.obs")
+#cor(x = DF_TEMP$Age, y = DF_TEMP$ConvertedComp, use = "complete.obs")
+#cor(x = DF_TEMP$Age, y = DF_TEMP$YearsCodePro, use = "complete.obs")
+#cor(x = DF_TEMP$YearsCodePro, y = DF_TEMP$ConvertedComp, use = "complete.obs")
+
+DF_USA_T <- DF_USA[DF_USA$Employment == "Independent contractor, freelancer, or self-employed" & !is.na(DF_USA$Employment), ]
+DF_LA_T <- DF_LA[DF_LA$Employment  == "Independent contractor, freelancer, or self-employed"  & !is.na(DF_LA$Employment), ]
+
+cor(x = DF_USA_T$WorkWeekHrs,y = DF_USA_T$Age, use = "pairwise.complete.obs")
+cor(x = DF_LA_T$WorkWeekHrs,y = DF_LA_T$Age, use = "pairwise.complete.obs")
+cor(x = DF_USA_T$WorkWeekHrs,y = DF_USA_T$Age1stCode, use = "pairwise.complete.obs")
+cor(x = DF_LA_T$WorkWeekHrs,y = DF_LA_T$Age1stCode, use = "pairwise.complete.obs")
+cor(x = DF_USA_T$WorkWeekHrs,y = DF_USA_T$ConvertedComp, use = "pairwise.complete.obs")
+cor(x = DF_LA_T$WorkWeekHrs,y = DF_LA_T$ConvertedComp, use = "pairwise.complete.obs")
+cor(x = DF_USA_T$WorkWeekHrs,y = DF_USA_T$YearsCodePro, use = "pairwise.complete.obs")
+cor(x = DF_LA_T$WorkWeekHrs,y = DF_LA_T$YearsCodePro, use = "pairwise.complete.obs")
+cor(x = DF_USA_T$Age1stCode,y = DF_USA_T$Age, use = "pairwise.complete.obs")
+cor(x = DF_LA_T$Age1stCode,y = DF_LA_T$Age, use = "pairwise.complete.obs")
+cor(x = DF_USA_T$Age1stCode,y = DF_USA_T$ConvertedComp, use = "pairwise.complete.obs")
+cor(x = DF_LA_T$Age1stCode,y = DF_LA_T$ConvertedComp, use = "pairwise.complete.obs")
+cor(x = DF_USA_T$Age1stCode,y = DF_USA_T$YearsCodePro, use = "pairwise.complete.obs")
+cor(x = DF_LA_T$Age1stCode,y = DF_LA_T$YearsCodePro, use = "pairwise.complete.obs")
+cor(x = DF_USA_T$Age,y = DF_USA_T$ConvertedComp, use = "pairwise.complete.obs")
+cor(x = DF_LA_T$Age, y = DF_LA_T$ConvertedComp, use = "pairwise.complete.obs")
+cor(x = DF_USA_T$Age,y = DF_USA_T$YearsCodePro, use = "pairwise.complete.obs")
+cor(x = DF_LA_T$Age, y = DF_LA_T$YearsCodePro, use = "pairwise.complete.obs")
+cor(x = DF_USA_T$YearsCodePro,y = DF_USA_T$ConvertedComp, use = "pairwise.complete.obs")
+cor(x = DF_LA_T$YearsCodePro, y = DF_LA_T$ConvertedComp, use = "pairwise.complete.obs")
+```
+```{r}
+table(DF_LA$Employment)
+table(DF_USA$Employment)
+```
+
+
 
 ### Bibliografía
 -   BBC new. (2019). Cuáles son los países donde la gente trabaja más y menos horas semanales (y qué quieren cambiar en Chile). Recuperado de https://www.bbc.com/mundo/noticias-49411425.
