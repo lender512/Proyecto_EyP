@@ -451,7 +451,12 @@ Después de analizar las siguientes variables: grado educativo, edad a la que re
 
 ##### ¿Cómo influye la región en la que los desarrolladores profesionales viven en las empresas en las que trabajan?
 
+Se procederá a realizar un alálisis de las variables 'Tamaño de organización en la que trabaja', 'Satisfacción con empleo', y
+'Proceso de incorporación' ya que estas variables ayudarán a comprobar con mayor precisión si realmente la region en donde los desarrolladores viven influye en las empresas en las que trabajan.
+
 ##### Tamaño de organización en la que trabaja
+
+Se procederá a analizar la variable 'Tamaño de organización en la que trabaja' y comparar la cantidad de empleados de las empresas u organizaciones en la que los desarrolladores de America Latina y Estados Unidos trabajan
 
 ```{r, comment=NA}
 empleados_LA <- table(DF_LA$OrgSize)
@@ -478,6 +483,8 @@ legend(x="center", ncol=3,legend=legend_text, fill=color_LA)
 Al igual que en el apartado anterior se utiliza la gráfica de barras, debido a que la diferencias entre las frecuencias relativas no son muy grandes por lo tanto visualmente no se aprecia barras muy pequeñas como si su valor fuera 0. Según las gráficas de barras de Estados Unidos la mayoría de los encuestados labora en un entorno con 10000 o más empleados (frecuencia absoluta de 1915), así mismo en América Latina la mayoría de encuestados labora en un entorno de 20 a 99 empleados.
 
 ##### Satisfacción con empleo
+
+Se procederá a realizar una análisis de esta variable para verificar la diferencia que hay en cuanto a la satisfaccion de empleo de los desarrolladores de America Latina y Estados Unidos.
 
 ```{r, comment=NA}
 variables1 <- c("MS", "AS", "NSN", "AI", "MI")
@@ -514,7 +521,10 @@ legend(x="center", ncol=2,legend=c("Muy Satisfecho","Algo Satisfecho","Ni Satisf
 
 Los grados de satisfacción son 5 y la diferencia entre las frecuencias relativas no son grandes, por lo tanto, es visualmente mejor comparar la frecuencia relativa de los grados de satisfacción mediante barras rectangulares, de modo que en este apartado se utiliza el grafico de barras. En la gráfica podemos ver que América Latina tiene un nivel de satisfacción mayor con su trabajo que Estado Unidos. Así mismo, en Estados Unidos el 48.18% de los encuestados están insatisfechos con su empleo. Además, la mayoría de los programadores en América Latina se encuentra ni satisfechos ni insatisfechos con su empleo.
 
+
 ##### Proceso de incorporación
+
+Se Procederá a realizar una analisis de la varaible 'Proceso de Incorporación' para Verificar las diferencias que hay en el acoplamiento de nuevos desarrolladores en las empresas u organizaciones de America Latina y Estados Unidos. 
 
 ```{r echo=FALSE, comment=NA}
 layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(6, 1))
@@ -547,7 +557,9 @@ legend(x="center",c("Si","No","No Se"), fill=color,ncol=3)
 
 Se uso gráficos de tortas ya que representa de manera ordenada y fácil de entender el porcentaje de respuestas a la pregunta por cada región y contamos con pocas categorias.
 
-De estos gráficos, podemos observar que tanto en América Latina como en Estados Unidos, las empresas tienen un buen proceso de incorporación (no todas), pero es ligeramente mejor en Estados Unidos, lo que implica que en América Latina existen más empresas con un mal proceso de incorporación. Los programadores más jóvenes en su mayoría respondieron a estas preguntas, debido a que suelen incorporarse a esa edad a las empresas o se encargan también de incorporar gente nueva.
+De estos gráficos, se puede observar que tanto en América Latina como en Estados Unidos, las empresas tienen un buen proceso de incorporación (no todas), pero es ligeramente mejor en Estados Unidos, lo que implica que en América Latina existen más empresas con un mal proceso de incorporación.
+
+En base al análisis de estas tres variables, se llega a la hipótesis de que en Estados Unidos es más accesible conseguir un empleo en empresas grandes, a diferencia de America Latina. Así mismo, trabajar como desarrollador en Estados Unidos puede resultar mas tedioso, ya que los desarrolladores de esta región se sienten mas insatisfechos con su empleo, a diferencia de America Latina, donde hay un menor grado de insatisfacción, y un mayor grado de neutralidad. Además se puede decir que el proceso de incorporacion de nuevos empleados a las empresas es practicamente igual en Estados Unidos y America Latina, ya que la diferencia de los resultados obtenidos en ambas regiones es mínima.
 
 ##### ¿Existe diferencia entre los años que llevan programando de manera profesional los desarrolladores de Estados Unidos y los de América Latina? 
 
