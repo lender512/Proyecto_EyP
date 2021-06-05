@@ -511,7 +511,7 @@ Se uso gráficos de tortas ya que representa de manera ordenada y fácil de ente
 
 De estos gráficos, se puede observar que tanto en América Latina como en Estados Unidos, las empresas tienen un buen proceso de incorporación (no todas), pero es ligeramente mejor en Estados Unidos, lo que implica que en América Latina existen más empresas con un mal proceso de incorporación.
 
-En base al análisis de estas tres variables, se llega a la hipótesis de que en Estados Unidos es más accesible conseguir un empleo en empresas grandes, a diferencia de America Latina. Así mismo, trabajar como desarrollador en Estados Unidos puede resultar mas tedioso, ya que los desarrolladores de esta región se sienten mas insatisfechos con su empleo, a diferencia de America Latina, donde hay un menor grado de insatisfacción, y un mayor grado de neutralidad.
+En base al análisis de estas tres variables, se llega a la hipótesis de que en Estados Unidos es más accesible conseguir un empleo en empresas grandes, a diferencia de America Latina. Así mismo, trabajar como desarrollador en Estados Unidos puede resultar mas tedioso, ya que los desarrolladores de esta región se sienten mas insatisfechos con su empleo, a diferencia de America Latina, donde hay un menor grado de insatisfacción, y un mayor grado de neutralidad. Además se puede decir que el proceso de incorporacion de nuevos empleados a las empresas es practicamente igual en Estados Unidos y America Latina, ya que la diferencia de los resultados obtenidos en ambas regiones es mínima.
 
 ##### ¿Existe diferencia entre los años que llevan programando de manera profesional los desarrolladores de Estados Unidos y los de América Latina? 
 
