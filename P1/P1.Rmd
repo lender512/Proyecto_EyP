@@ -205,10 +205,12 @@ A continuación, se especifican las variables con las que trabajaremos y su tipo
 
 #### ¿Cual es la diferencia entre el género y las edades de los desarrolladores profesionales según la región en la que viven?
 
-Se decidió realizar un analistas de aspectos generales como lo son la edad y el género de los desarrolladores previo al del aspecto educativo y laboral para poder mostrar otras variables que también se consideraron importantes pero no se podían clasificar en esas dos categorías. 
+Se decidió realizar un análisis de aspectos generales como lo son la edad y el género de los desarrolladores previo al del aspecto educativo y laboral para poder mostrar otras variables que también se consideraron importantes pero no se podían clasificar en esas dos categorías.
 
 ##### Género
+
 Se procederá a analizar la variable de género, pues esta permitirá ver si es que existe una brecha de género entre las personas que son desarrolladores profesionales y si esta depende de la región en la que viven.
+
 ```{r}
 
 temp = DF_USA$Gender[!is.na(DF_USA$Gender)]
@@ -251,7 +253,9 @@ legend(x="center", ncol=3,legend=c("Hombre","Otros","Mujer"),
 Se decidió utilizar el gráfico de pie porque se cuenta con pocas categorías y las diferencias entre estas resaltan bastante. Se puede observar como, si bien la proporción de mujeres que se dedican en Estados Unidos es el doble que la proporción en América Latina, en ambas regiones la brecha de género es bastante grande lo que lleva a la hipótesis, al analizar el indicador, de que la gran mayoría de los programadores profesionales y que esto no depende la región en la que viven.
 
 ##### Edad
+
 A continuación, se analizará la variable edad, para identificar si es que hay diferencia entre las edades de las personas que se dedican profesionalmente a la programacion en Estados Unidos y América Latina
+
 ```{r, warning=FALSE, comment=NA}
 
 boxplot(DF_MIX$Age~DF_MIX$Region, na.rm= T, xlab = "Edad", ylab = "Región", notch=TRUE, horizontal = TRUE, main='Edad de programadores por región')
@@ -266,6 +270,7 @@ Se decidió usar un gráfico de cajas y bigotes porque este permite observar mú
 IQR(DF_LA$Age, na.rm = TRUE)
 IQR(DF_USA$Age, na.rm = TRUE)
 ```
+
 Continuando con el análisis de la variable, se puede usar el promedio de la edad de los programadores para comparar fácilmente un representante de los programadores de cada región y ver si hay diferencia. Se puede notar que la edad de los profesionales de América Latina es de 30.14 mientras que en Estados Unidos es de 34.33, poco más que 4 años de diferencia.
 
 ```{r, comment=NA}
@@ -273,11 +278,14 @@ round(mean(DF_LA$Age, na.rm = TRUE), 2)
 round(mean(DF_USA$Age, na.rm = TRUE),2)
 ```
 
-Para finalizar con confirmacion de una diferencia real, se hace uso del parámetro *notch* del gráfico de cajas y bigotes para ver si la diferencia entre las medianas es estadísticamente significativas con un 95% de intervalo de confianza, si estas se sobreponen, significa que practicamente no hay diferencia de medianas, por el otro lado, si no se sobreponen si existe dicha diferencia. Este parámetro se seguirá utilizando a lo largo del estudio. En esta caso se aprecia que las muescas no se superponen, por lo que podemos calcular las medianas y determinar cual es la diferencia real, pues puede que los promedios estén sesgados por valores atípicos. Existe una diferencia de 3 años.
+Para finalizar con confirmación de una diferencia real, se hace uso del parámetro *notch* del gráfico de cajas y bigotes para ver si la diferencia entre las medianas es estadísticamente significativas con un 95% de intervalo de confianza, si estas se sobreponen, significa que prácticamente no hay diferencia de medianas, por el otro lado, si no se sobreponen si existe dicha diferencia. Este parámetro se seguirá utilizando a lo largo del estudio. En esta caso se aprecia que las muescas no se superponen, por lo que podemos calcular las medianas y determinar cual es la diferencia real, pues puede que los promedios estén sesgados por valores atípicos. Existe una diferencia de 3 años.
+
 ```{r, comment=NA}
 round(median(DF_LA$Age, na.rm = TRUE), 2)
 round(median(DF_USA$Age, na.rm = TRUE),2)
 ```
+**Respondiendo pregunta de investigación**
+
 Luego del análisis de la variable utilizando descriptores, se llega a la hipótesis de que si hay una diferencia entre la edad de los desarrolladores de Estados Unidos y la de los de América Latina. Sin embargo, esta no es abismal pues solo ronda los 3 y 4 años.
 
 #### ¿Cómo influye la región en la que viven los desarrolladores profesionales en su educación?
@@ -286,13 +294,14 @@ Luego del análisis de la variable utilizando descriptores, se llega a la hipót
 
 ##### Grado educativo
 
+Se analizará la variable grado educativo en ambas regiones porque permitirá ver si existe un brecha educativa entre los desarrolladores profesionales de Estados Unidos y América Latina.
 
 ```{r, warning=FALSE, comment=NA}
 
 tableUSA_WFR <- table(DF_USA$EdLevel)
 tableUSA <- prop.table(tableUSA_WFR)
 tablaUSA_DF <- data.frame(names(tableUSA_WFR), as.vector(tableUSA))
-names(tablaUSA_DF) <- c('Grado estudio','Frecuencia Relativa')
+names(tablaUSA_DF) <- c('Grado estudio - Estados Unidos','Frecuencia Relativa')
 
 tablaUSA_DF
 
@@ -302,7 +311,7 @@ names <- c("GA", "L", "NCE", "M", "OD", "EP", "TP", "ES", "ST")
 tableLA_WFR <- table(DF_LA$EdLevel)
 tableLA <- prop.table(tableLA_WFR)
 tableLA_DF <- data.frame(names(tableLA_WFR), as.vector(tableLA))
-names(tableLA_DF) <- c('Grado estudio','Frecuencia Relativa')
+names(tableLA_DF) <- c('Grado estudio - América Latina','Frecuencia Relativa')
 tableLA_DF
 
 layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(6, 2))
@@ -333,9 +342,13 @@ mlv(DF_USA$EdLevel)
 mlv(DF_LA$EdLevel)
 ```
 
+Luego del análisis de la variable, se puede presentar la hipótesis de que la mayoría de desarrolladores profesionales de Estados Unidos y la de los de América Latina tienen el grado académico de licenciados.
+
 ##### ¿Cómo influye la región en la que los desarrolladores profesionales viven en la edad a la que escribieron su primer programa?
 
 ##### Edad a la que realizó primer programa
+
+Se analizará la variable edad a la que realizó primer programa en ambas regiones porque permitirá ver si existe un diferencia al momento de realizar su primer programa entre los desarrolladores profesionales de Estados Unidos y América Latina.
 
 Para la limpieza de datos descartamos aquellos datos en donde la edad de primer programa de algún programador era mayor que la edad actual del mismo, ya que no tendría sentido que la edad a la que escribió su primer código sea mayor que la edad actual de algún programador.
 
@@ -354,15 +367,37 @@ abline(v=mean(as.numeric(DF_LA$Age1stCode), na.rm = TRUE), col = "blue")
 legend(25, 1.7, legend=c("media EEUU", "media Latam"), col=c("red", "blue"),lwd=2 )
 ```
 
-Decidimos utilizar un boxplot ya que nos permite ver múltiples descriptores de manera eficiente. Nos fijamos en que la diferencia de las medianas para comparar los valores y vemos que son estadísticamente significativas y que se diferencian en 2 años. Además calculamos la media para ver el sesgo de la gráfica y vemos que al coincidir con la media en el caso de América Latina, significa que la distribución es simétrica
+Decidimos utilizar un boxplot ya que nos permite ver múltiples descriptores de manera eficiente. Nos fijamos en que la diferencia de las medianas para comparar los valores y vemos que son estadísticamente significativas y que se diferencian en 2 años. Además calculamos la media para ver el sesgo de la gráfica y vemos que al coincidir con la media en el caso de América Latina, significa que la distribución es simétrica.
 
 ```{r, warning=FALSE}
 median(DF_USA$Age1stCode, na.rm = TRUE)
 median(DF_LA$Age1stCode, na.rm = TRUE)
 ```
-##### ¿Cómo influye la región en la que los desarrolladores profesionales viven en la frecuencia con la que aprenden un nuevo lenguaje? 
+
+Además, se puede apreciar que las edades de los programadores profesionales están más concentradas en América Latina, para comprobar ello se usa el rango intercuartílico, en este se puede apreciar una diferencia de 1 año.
+
+```{r}
+IQR(DF_LA$Age1stCode, na.rm = TRUE)
+
+IQR(DF_USA$Age1stCode, na.rm = TRUE)
+```
+
+Para saber a que edad en promedio realizaron su primer programa se usará la mediana. Se puede notar que en América Latina la edad promedio es 15.95 y en Estados Unidos es 14.81, la diferencia es de un poco más de un año.
+
+```{r}
+round(mean(DF_LA$Age1stCode, na.rm = TRUE), 2)
+
+round(mean(DF_USA$Age1stCode, na.rm = TRUE),2)
+```
+**Respondiendo pregunta de investigación**
+
+Luego del análisis de la variable, se llega a la hipótesis de que en Estados Unidos realizan su primer programa antes que en América Latina. Sin embargo, la diferencia es de apenas un poco más de un año, además en América Latina las edades están mas concentradas.
+
+##### ¿Cómo influye la región en la que los desarrolladores profesionales viven en la frecuencia con la que aprenden un nuevo lenguaje?
 
 ##### Frecuencia de aprendizaje de un nuevo lenguaje
+
+Se analizará la variable frecuencia de aprendizaje de un nuevo lenguaje en ambas regiones porque permitirá identificarla frecuencia de aprendizaje entre los desarrolladores profesionales de Estados Unidos y América Latina.
 
 ```{r, comment=NA}
 #usa
@@ -397,7 +432,20 @@ barplot(tabla_NEWLearn_LA_FR, names.arg=tiemponames, xlab = 'Frecuencia de apren
 
 Para esta variable también se hace uso de un gráfico de barras ya que nos permite ver que "tiempo de aprendizaje" es más común, asimismo esto nos permite una comparación rápida entre ambas regiones para un mejor análisis.
 
-Se observa que en USA la mayoría de los programadores aprenden un nuevo lenguaje cada año, seguido de pocos meses, mientras que en Latinoamérica la mayoría aprenden un nuevo lenguaje cada pocos meses, seguido de un año. Resaltando que en Latinoamérica hay un mayor ritmo de aprednizaje de un nuevo lenguaje.
+Se observa que en USA la mayoría de los programadores aprenden un nuevo lenguaje cada año, seguido de pocos meses, mientras que en Latinoamérica la mayoría aprenden un nuevo lenguaje cada pocos meses, seguido de un año. Resaltando que en Latinoamérica hay un mayor ritmo de aprendizaje de un nuevo lenguaje.
+
+También, podemos comprobar con la moda que la frecuencia de aprendizaje más común en Estados Unidos es un nuevo lenguaje por año, mientras que en América Latina en uno cada pocos meses.
+
+```{r, comment=NA}
+mlv(DF_USA$NEWLearn)
+mlv(DF_LA$NEWLearn)
+```
+
+Luego del análisis de la variable, se puede presentar la hipótesis que en Estados Unidos tiene una menor frecuencia de aprendizaje de un nuevo lenguaje que América Latina.
+
+**Respondiendo pregunta de investigación**
+
+Después de analizar las siguientes variables: grado educativo, edad a la que realizó primer programa y frecuencia de aprendizaje de un nuevo lenguaje a través de los descriptores. Se llega a la hipótesis que en Estados Unidos tiene una menor frecuencia de aprendizaje de un nuevo lenguaje que en América Latina, pero en este país realizan su primer programa antes que en América Latina y no existe una diferencia entre el grado educativo de los programadores en ambas regiones.
 
 #### ¿Cómo influye la región en la que los desarrolladores profesionales viven en su **trabajo**?
 
@@ -503,14 +551,18 @@ De estos gráficos, podemos observar que tanto en América Latina como en Estado
 
 ##### ¿Existe diferencia entre los años que llevan programando de manera profesional los desarrolladores de Estados Unidos y los de América Latina? 
 
+Se procederá a hacer un análisis de la variable "Años programando profesionalmente" que indica la cantidad de años que los desarrolladores llevan programando sin contar los años de educación en cada región para poder determinar si existe una diferencia o otro tipo de relación entre la variable y región.
+
 #### Años programando profesionalmente
 
-Para la limpieza de datos se utilizó el criterio de que una persona no puede tener más años codeando como profesional que años de vida, porque sería ilógico que alguien tenga más años codeando profesionalmente que años de vida.
+Para la limpieza de datos se utilizó el criterio de que una persona no puede tener más años codeando como profesional que años de vida, pues una situación como esta sería ilógica.
 
 
 ```{r, warning=FALSE, comment=NA}
 
 DF_MIX$YearsCodePro[(DF_MIX$YearsCodePro > DF_MIX$Age) & !is.na(DF_MIX$YearsCodePro) & !is.na(DF_MIX$Age)]  <- NA
+DF_LA$YearsCodePro[(DF_LA$YearsCodePro > DF_LA$Age) & !is.na(DF_LA$YearsCodePro) & !is.na(DF_LA$Age)]  <- NA
+DF_USA$YearsCodePro[(DF_USA$YearsCodePro > DF_USA$Age) & !is.na(DF_USA$YearsCodePro) & !is.na(DF_USA$Age)]  <- NA
 
 boxplot(as.numeric(DF_MIX$YearsCodePro)~DF_MIX$Region, na.rm= TRUE, ylab = "Región", xlab = "Años", notch = TRUE, horizontal = TRUE, main='Años programando profesionalmente por región')
 abline(v=mean(as.numeric(DF_USA$YearsCodePro), na.rm = TRUE), col = "red")
@@ -518,12 +570,29 @@ abline(v=mean(as.numeric(DF_LA$YearsCodePro), na.rm = TRUE), col = "blue")
 legend(25,1.7,legend=c("media EEUU", "media Latam"),col=c("red", "blue"),lwd=2)
 ```
 
-En este diagrama de cajas y bigotes se observa que los programadores de Estados Unidos tienen más años programando profesionalmente en total en comparación con los programadores de América Latina.
+Se decidió utilizar un gráfico de cajas y bigotes porque este ya incluye muchos otros descriptores numéricos, como la mediana y el rango intercuartílico. En este diagrama se observa que las medianas no se sobreponen en el rango de las muescas y que la de los programadores de Estados Unidos es más más alta en comparación con la de los programadores de América Latina.
+```{r}
+round(median(DF_LA$YearsCodePro, na.rm = TRUE), 2)
+round(median(DF_USA$YearsCodePro, na.rm = TRUE),2)
+```
 
-Existe una diferencia de 4 años en el tercer cuartil de ambas regiones; es decir, el 75% de los programadores estadounidenses cuentan a los mucho con 15 años programando profesionalmente y los latinoamericanos con 11 años.
 
+También destaca la diferencia de 4 años en el tercer cuartil de ambas regiones; es decir, el 75% de los programadores estadounidenses cuentan a los mucho con 15 años programando profesionalmente y los latinoamericanos con 11 años.
+```{r}
+quantile(DF_LA$YearsCodePro, na.rm = TRUE)
+quantile(DF_USA$YearsCodePro, na.rm = TRUE)
+```
+Continuando con el análisis, se toma las medias de ambas regiones, y se observa una diferencia de más de 2 años, siendo mayor para Estados Unidos, confirmando lo que ya sugerían las medianas. 
+
+```{r, comment=NA}
+round(mean(DF_LA$YearsCodePro, na.rm = TRUE), 2)
+round(mean(DF_USA$YearsCodePro, na.rm = TRUE),2)
+```
+A partir del análisis y las comparaciones, se llega a la hipótesis de que sí existe una diferencia entre Estados Unidos y América Latina en cuanto a los años programando profesionalmente, la comparación de medianas, sugiere que los programadores profesionales de Estados Unidos llevan programando más años que los de América Latina, sin embargo, esta diferencia no es muy notoria, ya que es solo de 2 años. 
 
 ##### ¿Cómo influye la región en la que los desarrolladores profesionales viven en su situación de búsqueda laboral?
+
+Se realizará un análisis de la variable "Situación de búsqueda de empleo", que describe si los programadores profesiones se encuentran o no buscando trabajo o si están abiertos a nuevas oportunidades en cada región, para determinar si existe una influencia de la región en la situación búsqueda laboral de los programadores de cada región.
 
 ##### Situación de búsqueda de empleo
 
@@ -539,9 +608,6 @@ c1<-barplot(m,xlab='Frecuencia', ylab = "Porcentaje(%)", main='Situacion de Empl
 col=colors,cex.names=0.8, ylim = c(0,70))
 text(c1, m-2, labels = round(m,2))
 
-
-
-
 c2<-barplot(n, xlab='Frecuencia',ylab = "Porcentaje(%)", main='Situacion de Empleo\nEstados Unidos', width = 5,
 col=colors,cex.names=0.8,names.arg=ar, ylim = c(0,70))
 text(c2, n-2, labels = round(n,2))
@@ -550,18 +616,21 @@ par(mai=c(0,0,0,0))
 plot.new()
 legend(x="center", legend = et, fill=colors,ncol=1)
 
-
 ```
 
 Utilizamos gráficos de barra en base al total de encuestados por región ya que nos permite identificar claramente y de manera ordenada las diferencias de la situación de empleo de los programadores por región.
 
-Podemos observar que la cantidad de programadores que buscan empleo es mayor en América Latina, y la cantidad de programadores que no buscan empleo es mucho mayor en Estados Unidos. Esto puede deberse a que hay mayor disponibilidad de trabajos en Estados Unidos que en América Latina y también que los desarrolladores en Estados Unidos ya tienen estabilidad laboral.
+Podemos observar que la cantidad de programadores que buscan empleo es mayor en América Latina, y la cantidad de programadores que no buscan empleo es mucho mayor en Estados Unidos (17.71%). En cuanto a las otras opciones, también hay diferencia, pero es menor. Esta es de 5% respecto a las personas que buscan un empleo, siendo mayor para Latinoamérica. Igualmente para la última opción, existe mayor disponibilidad a aceptar oportunidades en Latinoamérica, con un 11.89% a comparación de USA.
 
-##### ¿Cómo influye la región en la que los desarrolladores profesionales viven en la forma en la que trabajan? 
+**Respondiendo pregunta de investigación**
 
-#### Horas trabajadas semanalmente  
-Según la instancia federal del gobierno estadounidense (Internal Revenue Services) para que un trabajo sea considerado a tiempo completo mínimo tiene que cumplir 30 horas semanales, o 130 horas de servicio por mes y no hay un límite máximo de horas semanales. Por otra parte, en Latinoamérica según BBC new en ciertos países existen límites de 48 horas semanales  y en otros países en rango de horas es de 40 a 47 horas semanales. 
-Por ende, se decidió limpiar algunos datos debido a que se encontró valores imposibles, como 168 horas a la semana. Por lo cual decidimos que el rango normal de horas semanales considerando 5 días laborales a la semana va de  30 (horas mínimas en estados unidos) a 50 (rango máximo  en latinoamerica añadiendo algunas horas extras) horas.
+En base al análisis, se llega a la hipótesis de que la región influye en la situación de búsqueda laboral. Resaltando, que en Latinoamérica, existe un mayor porcentaje de programadores que están disponibles a nuevas oportunidades o buscando un trabajo (un total de 84.04% en América Latina vs un total de 66.34%).
+
+##### ¿Cómo influye la región en la que los desarrolladores profesionales viven en la forma en la que trabajan?
+
+#### Horas trabajadas semanalmente
+
+Según la instancia federal del gobierno estadounidense (Internal Revenue Services) para que un trabajo sea considerado a tiempo completo mínimo tiene que cumplir 30 horas semanales, o 130 horas de servicio por mes y no hay un límite máximo de horas semanales. Por otra parte, en Latinoamérica según BBC new en ciertos países existen límites de 48 horas semanales y en otros países en rango de horas es de 40 a 47 horas semanales. Por ende, se decidió limpiar algunos datos debido a que se encontró valores imposibles, como 168 horas a la semana. Por lo cual decidimos que el rango normal de horas semanales considerando 5 días laborales a la semana va de 30 (horas mínimas en estados unidos) a 50 (rango máximo en latinoamerica añadiendo algunas horas extras) horas.
 
 ```{r, comment=NA}
 horas_LA <- table(DF_LA$WorkWeekHrs)
@@ -594,7 +663,8 @@ boxplot(DF_TEMP$WorkWeekHrs~DF_TEMP$Region, ylab = "Región", xlab = "Horas", ma
 
 ```
 
-Para este apartado se utiliza la gráfica de caja porque ayuda a representar gráficamente variables cuantitativas mediante la distribución de sus cuartiles, además de que permite incluir los datos atípicos. Para la gráfica se consideró a los desarrolladores que trabajan a tiempo completo para que las unidades muestrales sean comparables. Según la gráfica, la media de horas que trabajan los encuestados por semana en América Latina es de 41.05 horas y en Estados Unidos es de 41.03 
+Para este apartado se utiliza la gráfica de caja porque ayuda a representar gráficamente variables cuantitativas mediante la distribución de sus cuartiles, además de que permite incluir los datos atípicos. Para la gráfica se consideró a los desarrolladores que trabajan a tiempo completo para que las unidades muestrales sean comparables. Según la gráfica, la media de horas que trabajan los encuestados por semana en América Latina es de 41.05 horas y en Estados Unidos es de 41.03
+
 ```{r}
 mean(DF_LA$WorkWeekHrs, na.rm = TRUE)
 mean(DF_USA$WorkWeekHrs, na.rm = TRUE)
@@ -606,7 +676,6 @@ Para confirmar esta similitud, podemos ver que las medias en el boxplot son igua
 sd(DF_USA$WorkWeekHrs, na.rm = TRUE)/mean(DF_USA$WorkWeekHrs, na.rm = TRUE)
 sd(DF_LA$WorkWeekHrs, na.rm = TRUE)/mean(DF_LA$WorkWeekHrs, na.rm = TRUE)
 ```
-
 
 ##### Frecuencia de horas extra en el trabajo
 
@@ -674,7 +743,6 @@ Los gráficos de barras muestran que la mayoría de los programadores tanto esta
 
 También se puede observar que existe mayor frecuencia relativa de latinoamericanos trabajando a medio tiempo y de manera independiente que los estadounidenses.
 
-
 ##### Lenguajes de programación
 
 ```{r echo=FALSE, comment=NA}
@@ -739,8 +807,7 @@ hist(DF_TEMP_LA$ConvertedComp, breaks = 30, freq = TRUE, main = "Histograma del 
 abline(v=mean(as.numeric(DF_LA$ConvertedComp), na.rm = TRUE), col = "blue")
 ```
 
-
-Para esta variable se hizo uso de histogramas debido a que nos permiten observar la distribución de los desarrolladores por salario, además, nos permite marcar la media, y como estan distribuidos los salarios alrededor de esta, lo que permite un análisis pertinente. 
+Para esta variable se hizo uso de histogramas debido a que nos permiten observar la distribución de los desarrolladores por salario, además, nos permite marcar la media, y como estan distribuidos los salarios alrededor de esta, lo que permite un análisis pertinente.
 
 ```{r}
 round(mean(DF_LA$ConvertedComp, na.rm = TRUE), 2)
@@ -857,16 +924,18 @@ cor(x = DF_LA_T$Age, y = DF_LA_T$YearsCodePro, use = "pairwise.complete.obs")
 cor(x = DF_USA_T$YearsCodePro,y = DF_USA_T$ConvertedComp, use = "pairwise.complete.obs")
 cor(x = DF_LA_T$YearsCodePro, y = DF_LA_T$ConvertedComp, use = "pairwise.complete.obs")
 ```
+
 ```{r}
 table(DF_LA$Employment)
 table(DF_USA$Employment)
 ```
 
-
-
 ### Bibliografía
--   BBC new. (2019). Cuáles son los países donde la gente trabaja más y menos horas semanales (y qué quieren cambiar en Chile). Recuperado de https://www.bbc.com/mundo/noticias-49411425.
--   Internal Revenue Service. (2021). Identifying Full-time Employees. Recuperado de https://www.irs.gov/affordable-care-act/employers/identifying-full-time-employees
--   ZipRecruiter (2020). Software Developer Salary. Recuperado de: https://www.ziprecruiter.com/Salaries/Software-Developer-Salary
 
--   Evalart (2019). Cuánto ganan los desarrolladores en América Latina. Recuperado de: https://evalart.com/es/blog/cuanto-ganan-los-desarrolladores-en-america-latina/#:~:text=Por%20%C3%BAltimos%20se%20encuentran%20los,ganar%20hasta%203.170%2C00%20USD.
+-   BBC new. (2019). Cuáles son los países donde la gente trabaja más y menos horas semanales (y qué quieren cambiar en Chile). Recuperado de <https://www.bbc.com/mundo/noticias-49411425>.
+
+-   Internal Revenue Service. (2021). Identifying Full-time Employees. Recuperado de <https://www.irs.gov/affordable-care-act/employers/identifying-full-time-employees>
+
+-   ZipRecruiter (2020). Software Developer Salary. Recuperado de: <https://www.ziprecruiter.com/Salaries/Software-Developer-Salary>
+
+-   Evalart (2019). Cuánto ganan los desarrolladores en América Latina. Recuperado de: <https://evalart.com/es/blog/cuanto-ganan-los-desarrolladores-en-america-latina/#>:\~:text=Por%20%C3%BAltimos%20se%20encuentran%20los,ganar%20hasta%203.170%2C00%20USD.
