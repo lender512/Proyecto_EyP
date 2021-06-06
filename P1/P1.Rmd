@@ -290,44 +290,39 @@ Luego del análisis de la variable utilizando descriptores, se llega a la hipót
 
 #### ¿Cómo influye la región en la que viven los desarrolladores profesionales en su educación?
 
+Para responder esta pregunta se decidio realizar un análisis de aspectos generales como el grado educactivo, la edad a la que realizó primer programa y la frecuencia de aprendizaje de un nuevo lenguaje, ya que estás brinda un paranorama de la formación acedémica de los desarrolladores profesionales en las dos regiones (Estados Unidos y América Latina).
+
 ##### ¿Cómo influye la región en la que viven los desarrolladores profesionales en su grado educativo?
 
 ##### Grado educativo
 
 Se analizará la variable grado educativo en ambas regiones porque permitirá ver si existe un brecha educativa entre los desarrolladores profesionales de Estados Unidos y América Latina.
 
-```{r, warning=FALSE, comment=NA}
 
+```{r, warning=FALSE, comment=NA}
 tableUSA_WFR <- table(DF_USA$EdLevel)
 tableUSA <- prop.table(tableUSA_WFR)
+tableUSA <- tableUSA[c(3, 6, 8, 9, 1, 2, 4, 7, 5)]
 tablaUSA_DF <- data.frame(names(tableUSA_WFR), as.vector(tableUSA))
 names(tablaUSA_DF) <- c('Grado estudio - Estados Unidos','Frecuencia Relativa')
-
 tablaUSA_DF
-
-
 names <- c("GA", "L", "NCE", "M", "OD", "EP", "TP", "ES", "ST")
-
+names <- names[c(3, 6, 8, 9, 1, 2, 4, 7, 5)]
 tableLA_WFR <- table(DF_LA$EdLevel)
 tableLA <- prop.table(tableLA_WFR)
+tableLA <- tableLA[c(3, 6, 8, 9, 1, 2, 4, 7, 5)]
 tableLA_DF <- data.frame(names(tableLA_WFR), as.vector(tableLA))
 names(tableLA_DF) <- c('Grado estudio - América Latina','Frecuencia Relativa')
 tableLA_DF
-
 layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(6, 2))
 par(mai=rep(0.8, 4))
-
 barplot(tableUSA, las=2, names.arg=names, main='Grados educativos en Estados Unidos', xlab = "Grados educativos",  ylab = "Frecuencia relativa", col=c("skyblue","orange","red","beige","aliceblue","black","azure", "burlywood3", "cornflowerblue"),xlim=c(0,10), ylim = c(0, 0.6), cex.names=0.8)
-
-
 barplot(tableLA, las=2, names.arg=names, main='Grados educativos en América Latina', xlab = "Grados educativos",  ylab = "Frecuencia relativa", col=c("skyblue","orange","red","beige","aliceblue","black","azure", "burlywood3", "cornflowerblue"),xlim=c(0,10), ylim = c(0, 0.6), cex.names=0.8)
-
 par(mai=c(0,0,0,0))
 plot.new()
-
-legend(x="center", ncol=2, legend = c("Grado Asociado","Licenciatura", "Nunca Completé ninguna Educación formal", "Maestría", "Otro Doctorado", "Escuela Primaria", "Título Profesional", "Escuela Secundaria", "Estudios Superiores sin obtener un Título"), fill=c("skyblue","orange","red","beige","aliceblue","black","azure", "burlywood3", "cornflowerblue"))
-
+legend(x="center", ncol=2, legend = c("Nunca Completé ninguna Educación formal", "Escuela Primaria", "Escuela Secundaria", "Estudios Superiores sin obtener un Título", "Grado Asociado", "Licenciatura", "Maestría", "Título Profesional", "Otro Doctorado"), fill=c("skyblue","orange","red","beige","aliceblue","black","azure", "burlywood3", "cornflowerblue"))
 ```
+
 
 En este estudio se contemplaron 9 diferentes grados de estudios, en algunos casos la diferencia entre ellos es abismal. Por lo tanto, para poder observar mejor las diferencias se utilizó gráficos de barra, además para poder tener una mejor visualización de las diferencias de frecuencia relativa entre Estados Unidos y América Latina se optó por poner los gráficos uno al costado de otro.
 
@@ -335,14 +330,7 @@ Los gráficos de barras muestran que la mayoría de los programadores tanto esta
 
 Por otro lado, en América Latina existe una mayor frecuencia relativa de programadores que no terminaron sus estudios universitarios en comparación con Estados Unidos.
 
-Por último, podemos comprobar con la moda que el grado más común en ambas regiones es el de licenciatura.
-
-```{r, comment=NA}
-mlv(DF_USA$EdLevel)
-mlv(DF_LA$EdLevel)
-```
-
-Luego del análisis de la variable, se puede presentar la hipótesis de que la mayoría de desarrolladores profesionales de Estados Unidos y la de los de América Latina tienen el grado académico de licenciados.
+Luego del análisis de la variable, se puede presentar la hipótesis de que la mayoría de desarrolladores profesionales tanto de Estados Unidos como de América Latina tienen el grado académico de licenciados.
 
 ##### ¿Cómo influye la región en la que los desarrolladores profesionales viven en la edad a la que escribieron su primer programa?
 
@@ -389,7 +377,6 @@ round(mean(DF_LA$Age1stCode, na.rm = TRUE), 2)
 
 round(mean(DF_USA$Age1stCode, na.rm = TRUE),2)
 ```
-**Respondiendo pregunta de investigación**
 
 Luego del análisis de la variable, se llega a la hipótesis de que en Estados Unidos realizan su primer programa antes que en América Latina. Sin embargo, la diferencia es de apenas un poco más de un año, además en América Latina las edades están mas concentradas.
 
@@ -403,10 +390,11 @@ Se analizará la variable frecuencia de aprendizaje de un nuevo lenguaje en amba
 #usa
 temp = DF_USA$NEWLearn[!is.na(DF_USA$NEWLearn)]
 
-tiemponames <- c("Pocos meses", "Una por década", "Una vez al año", "Pocos años")
+tiemponames <- c("Pocos meses", "Una vez al año", "Pocos años", "Una por década")
 
 tabla_NEWLearn_USA_F = table(temp)
 tabla_NEWLearn_USA_FR = prop.table(tabla_NEWLearn_USA_F)
+tabla_NEWLearn_USA_FR <- tabla_NEWLearn_USA_FR[c(1, 3, 4, 2)]
 tabla_NEWLearn_USA_P = data.frame(tiemponames, as.vector(tabla_NEWLearn_USA_F), as.vector(tabla_NEWLearn_USA_FR))
 
 names(tabla_NEWLearn_USA_P) <- c('Frecuencia de aprendizaje USA', 'Frecuencia de aprendizaje', 'Frecuencia Relativa')
@@ -420,7 +408,7 @@ barplot(tabla_NEWLearn_USA_FR, names.arg=tiemponames, xlab = 'Frecuencia de apre
 temp2 = DF_LA$NEWLearn[!is.na(DF_LA$NEWLearn)]
 tabla_NEWLearn_LA_F= table(temp2)
 tabla_NEWLearn_LA_FR = prop.table(tabla_NEWLearn_LA_F)
-
+tabla_NEWLearn_LA_FR <- tabla_NEWLearn_LA_FR[c(1, 3, 4, 2)]
 tabla_NEWLearn_LA_P = data.frame(tiemponames, as.vector(tabla_NEWLearn_LA_F), as.vector(tabla_NEWLearn_LA_FR))
 
 names(tabla_NEWLearn_LA_P) <- c('Frecuencia de aprendizaje Latinoamérica', 'Frecuencia', 'Frecuencia Relativa')
@@ -639,10 +627,10 @@ Podemos observar que la cantidad de programadores que buscan empleo es mayor en 
 En base al análisis, se llega a la hipótesis de que la región influye en la situación de búsqueda laboral. Resaltando, que en Latinoamérica, existe un mayor porcentaje de programadores que están disponibles a nuevas oportunidades o buscando un trabajo (un total de 84.04% en América Latina vs un total de 66.34%).
 
 ##### ¿Cómo influye la región en la que los desarrolladores profesionales viven en la forma en la que trabajan?
-
+Se analizarán las variables “horas trabajadas semanalmente”, “frecuencia de horas extra en el trabajo”, “tipo de empleo” y “Lenguajes de programación” para dar una posible respuesta para la pregunta, debido a que mediante esas variables podemos comparar entre América Latina y Estados Unidos si es que predominan los trabajos a tiempo completo, que lenguajes se utilizan más en cada región y cuantas horas de trabajo realizan los programadores.  
 #### Horas trabajadas semanalmente
-
-Según la instancia federal del gobierno estadounidense (Internal Revenue Services) para que un trabajo sea considerado a tiempo completo mínimo tiene que cumplir 30 horas semanales, o 130 horas de servicio por mes y no hay un límite máximo de horas semanales. Por otra parte, en Latinoamérica según BBC new en ciertos países existen límites de 48 horas semanales y en otros países en rango de horas es de 40 a 47 horas semanales. Por ende, se decidió limpiar algunos datos debido a que se encontró valores imposibles, como 168 horas a la semana. Por lo cual decidimos que el rango normal de horas semanales considerando 5 días laborales a la semana va de 30 (horas mínimas en estados unidos) a 50 (rango máximo en latinoamerica añadiendo algunas horas extras) horas.
+Según la instancia federal del gobierno estadounidense (Internal Revenue Services) para que un trabajo sea considerado a tiempo completo mínimo tiene que cumplir 30 horas semanales, o 130 horas de servicio por mes, sin un límite máximo de horas. Por otra parte, en Latinoamérica según BBC new en ciertos países existen límites de 48 horas semanales y en otros países van de 40 a 47 horas semanales. 
+Se limpiaron los datos siguiendo las fuentes consultas debido a que se encontraron muchos valores que no pueden ser verídicos, como es el caso de trabajar 168 horas a la semana. Así mismo, se estableció las horas semanales considerando 5 días laborales a la semana desde 30 (horas mínimas en estados unidos) a 50 (valor máximo en Latinoamérica añadiendo algunas horas extras) horas para observar una gráfica sin muchos datos atípicos.
 
 ```{r, comment=NA}
 horas_LA <- table(DF_LA$WorkWeekHrs)
@@ -674,49 +662,49 @@ DF_TEMP <-DF_MIX[DF_MIX$Employment == "Employed full-time" & !is.na(DF_MIX$Emplo
 boxplot(DF_TEMP$WorkWeekHrs~DF_TEMP$Region, ylab = "Región", xlab = "Horas", main="Horas trabajadas por semana", notch = FALSE, horizontal = TRUE)
 
 ```
-
-Para este apartado se utiliza la gráfica de caja porque ayuda a representar gráficamente variables cuantitativas mediante la distribución de sus cuartiles, además de que permite incluir los datos atípicos. Para la gráfica se consideró a los desarrolladores que trabajan a tiempo completo para que las unidades muestrales sean comparables. Según la gráfica, la media de horas que trabajan los encuestados por semana en América Latina es de 41.05 horas y en Estados Unidos es de 41.03
+En este apartado se utiliza la gráfica de caja porque ayuda a representar gráficamente variables cuantitativas mediante la distribución de sus cuartiles, además de que permite incluir los datos atípicos. Para la gráfica se consideró a los desarrolladores que trabajan a tiempo completo para que las unidades muestrales sean comparables. Analizando la gráfica se obtuvo que la media de horas que trabajan los encuestados por semana en América Latina es de 40.46 horas y en Estados Unidos es de 40.83.
 
 ```{r}
 mean(DF_LA$WorkWeekHrs, na.rm = TRUE)
 mean(DF_USA$WorkWeekHrs, na.rm = TRUE)
 ```
-
 Para confirmar esta similitud, podemos ver que las medias en el boxplot son iguales 40. Por otro lado también podemos utilizar el coeficiente de variación para ver si los datos están distribuidos de manera similar en proporción a su promedio y vemos que para ambos casos es prácticamente la misma.
-
 ```{r, comment=NA}
 sd(DF_USA$WorkWeekHrs, na.rm = TRUE)/mean(DF_USA$WorkWeekHrs, na.rm = TRUE)
 sd(DF_LA$WorkWeekHrs, na.rm = TRUE)/mean(DF_LA$WorkWeekHrs, na.rm = TRUE)
 ```
 
 ##### Frecuencia de horas extra en el trabajo
+Esta variable es necesaria estudiarla ya que nos puede dar a conocer la frecuencia de realizar horas extras en los trabajos de los programadores en las dos regiones, para poder comparar la forma de trabajar en los Estados Unidos y América Latina.
 
 ```{r echo=FALSE, comment=NA}
 
 layout(matrix(c(1,2,3,3), nrow=2,byrow=TRUE), heights=c(3, 1))
 m<-prop.table(table(DF_LA$NEWOvertime[!is.na(DF_LA$NEWOvertime)]))*100
+m<- m[c(1, 4,2,5,3)]
 colors<-c('blue','yellow','green','orange','brown')
-b1<-barplot(m, xlab='Frecuencia',ylab = "Porcentaje(%)", main='Frecuencia de horas extra\nLatinoamérica', width = 5, col.lab="darkgreen",names.arg=c("N","O","AM","RV","AV"),beside=TRUE,
+b1<-barplot(m, xlab='Frecuencia',ylab = "Porcentaje(%)", main='Frecuencia de horas extra\nLatinoamérica', width = 5, col.lab="darkgreen",names.arg=c("N","RV","O","AV","AM"),beside=TRUE,
 col=colors,cex.names=0.8, ylim = c(0,30))
 text(b1, m-1, labels = round(m,2))
 
 
-
 n<-prop.table(table(DF_USA$NEWOvertime[!is.na(DF_USA$NEWOvertime)]))*100
-b2<-barplot(n, xlab='Frecuencia',ylab = "Porcentaje(%)", main='Frecuencia de horas extra\nEstados Unidos', width = 5, col.lab="darkgreen",names.arg=c("N","O","AM","RV","AV"),
+n<- n[c(1, 4,2,5,3)]
+b2<-barplot(n, xlab='Frecuencia',ylab = "Porcentaje(%)", main='Frecuencia de horas extra\nEstados Unidos', width = 5, col.lab="darkgreen",names.arg=c("N","RV","O","AV","AM"),
 col=colors,cex.names=0.8, ylim = c(0,30))
 text(b2, n-1, labels = round(n,2))
  
 par(mai=c(0,0,0,0))
 plot.new()
-legend(x="center", legend = c("Nunca", "Ocasionalmente: 1-2 días por trimestre pero menos que al mes", "A Menudo: 1-2 días por semana o más", "Rara Vez: 1-2 días al año o menos", "A Veces: 1-2 días al mes pero menos de una semana"), fill=colors,ncol=1)
+legend(x="center", legend = c("Nunca", "Rara Vez: 1-2 días al año o menos", "Ocasionalmente: 1-2 días por trimestre pero menos que al mes", "A Veces: 1-2 días al mes pero menos de una semana", "A Menudo: 1-2 días por semana o más"), fill=colors,ncol=1)
 ```
 
-Decidimos usar gráficos de barras con porcentajes en base al total de encuestados por región ya que ya que la diferencia del total era grande y estos gráficos nos permiten comparar fácilmente la frecuencia de horas extra de los programadores. El uso de porcentajes y colores hace que sea un gráfico fácil de comprender para el lector.
+Se decidió utilizar la gráfica de barras con porcentajes en base al total de encuestados por región ya que la diferencia del total era grande y estos gráficos nos permiten comparar fácilmente la frecuencia de horas extra de los programadores. El uso de porcentajes y colores hace que sea un gráfico fácil de comprender para el lector.  
 
-Gracias a estos gráficos sabemos que en América Latina el 26.05% de empleados trabaja horas extra a menudo (de 1 a más días a la semana) y el 27.71% a veces (1 o 2 dos días al mes). En Estados Unidos, las 2 respuestas más votadas son "A veces" y "Ocasionalmente (1o 2 días por trimestre)", con 26.35% y 25.71% cada una. También podemos observar que la variable "Nunca" tiene mayor porcentaje en Estados Unidos. Todo esto nos dice claramente que en América Latina los desarrolladores trabajan más horas extra a comparación de Estados Unidos, y esto podría deberse a un mejor entorno laboral.
+Analizando las gráficas se obtiene que en América Latina el 26.22% de empleados trabaja horas extra a menudo (de 1 a más días a la semana) y el 28.5% a veces (1 o 2 dos días al mes). En Estados Unidos, las 2 respuestas más votadas son "A veces" y "Ocasionalmente (1o 2 días por trimestre)", con 26.57% y 25.6% cada una. También se observa que la variable "Nunca" tiene mayor porcentaje en Estados Unidos. 
 
 ##### Tipo de empleo
+Esta variable es importante para el análisis debido a que permite observar y comparar si los programadores de ambas regiones tienen empleos de tiempo completo, son trabajadores de tiempo parcial, etc. y esto es muy importante a la hora de comparar la forma de trabajar.
 
 ```{r, comment=NA}
 tableEmpleoUSA_WFR <- table(DF_USA$Employment)
@@ -749,13 +737,11 @@ legend(x="center", ncol=3, legend = c("Tiempo Completo","Tiempo Parcial", "Indep
 
 ```
 
-En este apartado contempla 7 tipos de empleos diferentes, en algunos casos la diferencia entre ellos es abismal. Por lo tanto, para poder observar mejor las diferencias se utilizó gráficos de barra, además para poder tener una mejor visualización de las diferencias de frecuencia relativa entre Estados Unidos y América Latina se optó por poner los gráficos uno al costado de otro.
-
-Los gráficos de barras muestran que la mayoría de los programadores tanto estadounidenses como latinoamericanos trabajan a tiempo completo, existe una mayor frecuencia relativa de programadores trabajando a tiempo completo en Estados Unidos que en América Latina.
-
-También se puede observar que existe mayor frecuencia relativa de latinoamericanos trabajando a medio tiempo y de manera independiente que los estadounidenses.
+Este apartado tiene 7 tipos de empleos diferentes, en algunos casos la diferencia entre ellos es abismal. Por lo tanto, para poder observar mejor las diferencias se utilizó gráficos de barra, además para poder tener una mejor visualización de las diferencias de frecuencia relativa entre Estados Unidos y América Latina se optó por poner los gráficos uno al costado de otro.  
+Los gráficos de barras muestran que la mayoría de los programadores tanto en Estados Unidos como en América Latina trabajan a tiempo completo, pero existe una mayor frecuencia relativa de programadores trabajando a tiempo completo en Estados Unidos que en América Latina. También se observa que existe mayor frecuencia relativa de latinoamericanos trabajando a medio tiempo y de manera independiente que los estadounidenses.
 
 ##### Lenguajes de programación
+Esta variable muestra los leguajes de programación más utilizados en los entornos de trabajo de los programadores, por lo tanto, es importante su análisis para comparar la forma de trabajo por región.
 
 ```{r echo=FALSE, comment=NA}
 temp = DF_USA$LanguageWorkedWith[!is.na(DF_USA$LanguageWorkedWith)]
@@ -788,9 +774,10 @@ tabla_LWW_LA_or <- tabla_LWW_LA_o[order(tabla_LWW_LA_o$`Frencuencia Relativa`,de
 barplot(tabla_LWW_LA_or$`Frencuencia Relativa`, names.arg = tabla_LWW_LA_or$lenguajes, main = "América Latina", ylab = 'frecuencias relativas', las=2, font.lab = 4, cex.names = 0.7, ylim = c(0,0.16))
 ```
 
-Para esta variable se hizo uso de un barplot por separado para cada región, debido a que existe una cantidad de lenguajes de programación considerable, Además un gráfico de barras nos permite visualizar en que lenguajes se trabajan más, para facilitar esta comparación se ordeno el barplot en orden descendente.
+Para esta variable se hizo uso de un barplot por separado para cada región, debido a que existe una cantidad de lenguajes de programación considerable, Además un gráfico de barras nos permite visualizar en que lenguajes se trabajan más, para facilitar esta comparación se ordenó el barplot de manera descendente. Se destaca que entre los lenguajes más usados tanto en Estados Unidos como en América Latina son JavaScript, HTML/CSS, SQL. Es importante resaltar que en Estados Unidos hay un mayor uso de Python que en América Latina.
 
-Se destaca que entre los lenguajes más usados tanto en Estados Unidos como en América Latina son JavaScript, HTML/CSS, SQL. Es importante resaltar que en Estados Unidos hay un mayor uso de Python que en América Latina.
+**Respondiendo pregunta de investigación**
+Finalmente, a modo de hipótesis se obtuvo que la forma de trabajo en Estados Unidos y Latino América es similar, debido de que en ambas regiones la mayoría de programadores tiene un empleo a tiempo completo, así mismo, trabajan en los mismos lenguajes de programación siendo el más utilizado JavaScript. La única diferencia se evidencia en las horas extras, pues los programadores de América Latina lo realizan más.
 
 ##### ¿Existe una relación entre la remuneración anual total y la región en la que los desarrolladores viven?
 
