@@ -681,21 +681,22 @@ Esta variable es necesaria estudiarla ya que nos puede dar a conocer la frecuenc
 
 layout(matrix(c(1,2,3,3), nrow=2,byrow=TRUE), heights=c(3, 1))
 m<-prop.table(table(DF_LA$NEWOvertime[!is.na(DF_LA$NEWOvertime)]))*100
+m<- m[c(1, 4,2,5,3)]
 colors<-c('blue','yellow','green','orange','brown')
-b1<-barplot(m, xlab='Frecuencia',ylab = "Porcentaje(%)", main='Frecuencia de horas extra\nLatinoamérica', width = 5, col.lab="darkgreen",names.arg=c("N","O","AM","RV","AV"),beside=TRUE,
+b1<-barplot(m, xlab='Frecuencia',ylab = "Porcentaje(%)", main='Frecuencia de horas extra\nLatinoamérica', width = 5, col.lab="darkgreen",names.arg=c("N","RV","O","AV","AM"),beside=TRUE,
 col=colors,cex.names=0.8, ylim = c(0,30))
 text(b1, m-1, labels = round(m,2))
 
 
-
 n<-prop.table(table(DF_USA$NEWOvertime[!is.na(DF_USA$NEWOvertime)]))*100
-b2<-barplot(n, xlab='Frecuencia',ylab = "Porcentaje(%)", main='Frecuencia de horas extra\nEstados Unidos', width = 5, col.lab="darkgreen",names.arg=c("N","O","AM","RV","AV"),
+n<- n[c(1, 4,2,5,3)]
+b2<-barplot(n, xlab='Frecuencia',ylab = "Porcentaje(%)", main='Frecuencia de horas extra\nEstados Unidos', width = 5, col.lab="darkgreen",names.arg=c("N","RV","O","AV","AM"),
 col=colors,cex.names=0.8, ylim = c(0,30))
 text(b2, n-1, labels = round(n,2))
  
 par(mai=c(0,0,0,0))
 plot.new()
-legend(x="center", legend = c("Nunca", "Ocasionalmente: 1-2 días por trimestre pero menos que al mes", "A Menudo: 1-2 días por semana o más", "Rara Vez: 1-2 días al año o menos", "A Veces: 1-2 días al mes pero menos de una semana"), fill=colors,ncol=1)
+legend(x="center", legend = c("Nunca", "Rara Vez: 1-2 días al año o menos", "Ocasionalmente: 1-2 días por trimestre pero menos que al mes", "A Veces: 1-2 días al mes pero menos de una semana", "A Menudo: 1-2 días por semana o más"), fill=colors,ncol=1)
 ```
 
 Se decidió utilizar la gráfica de barras con porcentajes en base al total de encuestados por región ya que la diferencia del total era grande y estos gráficos nos permiten comparar fácilmente la frecuencia de horas extra de los programadores. El uso de porcentajes y colores hace que sea un gráfico fácil de comprender para el lector.  
