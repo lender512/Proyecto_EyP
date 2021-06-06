@@ -833,45 +833,38 @@ En usa se observa una distribución normal respecto a la media, es decir que la 
 podemos realizar un análisis de interacción entre las variables de edad en la que realizó su primer programa y años programando profesionalmente
 
 ```{r}
+plot(x = DF_USA_T$Age, y = DF_USA_T$YearsCodePro)
+abline(lm(DF_USA_T$YearsCodePro ~ DF_USA_T$Age))
+```
+
+
+
+```{r}
 DF_USA_T <-DF_USA[DF_USA$Employment == "Employed full-time" & !is.na(DF_USA$Employment) & !is.na(DF_USA$Age) & !is.na(DF_USA$ConvertedComp),]
 
 #DF_USA_T[(as.numeric(DF_USA_T$Age) < as.numeric(DF_USA_T$Age1stCode) & !is.na(DF_USA_T$Age)),]
-DF_LA_T <-DF_LA[DF_LA$Employment == "Employed full-time" & !is.na(DF_LA$Employment) & !is.na(DF_LA$Age) & !is.na(DF_LA$ConvertedComp),]
-plot(x = DF_USA_T$Age, y = DF_USA_T$ConvertedComp)
+DF_LA_T <-DF_LA[DF_LA$ConvertedComp < 48000 & !is.na(DF_LA$ConvertedComp) & !is.na(DF_LA$Age),]
+DF_USA <-DF_USA[DF_USA$ConvertedComp < 200000 & !is.na(DF_USA$ConvertedComp) & !is.na(DF_USA$Age),]
+plot(x = DF_USA_T$Age, y = DF_USA_T$ConvertedComp, col = "red")
 abline(lm(DF_USA_T$Age ~ DF_USA_T$ConvertedComp), col = "red")
-plot(x = DF_LA_T$Age, y = DF_LA_T$ConvertedComp)
+points(x = DF_LA_T$Age, y = DF_LA_T$ConvertedComp)
 DF_LA_T
 abline(lm(DF_LA_T$Age ~ DF_LA_T$ConvertedComp), col = "red")
 
-cor(x = DF_USA_T$Age,y = DF_USA_T$YearsCodePro, use = "complete.obs")
-cor(x = DF_LA_T$Age,y = DF_LA_T$YearsCodePro, use = "complete.obs")
+cor(x = DF_USA_T$Age,y = DF_USA_T$ConvertedComp, use = "complete.obs")
+cor(x = DF_LA_T$Age,y = DF_LA_T$ConvertedComp, use = "complete.obs")
 ```
 
-```{r, warning=FALSE}
-DF_caros <- DF_USA[DF_USA$ConvertedComp > 1000000 & !is.na(DF_USA$ConvertedComp), ]
-DF_USA_T <- DF_USA
-DF_LA_T <- DF_LA
-DF_LA_T
-plot(x = DF_USA_T$Age, y = as.double(DF_USA_T$Age1stCode), xlab = "Edad", ylab = "")
-abline(lm(Age ~ Age1stCode, data = DF_USA_T))
-plot(x = DF_LA_T$Age, y = DF_LA_T$Age1stCode)
-abline(lm(DF_LA_T$Age ~ DF_LA_T$Age1stCode))
-cor(y = DF_USA_T$Age, x = DF_USA_T$Age1stCode, use = "complete.obs")
-cor(y = DF_LA_T$Age, x = DF_LA_T$Age1stCode, use = "complete.obs")
-```
 
 ```{r, warning=FALSE}
 DF_USA_T <- DF_USA[DF_USA$Employment == "Independent contractor, freelancer, or self-employed" & !is.na(DF_USA$Employment),]
-#DF_USA_T[(as.numeric(DF_USA_T$Age) < as.numeric(DF_USA_T$Age1stCode) & !is.na(DF_USA_T$Age)),]
 DF_LA_T <- DF_LA[DF_USA$Employment == "Independent contractor, freelancer, or self-employed" & !is.na(DF_LA$Employment),]
-#DF_MIX$ConvertedComp[DF_MIX$ConvertedComp > 200000 & !is.na(DF_MIX$ConvertedComp)] <- NA
-DF_USA_T$ConvertedComp[DF_USA_T$ConvertedComp > 200000 & !is.na(DF_USA_T$ConvertedComp)] <- NA
-DF_LA_T$ConvertedComp[DF_LA_T$ConvertedComp > 200000 & !is.na(DF_LA_T$ConvertedComp)] <- NA
+DF_USA_T$ConvertedComp[(DF_USA_T$ConvertedComp > 200000 | DF_USA_T$ConvertedComp == 0) & !is.na(DF_USA_T$ConvertedComp)] <- NA
+DF_LA_T$ConvertedComp[(DF_LA_T$ConvertedComp > 200000| DF_LA_T$ConvertedComp == 0) & !is.na(DF_LA_T$ConvertedComp)] <- NA
 plot(x = DF_USA_T$YearsCodePro, y = DF_USA_T$ConvertedComp, col = "red")
-abline(lm(YearsCodePro ~ ConvertedComp, data = DF_USA_T))
-#plot(x = DF_LA_T$YearsCodePro, y = DF_LA_T$ConvertedComp)
 points(x = DF_LA_T$YearsCodePro, y = DF_LA_T$ConvertedComp, col = "blue")
-abline(lm(YearsCodePro ~ ConvertedComp, data = DF_LA_T))
+abline(lm(ConvertedComp ~  YearsCodePro, data = DF_LA_T))
+abline(lm(ConvertedComp ~  YearsCodePro, data = DF_USA_T))
 cor(x = DF_USA_T$YearsCodePro,y = DF_USA_T$ConvertedComp, use = "pairwise.complete.obs")
 cor(x = DF_LA_T$YearsCodePro, y = DF_LA_T$ConvertedComp, use = "pairwise.complete.obs")
 
