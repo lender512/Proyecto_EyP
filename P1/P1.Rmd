@@ -89,6 +89,15 @@ Para lograr los objetivos, se plantean las siguientes preguntas de investigació
 
     -   ¿Existe una relación entre la remuneraron anual total y la región en la que los desarrolladores viven?
 
+-   ¿Cómo son las diferencias entre relaciones de variables de las dos regiones?
+
+    -   ¿Existe diferencia entre la relación que hay entre la edad de los desarrolladores prefesiones y los años que llevan programando profesionalmente?
+    
+    -   ¿Cual es la diferencia entre regiones de la relación que existe entre la edad y la remuneración anual de los programadores profesionales que trabajan tiempo parcial?
+    
+    -   ¿Cual es la diferencia que exise entre regiones de la relación entre los años de experiencia y el sueldo de los programadores que traban en empresas pequeñas?
+
+
 ### Marco teórico
 
 -   **Población objetivo:** Personas que son o fueron programadores profesionales y son de América Latina o de Estados Unidos
@@ -343,10 +352,10 @@ Para la limpieza de datos descartamos aquellos datos en donde la edad de primer 
 
 ```{r, comment=NA, warning= FALSE}
 
-DF_MIX$Age1stCode[!(DF_MIX$Age1stCode > DF_MIX$Age) & !is.na(DF_MIX$Age)] <- NA
+DF_MIX$Age1stCode[(DF_MIX$Age1stCode > DF_MIX$Age)] <- NA
 DF_MIX$Age1stCode[DF_MIX$Age1stCode == 85] <- NA
-DF_USA$Age1stCode[!(DF_USA$Age1stCode > DF_USA$Age) & !is.na(DF_USA$Age)] <- NA
-DF_LA$Age1stCode[!(DF_LA$Age1stCode > DF_LA$Age) & !is.na(DF_LA$Age)] <- NA
+DF_USA$Age1stCode[(DF_USA$Age1stCode > DF_USA$Age)] <- NA
+DF_LA$Age1stCode[(DF_LA$Age1stCode > DF_LA$Age)] <- NA
 DF_LA$Age1stCode[DF_LA$Age1stCode == 85] <- NA
 
 boxplot(as.numeric(DF_MIX$Age1stCode)~DF_MIX$Region, na.rm= TRUE, ylab = "Region", xlab = "Años", notch = TRUE, horizontal = TRUE, main='Edad primer programa por region')
@@ -357,7 +366,7 @@ mean(DF_USA$Age1stCode, na.rm = TRUE)
 legend(25, 1.7, legend=c("media EEUU", "media Latam"), col=c("red", "blue"),lwd=2 )
 ```
 
-Decidimos utilizar un boxplot ya que nos permite ver múltiples descriptores de manera eficiente. Nos fijamos en que la diferencia de las medianas para comparar los valores y vemos que son estadísticamente significativas y que se diferencian en 1 años. Además calculamos la media para ver el sesgo de la gráfica y vemos que al prácticamente coincidir con la media en el caso de América Latina, significa que la distribución es simétrica.
+Decidimos utilizar un boxplot ya que nos permite ver múltiples descriptores de manera eficiente. Nos fijamos en que la diferencia de las medianas para comparar los valores y vemos que son estadísticamente significativas y que se diferencian en 2 años. Además calculamos la media para ver el sesgo de la gráfica y vemos que al prácticamente coincidir con la media en el caso de América Latina, significa que la distribución es simétrica.
 
 ```{r, warning=FALSE}
 median(DF_USA$Age1stCode, na.rm = TRUE)
@@ -367,12 +376,11 @@ median(DF_LA$Age1stCode, na.rm = TRUE)
 Además, se puede apreciar que las edades de los programadores profesionales están más concentradas en América Latina, para comprobar ello se usa el rango intercuartílico, en este se puede apreciar una diferencia de 2 años.
 
 ```{r}
-IQR(DF_LA$Age1stCode, na.rm = TRUE)
-
 IQR(DF_USA$Age1stCode, na.rm = TRUE)
+IQR(DF_LA$Age1stCode, na.rm = TRUE)
 ```
 
-Para saber a que edad en promedio realizaron su primer programa se usará la media. Se puede notar que en América Latina la edad promedio es 15.9 y en Estados Unidos es 15.44, la diferencia es bastante pequeña.
+Para saber a que edad en promedio realizaron su primer programa se usará la media. Se puede notar que en América Latina la edad promedio es 15.94 y en Estados Unidos es 14.92, la diferencia es cercana a 1 año.
 
 ```{r}
 round(mean(DF_USA$Age1stCode, na.rm = TRUE),2)
@@ -632,7 +640,7 @@ En base al análisis, se llega a la hipótesis de que la región influye en la s
 
 Se analizarán las variables "horas trabajadas semanalmente", "frecuencia de horas extra en el trabajo", "tipo de empleo" y "Lenguajes de programación" para dar una posible respuesta para la pregunta, debido a que mediante esas variables podemos comparar entre América Latina y Estados Unidos si es que predominan los trabajos a tiempo completo, que lenguajes se utilizan más en cada región y cuantas horas de trabajo realizan los programadores.
 
-#### Variable: Horas trabajadas semanalmente 
+##### Variable: Horas trabajadas semanalmente 
 Según la instancia federal del gobierno estadounidense (Internal Revenue Services) para que un trabajo sea considerado a tiempo completo mínimo tiene que cumplir 30 horas semanales, o 130 horas de servicio por mes, sin un límite máximo de horas. Por otra parte, en Latinoamérica según BBC new en ciertos países existen límites de 48 horas semanales y en otros países van de 40 a 47 horas semanales. Se limpiaron los datos siguiendo las fuentes consultas debido a que se encontraron muchos valores que no pueden ser verídicos, como es el caso de trabajar 168 horas a la semana. Así mismo, se estableció las horas semanales considerando 5 días laborales a la semana desde 30 (horas mínimas en estados unidos) a 50 (valor máximo en Latinoamérica añadiendo algunas horas extras) horas para observar una gráfica sin muchos datos atípicos.
 
 ```{r, comment=NA}
@@ -905,123 +913,89 @@ round(median_comp_usa/median_comp_la*100,2)
 ```
 
 A partir del análisis, se plantea la hipótesis de que existe una abismal diferencia en cuanto la remuneración total anual entre los programadores full-time que viven en Estados Unidos y los que viven en América Latina. Siendo mucho mayor para Estados Unidos.
+  
+#### Rreguntas que involucran relaciones entre variables
 
-### Relaciones entre variables
+##### ¿Existe diferencia entre la relación que hay entre la edad de los desarrolladores prefesiones y los años que llevan programando profesionalmente?
 
-podemos realizar un análisis de interacción entre las variables de edad en la que realizó su primer programa y años programando profesionalmente
+Utilizamos las variables de Años programando profesionalmente y edad para responder esta pregunta.
 
 ```{r}
-plot(x = DF_USA$Age, y = DF_USA$YearsCodePro, col = "red")
-points(x = DF_LA$Age, y = DF_LA$YearsCodePro, col = "blue")
+plot(x = DF_USA$Age, y = DF_USA$YearsCodePro, col = "red", cex = 0.6, xlab = "Edad", ylab = "Años programando profesionalmente", main = "Edad vs Años programando profesionalmente")
+points(x = DF_LA$Age, y = DF_LA$YearsCodePro, col = "blue", cex = 0.6)
+legend(15, 40, legend = c("EEUU", "Latam"), fill=c("red", "blue"))
+
 abline(lm(DF_USA$YearsCodePro ~ DF_USA$Age), col = "red")
 abline(lm(DF_LA$YearsCodePro ~ DF_LA$Age), col = "blue")
 ```
+Se decidió utilizar un diagrama de dispersión con colores porque permite observar la correlación entre dos variables y además permite diferenciar con colores variables categóricas. En el gráfico se puede observar que existe una fuerte relación entre la edad y los años de experiencia y que la pendiente es similar entre las regiones. Se puede utilizar la covarianza para medir el grado de asociaron que existen entre las variables y se puede ver que es positiva y hay asociación, las dos variables creecen en la misma dirección.
+```{r}
+cov(y = DF_USA$Age,x = DF_USA$YearsCodePro, use = "pairwise.complete.obs")
+cov(y = DF_LA$Age,x = DF_LA$YearsCodePro, use = "pairwise.complete.obs")
+```
+Sin embargo, si se desea comparar la relación entre las dos regiones, se tiene que usar la correlación, pues en este descriptor no influye la escala pues esta dividida por el promedio de los datos. Con la correlación podemos ver que es bastante similar y que, además en las dos regiones es bastante alta.
 
 ```{r}
-DF_USA_T <-DF_USA[DF_USA$Employment == "Employed full-time" & !is.na(DF_USA$Employment) & !is.na(DF_USA$Age) & !is.na(DF_USA$ConvertedComp),]
-
-#DF_USA_T[(as.numeric(DF_USA_T$Age) < as.numeric(DF_USA_T$Age1stCode) & !is.na(DF_USA_T$Age)),]
-DF_LA_T <-DF_LA[DF_LA$ConvertedComp < 200000 & !is.na(DF_LA$ConvertedComp) & !is.na(DF_LA$Age),]
-DF_USA_T <-DF_USA[DF_USA$ConvertedComp < 200000 & !is.na(DF_USA$ConvertedComp) & !is.na(DF_USA$Age),]
-plot(x = DF_USA_T$Age, y = DF_USA_T$ConvertedComp, col = "red")
-abline(lm(DF_USA_T$Age ~ DF_USA_T$ConvertedComp), col = "red")
-points(x = DF_LA_T$Age, y = DF_LA_T$ConvertedComp)
-DF_LA_T
-abline(lm(DF_LA_T$Age ~ DF_LA_T$ConvertedComp), col = "red")
-
-cor(x = DF_USA_T$Age,y = DF_USA_T$ConvertedComp, use = "complete.obs")
-cor(x = DF_LA_T$Age,y = DF_LA_T$ConvertedComp, use = "complete.obs")
-
+cor(x = DF_USA$Age,y = DF_USA$YearsCodePro, use = "pairwise.complete.obs")
+cor(x = DF_LA$Age,y = DF_LA$YearsCodePro, use = "pairwise.complete.obs")
 ```
+Luego de analizar la variable con los indicadores, se puede dar la hipótesis de que la región no influye entre la relación de la edad y años programando profesionalmente, además esta es muy alta y sugeriría que los programadores profesionales comienzan a trabajar a una temprana edad lo que permite que ganen años de experiencia mientras aumenta su edad.
+
+##### ¿Cual es la diferencia entre regiones de la relación que existe entre la edad y la remuneración anual de los programadores profesionales que trabajan tiempo parcial?
+
+Para responder esta pregunta se procederá con el análisis de las variables de remuneración anual y edad considerando solo los que trabajan tiempo completo y además, tienen la variable de sueldo estándar utilizada para filtrar la variable del sueldo como TRUE.
+
+```{r}
+DF_LA_FREE <- DF_MIX[DF_MIX$Region == "América Latina" & DF_MIX$isStandard_mix == TRUE & DF_MIX$Employment == "Employed part-time", ]
+DF_USA_FREE <- DF_MIX[DF_MIX$Region == "Estados Unidos" & DF_MIX$isStandard_mix == TRUE & DF_MIX$Employment == "Employed part-time", ]
+
+plot(x = DF_USA_FREE$Age, y = DF_USA_FREE$ConvertedComp, col = "red", cex = 0.6, main = "Edad vs remuneración anual de programadores part-time", xlab = "Edad", ylab = "Remuneración anual $")
+points(x = DF_LA_FREE$Age, y = DF_LA_FREE$ConvertedComp, col = "blue", cex = 0.6)
+legend(55, 140000, legend = c("EEUU", "Latam"), fill=c("red", "blue"))
+abline(lm(DF_USA_FREE$ConvertedComp ~ DF_USA_FREE$Age), col = "red")
+abline(lm(DF_LA_FREE$ConvertedComp ~ DF_LA_FREE$Age), col = "blue")
+```
+Al igual que en el anterior caso, se optó por utilizar un diagrama de dispersión con colores para diferenciar la variable categorica de la región. Se puede apreciar en el cuadro que ambas variables parecen tener cierta relación, para verificar esto se analizara el valor de la covarianza. Se puede ver que ambas son positivas, sin embargo, el valor de la covarianza de Estados Unidos es mucho mayor que la de América Latina.
+```{r}
+cov(x = DF_USA_FREE$Age,y = DF_USA_FREE$ConvertedComp, use = "pairwise.complete.obs")
+cov(x = DF_LA_FREE$Age,y = DF_LA_FREE$ConvertedComp, use = "pairwise.complete.obs")
+```
+Para poder comparar ambas relaciones, pues ya se ha analizado que el sueldo de los programadores en Estados Unidos es mucho mayor, se utilizará la correlación, que permite comparar en proporción a la media de las variables, y podemos ver que, que la correlación en Estados Unidos es menos de la mitad que en América Latina.
+
+```{r}
+cor(x = DF_USA_FREE$Age,y = DF_USA_FREE$ConvertedComp, use = "pairwise.complete.obs")
+cor(x = DF_LA_FREE$Age,y = DF_LA_FREE$ConvertedComp, use = "pairwise.complete.obs")
+```
+Luego del análisis de los indicadores, se puede sugerir la hipótesis de que la edad de los programadores a tiempo parcial en Estados Unidos no está muy relacionada con su sueldo anual. Por otro lado, en América latina el valor cercano a 0.6 de la covarianza indica que hay una correlación moderada y que la edad si influye en la remuneración anual de los programadores profesionales que trabajan a tiempo parcial.
+
+##### ¿Cual es la diferencia que exise entre regiones de la relación entre los años de experiencia y el sueldo de los programadores que traban en empresas pequeñas?
+
+Para responder a esta pregunta, se seleccionaron las variables de remuneración anual y años programando profesionalmente de las observaciones que tienen en la variable del tamaño de la organización como que trabajan en una empresa de entre 2 a 9 empleados o de 10 a 19 y una vez más se tomo solo a los programadores que contaban con un sueldo "estándar" segun la variable booleana que fue definida anteriormente.
 
 ```{r, warning=FALSE}
-DF_USA_T <- DF_USA[DF_USA$Employment == "Independent contractor, freelancer, or self-employed" & !is.na(DF_USA$Employment),]
-DF_LA_T <- DF_LA[DF_USA$Employment == "Independent contractor, freelancer, or self-employed" & !is.na(DF_LA$Employment),]
-#DF_USA_T$ConvertedComp[(DF_USA_T$ConvertedComp > 178000 | DF_USA_T$ConvertedComp == 0) & !is.na(DF_USA_T$ConvertedComp)] <- NA
-#DF_LA_T$ConvertedComp[(DF_LA_T$ConvertedComp > 178000| DF_LA_T$ConvertedComp == 0) & !is.na(DF_LA_T$ConvertedComp)] <- NA
-#plot(x = DF_USA_T$YearsCodePro, y = DF_USA_T$ConvertedComp, col = "red")
-#points(x = DF_LA_T$YearsCodePro, y = DF_LA_T$ConvertedComp, col = "blue")
-#abline(lm(ConvertedComp ~  YearsCodePro, data = DF_LA_T))
-#abline(lm(ConvertedComp ~  YearsCodePro, data = DF_USA_T))
-#cor(x = DF_USA_T$YearsCodePro,y = DF_USA_T$ConvertedComp, use = "pairwise.complete.obs")
-#cor(x = DF_LA_T$YearsCodePro, y = DF_LA_T$ConvertedComp, use = "pairwise.complete.obs")
-DF_MIX[DF_MIX$Region == "Estados Unidos",]
-DF_FREE_USA <- DF_MIX[DF_MIX$isStandard_mix == TRUE & DF_MIX$Employment == "Independent contractor, freelancer, or self-employed" & !is.na(DF_MIX$Employment) & DF_MIX$Region == "Estados Unidos",]
-plot(x = DF_FREE_USA$YearsCodePro, y = DF_FREE_USA$ConvertedComp, col = "red")
-abline(lm(ConvertedComp ~  YearsCodePro, data = DF_FREE_USA))
-cor(x = DF_FREE_USA$YearsCodePro,y = DF_FREE_USA$ConvertedComp, use = "pairwise.complete.obs")
+DF_LA_FREE <- DF_MIX[(DF_MIX$Region == "América Latina" & DF_MIX$isStandard_mix == TRUE & (DF_MIX$OrgSize == "2 to 9 employees" |DF_MIX$OrgSize == "10 to 19 employees")), ]
+DF_USA_FREE <- DF_MIX[(DF_MIX$Region == "Estados Unidos" & DF_MIX$isStandard_mix == TRUE & (DF_MIX$OrgSize == "2 to 9 employees" |DF_MIX$OrgSize == "10 to 19 employees")), ]
 
-DF_FREE_LA <- DF_MIX[DF_MIX$isStandard_mix == TRUE & DF_MIX$Employment == "Independent contractor, freelancer, or self-employed" & DF_MIX$Region == "América Latina",]
-plot(x = DF_FREE_LA$YearsCodePro, y = DF_FREE_LA$ConvertedComp, col = "red")
-abline(lm(ConvertedComp ~  YearsCodePro, data = DF_FREE_LA))
-cor(x = DF_FREE_LA$YearsCodePro,y = DF_FREE_LA$ConvertedComp, use = "pairwise.complete.obs")
+plot(x = DF_USA_FREE$YearsCodePro, y = DF_USA_FREE$ConvertedComp, col = "red", cex = 0.6, main = "Años programando profesionalmente vs remuneración anual de programadores de empresas pequeñas", cex.main = 0.8, xlab = "Años programando profesionalmente", ylab = "Remuneración anual $")
+points(x = DF_LA_FREE$YearsCodePro, y = DF_LA_FREE$ConvertedComp, col = "blue", cex = 0.6)
 
+abline(lm(DF_USA_FREE$ConvertedComp ~ DF_USA_FREE$YearsCodePro), col = "red")
+abline(lm(DF_LA_FREE$ConvertedComp ~ DF_LA_FREE$YearsCodePro), col = "blue")
 ```
+Se decidió utilizar un diagrama de dispersión por colores por los motivos ya mencionados anteriormente. Se puede observar en el diagrama que la regresion lineal tiene pendiente positiva en ambos casos. Se recurre a las covarianza para ver el grado de asosciacion en las variables y se ve que en ambos casos es positiva, lo que indicaría que las variables crecen en la misma dirección. 
 
 ```{r}
-#cor(x = DF_USA_T$WorkWeekHrs,y = DF_USA_T$Age, use = "complete.obs")
-#cor(x = DF_LA_T$WorkWeekHrs,y = DF_LA_T$Age, use = "complete.obs")
-#cor(x = DF_USA_T$WorkWeekHrs,y = DF_USA_T$Age1stCode, use = "complete.obs")
-#cor(x = DF_LA_T$WorkWeekHrs,y = DF_LA_T$Age1stCode, use = "complete.obs")
-#cor(x = DF_USA_T$WorkWeekHrs,y = DF_USA_T$ConvertedComp, use = "complete.obs")
-#cor(x = DF_LA_T$WorkWeekHrs,y = DF_LA_T$ConvertedComp, use = "complete.obs")
-#cor(x = DF_USA_T$WorkWeekHrs,y = DF_USA_T$YearsCodePro, use = "complete.obs")
-#cor(x = DF_LA_T$WorkWeekHrs,y = DF_LA_T$YearsCodePro, use = "complete.obs")
-#cor(x = DF_USA_T$Age1stCode,y = DF_USA_T$Age, use = "complete.obs")
-#cor(x = DF_LA_T$Age1stCode,y = DF_LA_T$Age, use = "complete.obs")
-#cor(x = DF_USA_T$Age1stCode,y = DF_USA_T$ConvertedComp, use = "complete.obs")
-#cor(x = DF_LA_T$Age1stCode,y = DF_LA_T$ConvertedComp, use = "complete.obs")
-#cor(x = DF_USA_T$Age1stCode,y = DF_USA_T$YearsCodePro, use = "complete.obs")
-#cor(x = DF_LA_T$Age1stCode,y = DF_LA_T$YearsCodePro, use = "complete.obs")
-#cor(x = DF_USA_T$Age,y = DF_USA_T$ConvertedComp, use = "complete.obs")
-#cor(x = DF_LA_T$Age, y = DF_LA_T$ConvertedComp, use = "complete.obs")
-#cor(x = DF_USA_T$Age,y = DF_USA_T$YearsCodePro, use = "complete.obs")
-#cor(x = DF_LA_T$Age, y = DF_LA_T$YearsCodePro, use = "complete.obs")
-#cor(x = DF_USA_T$YearsCodePro,y = DF_USA_T$Age1stCode, use = "complete.obs")
-#cor(x = DF_LA_T$YearsCodePro, y = DF_LA_T$Age1stCode, use = "complete.obs")
-
-
-#DF_TEMP <- DF_MIX[DF_MIX$Region == "América Latina" & !is.na(DF_MIX$Region), ]
-#cor(x = DF_TEMP$WorkWeekHrs,y = DF_TEMP$Age, use = "complete.obs")
-#cor(x = DF_TEMP$WorkWeekHrs,y = DF_TEMP$Age1stCode, use = "complete.obs")
-#cor(x = DF_TEMP$WorkWeekHrs,y = DF_TEMP$ConvertedComp, use = "complete.obs")
-#cor(x = DF_TEMP$WorkWeekHrs,y = DF_TEMP$YearsCodePro, use = "complete.obs")
-#cor(x = DF_TEMP$Age1stCode,y = DF_TEMP$Age, use = "complete.obs")
-#cor(x = DF_TEMP$Age1stCode,y = DF_TEMP$ConvertedComp, use = "complete.obs")
-#cor(x = DF_TEMP$Age1stCode,y = DF_TEMP$YearsCodePro, use = "complete.obs")
-#cor(x = DF_TEMP$Age, y = DF_TEMP$ConvertedComp, use = "complete.obs")
-#cor(x = DF_TEMP$Age, y = DF_TEMP$YearsCodePro, use = "complete.obs")
-#cor(x = DF_TEMP$YearsCodePro, y = DF_TEMP$ConvertedComp, use = "complete.obs")
-
-DF_USA_T <- DF_USA[DF_USA$Employment == "Independent contractor, freelancer, or self-employed" & !is.na(DF_USA$Employment), ]
-DF_LA_T <- DF_LA[DF_LA$Employment  == "Independent contractor, freelancer, or self-employed"  & !is.na(DF_LA$Employment), ]
-
-cor(x = DF_USA_T$WorkWeekHrs,y = DF_USA_T$Age, use = "pairwise.complete.obs")
-cor(x = DF_LA_T$WorkWeekHrs,y = DF_LA_T$Age, use = "pairwise.complete.obs")
-cor(x = DF_USA_T$WorkWeekHrs,y = DF_USA_T$Age1stCode, use = "pairwise.complete.obs")
-cor(x = DF_LA_T$WorkWeekHrs,y = DF_LA_T$Age1stCode, use = "pairwise.complete.obs")
-cor(x = DF_USA_T$WorkWeekHrs,y = DF_USA_T$ConvertedComp, use = "pairwise.complete.obs")
-cor(x = DF_LA_T$WorkWeekHrs,y = DF_LA_T$ConvertedComp, use = "pairwise.complete.obs")
-cor(x = DF_USA_T$WorkWeekHrs,y = DF_USA_T$YearsCodePro, use = "pairwise.complete.obs")
-cor(x = DF_LA_T$WorkWeekHrs,y = DF_LA_T$YearsCodePro, use = "pairwise.complete.obs")
-cor(x = DF_USA_T$Age1stCode,y = DF_USA_T$Age, use = "pairwise.complete.obs")
-cor(x = DF_LA_T$Age1stCode,y = DF_LA_T$Age, use = "pairwise.complete.obs")
-cor(x = DF_USA_T$Age1stCode,y = DF_USA_T$ConvertedComp, use = "pairwise.complete.obs")
-cor(x = DF_LA_T$Age1stCode,y = DF_LA_T$ConvertedComp, use = "pairwise.complete.obs")
-cor(x = DF_USA_T$Age1stCode,y = DF_USA_T$YearsCodePro, use = "pairwise.complete.obs")
-cor(x = DF_LA_T$Age1stCode,y = DF_LA_T$YearsCodePro, use = "pairwise.complete.obs")
-cor(x = DF_USA_T$Age,y = DF_USA_T$ConvertedComp, use = "pairwise.complete.obs")
-cor(x = DF_LA_T$Age, y = DF_LA_T$ConvertedComp, use = "pairwise.complete.obs")
-cor(x = DF_USA_T$Age,y = DF_USA_T$YearsCodePro, use = "pairwise.complete.obs")
-cor(x = DF_LA_T$Age, y = DF_LA_T$YearsCodePro, use = "pairwise.complete.obs")
-cor(x = DF_USA_T$YearsCodePro,y = DF_USA_T$ConvertedComp, use = "pairwise.complete.obs")
-cor(x = DF_LA_T$YearsCodePro, y = DF_LA_T$ConvertedComp, use = "pairwise.complete.obs")
+cov(x = DF_USA_FREE$YearsCodePro,y = DF_USA_FREE$ConvertedComp, use = "pairwise.complete.obs")
+cov(x = DF_LA_FREE$YearsCodePro,y = DF_LA_FREE$ConvertedComp, use = "pairwise.complete.obs")
 ```
+Como se desea identificar una diferencia se hará uso, una vez más, de la correlación que permite eliminar el hecho de que el sueldo de por si es más bajo en América Latina que en Estados Unidos. Se puede observar que la correlación es baja en el caso del país del norte pero es moderada en el caso de la región del sur.
 
 ```{r}
-table(DF_LA$Employment)
-table(DF_USA$Employment)
+cor(x = DF_USA_FREE$YearsCodePro,y = DF_USA_FREE$ConvertedComp, use = "pairwise.complete.obs")
+cor(x = DF_LA_FREE$YearsCodePro,y = DF_LA_FREE$ConvertedComp, use = "pairwise.complete.obs")
 ```
+Luego de la revisión de los descriptores, se plantea la hipótesis de que el sueldo tiene poco que ver con la edad de los que trabajan en empresas pequeñas en Estados Unidos, mientras que en América latina, la edad de los que trabajan para estas empresas están mucho más relacionadas con el dinero que ganan anualmente. 
+
 
 ### Bibliografía
 
