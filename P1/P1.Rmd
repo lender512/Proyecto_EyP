@@ -879,9 +879,9 @@ DF_FT_USA_STD <- DF_FT_USA[DF_FT_USA$isStandard_usa == TRUE, ]
 
 DF_MIX <-data.frame(cbind(DF_MIX, isStandard_mix))
 
-hist(DF_FT_USA_STD$ConvertedComp[DF_FT_USA_STD$isStandard_usa == TRUE ], breaks = 30, freq = TRUE, main = "Histograma del salario anual USA", ylab = "Frecuencia", xlab = "Salario anual en dolares")
+hist(DF_FT_USA_STD$ConvertedComp[DF_FT_USA_STD$isStandard_usa == TRUE ], breaks = 15, probability = TRUE, main = "Histograma del salario anual USA", ylab = "Frecuencia", xlab = "Salario anual en dolares")
 abline(v=mean(as.numeric(DF_FT_USA_STD$ConvertedComp), na.rm = TRUE), col = "red")
-hist(DF_FT_LA_STD$ConvertedComp, breaks = 30, freq = TRUE, main = "Histograma del salario anual Latinoamerica", ylab = "Frecuencia", xlab = "Salario anual en dolares")
+hist(DF_FT_LA_STD$ConvertedComp, breaks = 15, probability = TRUE, main = "Histograma del salario anual Latinoamerica", ylab = "Frecuencia", xlab = "Salario anual en dolares")
 abline(v=mean(DF_FT_LA_STD$ConvertedComp, na.rm = TRUE), col = "blue")
 ```
 En Estados Unidos se observa una distribución normal respecto a la media, es decir que la mayoría de programadores gana alrededor de 104533 dolares anuales. Por otro lado, en América Latina no existe una distribución muy atípica, pero sí hay más variación respecto a la media, a comparación de USA.
@@ -994,7 +994,7 @@ Como se desea identificar una diferencia se hará uso, una vez más, de la corre
 cor(x = DF_USA_FREE$YearsCodePro,y = DF_USA_FREE$ConvertedComp, use = "pairwise.complete.obs")
 cor(x = DF_LA_FREE$YearsCodePro,y = DF_LA_FREE$ConvertedComp, use = "pairwise.complete.obs")
 ```
-Luego de la revisión de los descriptores, se plantea la hipótesis de que el sueldo tiene poco que ver con la edad de los que trabajan en empresas pequeñas en Estados Unidos, mientras que en América latina, la edad de los que trabajan para estas empresas están mucho más relacionadas con el dinero que ganan anualmente. 
+Luego de la revisión de los descriptores, se plantea la hipótesis de que el sueldo tiene poco que ver con la edad de los que trabajan en empresas pequeñas en Estados Unidos, mientras que en América latina, la edad de los que trabajan para estas empresas están mucho más relacionadas con el dinero que ganan anualmente.
 
 
 ### Bibliografía
