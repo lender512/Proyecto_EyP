@@ -374,12 +374,6 @@ median(DF_USA$Age1stCode, na.rm = TRUE)
 median(DF_LA$Age1stCode, na.rm = TRUE)
 ```
 
-Además, se puede apreciar que las edades de los programadores profesionales están más concentradas en América Latina, para comprobar ello se usa el rango intercuartílico, en este se puede apreciar una diferencia de 2 años.
-
-```{r}
-IQR(DF_USA$Age1stCode, na.rm = TRUE)
-IQR(DF_LA$Age1stCode, na.rm = TRUE)
-```
 
 Para saber a que edad en promedio realizaron su primer programa se usará la media. Se puede notar que en América Latina la edad promedio es 15.94 y en Estados Unidos es 14.92, la diferencia es cercana a 1 año.
 
@@ -388,8 +382,15 @@ round(mean(DF_USA$Age1stCode, na.rm = TRUE),2)
 round(mean(DF_LA$Age1stCode, na.rm = TRUE), 2)
 
 ```
+Con el objetivo de saber la dispersión de los valores respecto a la media aritmética se usó la varianza, la cual para Estados Unidos es de 28.46 y para América Latina 15.49, la diferencia es de aproximadamente 13.
 
-Luego del análisis de la variable, se llega a la hipótesis de que en Estados Unidos realizan su primer programa antes que en América Latina. Sin embargo, la diferencia es de apenas un poco más de un año, además en América Latina las edades están ms concentradas.
+```{r}
+round(var(DF_USA$Age1stCode, na.rm = TRUE),2)
+round(var(DF_LA$Age1stCode, na.rm = TRUE), 2)
+```
+
+
+Luego del análisis de la variable, se llega a la hipótesis de que en Estados Unidos realizan su primer programa antes que en América Latina. Sin embargo, la diferencia es de apenas un poco más de un año, además en América Latina las edades están más concentradas a su media aritmétrica.
 
 ##### ¿Cómo influye la región en la que los desarrolladores profesionales viven en la frecuencia con la que aprenden un nuevo lenguaje?
 
