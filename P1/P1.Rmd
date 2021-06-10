@@ -118,6 +118,7 @@ library(dplyr)
 library(countrycode)
 library(ggplot2)
 library(modeest)
+library(Rlab)
 
 df <- read_csv("survey_results_public.csv")
 df <- df[!(df$Age == "1" &  !is.na(df$Age)),]
@@ -519,7 +520,7 @@ Los grados de satisfacción son 5 y la diferencia entre las frecuencias relativa
 
 ##### Variable: Proceso de incorporación
 
-Se Procederá a realizar un análisis de la variable 'Proceso de Incorporación' para Verificar las diferencias que hay en el acoplamiento de nuevos desarrolladores en las empresas u organizaciones de América Latina y Estados Unidos.
+Se Procederá a realizar un análisis de la variable 'Proceso de Incorporación' para verificar las diferencias que hay en el acoplamiento de nuevos desarrolladores en las empresas u organizaciones de América Latina y Estados Unidos. Esta variable responde a si es que las empresas donde los programadores encuestados trabajan tienen un buen proceso de incorporación.
 
 ```{r echo=FALSE, comment=NA}
 layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(6, 1))
@@ -539,20 +540,21 @@ x_LA_s<-round(x_LA_s*100/tot_x,2)
 x_LA_n<-round(x_LA_n*100/tot_x,2)
 x_LA_m<-round(x_LA_m*100/tot_x,2)
 porc_usa<-c(x_LA_s,x_LA_n,x_LA_m)
-label<-paste(porc_LA,"%",sep=" ")
 
+label<-paste(porc_LA,"%",sep=" ")
 color<-c("yellow", "blue", "cadetblue")
-pie(porc_usa, labels = label, clockwise=TRUE, main="Estados Unidos",col=color)
+pie(porc_LA, labels = label, clockwise=TRUE, main="América Latina",col=color)
 label<-paste(porc_usa,"%",sep=" ")
-pie(porc_LA, labels = label, clockwise=TRUE, main="America Latina",col=color)
+pie(porc_usa, labels = label, clockwise=TRUE, main="Estados Unidos",col=color)
+
 par(mai=c(0,0,0,0))
 plot.new()
-legend(x="center",c("Si","No","No Se"), fill=color,ncol=3)
+legend(x="center",c("Sí","No","¿Cuál proceso?"), fill=color,ncol=3)
 ```
 
 Se uso gráficos de tortas ya que representa de manera ordenada y fácil de entender el porcentaje de respuestas a la pregunta por cada región y contamos con pocas categorías.
 
-De estos gráficos, se puede observar que tanto en América Latina como en Estados Unidos, las empresas tienen un buen proceso de incorporación (no todas), pero es ligeramente mejor en Estados Unidos, lo que implica que en América Latina existen más empresas con un mal proceso de incorporación.
+De estos gráficos, se puede observar que tanto en América Latina como en Estados Unidos, cerca al 45% de empresas tienen un buen proceso de incorporación, pero es ligeramente mejor en Estados Unidos, lo que implica que en América Latina existen más empresas con un mal proceso de incorporación o directamente, no tienen.
 
 En base al análisis de estas tres variables, se llega a la hipótesis de que en Estados Unidos es más accesible conseguir un empleo en empresas grandes, a diferencia de América Latina. Así mismo, trabajar como desarrollador en Estados Unidos puede resultar más tedioso, ya que los desarrolladores de esta región se sienten más insatisfechos con su empleo, a diferencia de América Latina, donde hay un menor grado de insatisfacción, y un mayor grado de neutralidad. Además, se puede decir que el proceso de incorporación de nuevos empleados a las empresas es prácticamente igual en Estados Unidos y América Latina, ya que la diferencia de los resultados obtenidos en ambas regiones es mínima.
 
@@ -692,6 +694,7 @@ Esta variable es necesaria estudiarla ya que nos puede dar a conocer la frecuenc
 ```{r echo=FALSE, comment=NA}
 
 layout(matrix(c(1,2,3,3), nrow=2,byrow=TRUE), heights=c(3, 1))
+colors<-c('blue','yellow','green','orange','brown')
 
 n<-prop.table(table(DF_USA$NEWOvertime[!is.na(DF_USA$NEWOvertime)]))*100
 n<- n[c(1, 4,2,5,3)]
@@ -701,7 +704,6 @@ text(b2, n-1, labels = round(n,2))
 
 m<-prop.table(table(DF_LA$NEWOvertime[!is.na(DF_LA$NEWOvertime)]))*100
 m<- m[c(1, 4,2,5,3)]
-colors<-c('blue','yellow','green','orange','brown')
 b1<-barplot(m, xlab='Frecuencia',ylab = "Porcentaje(%)", main='Frecuencia de horas extra\nAmérica Latina', width = 5, col.lab="darkgreen",names.arg=c("N","RV","O","AV","AM"),beside=TRUE,
 col=colors,cex.names=0.8, ylim = c(0,30))
 text(b1, m-1, labels = round(m,2))
@@ -979,7 +981,7 @@ Luego del análisis de los indicadores, se puede sugerir la hipótesis de que la
 
 ##### ¿Cuál es la diferencia que exise entre regiones de la relación entre los años de experiencia y el sueldo de los programadores que traban en empresas pequeñas?
 
-Para responder a esta pregunta, se seleccionaron las variables de remuneración anual y años programando profesionalmente de las observaciones que tienen en la variable del tamaño de la organización como que trabajan en una empresa de entre 2 a 9 empleados o de 10 a 19 y una vez más se usó solo a los programadores que contaban con un sueldo "estándar" según la variable booleana que fue definida anteriormente.
+Para responder a esta pregunta, se seleccionaron las variables de remuneración anual y años programando profesionalmente de las observaciones que tienen en la variable del tamaño de la organización como que trabajan en una empresa de entre 2 a 9 empleados o de 10 a 19 y una vez más se usó solo a los programadores que contaban con un sueldo "estándar" norteamericano según la variable booleana que fue definida anteriormente.
 
 ```{r, warning=FALSE}
 DF_LA_FREE <- DF_MIX[(DF_MIX$Region == "América Latina" & DF_MIX$isStandard_mix == TRUE & (DF_MIX$OrgSize == "2 to 9 employees" |DF_MIX$OrgSize == "10 to 19 employees")), ]
@@ -1005,6 +1007,48 @@ cor(x = DF_LA_FREE$YearsCodePro,y = DF_LA_FREE$ConvertedComp, use = "pairwise.co
 ```
 Luego de la revisión de los descriptores, se plantea la hipótesis de que el sueldo tiene poco que ver con la edad de los que trabajan en empresas pequeñas en Estados Unidos, mientras que en América latina, la edad de los que trabajan para estas empresas están mucho más relacionadas con el dinero que ganan anualmente.
 
+### Modelos de variable aleatoria para variables de interés
+
+#### Probabilidad de que un desarrollador profesional de Estados Unidos o de América latina tenga un sueldo anual "estándar"
+
+Anteriormente se definió utilizando fuentes bibliográficas y el gráfico original, una variable booleana que nos permite definir si un programador posee un sueldo anual "estándar" o no. Utilizando esta variable se puede definir una variable aleatoria discreta que se distribuye en una Bernoulli p. Cuando un programador gane un sueldo estándar, será considerado un exito, y cuando gane más del será un fracaso. Se calcula la probabilidad de éxito par ambas regiones:
+
+```{r}
+totalUSA <- nrow(DF_FT_USA)
+totalUSA_std <- nrow(DF_FT_USA[DF_FT_USA$isStandard_usa == TRUE,])
+totalLA <- nrow(DF_FT_LA)
+totalLA_std <- nrow(DF_FT_LA[DF_FT_LA$isStandard_la == TRUE,])
+
+
+round(dbern(1, totalUSA_std/totalUSA),2)
+round(dbern(1, totalLA_std/totalLA),2)
+```
+Se puede observar que la probabilidad de que al elegir un programador profesional en Estados Unidos este gane un sueldo considerado estándar es de  0.84. Mientras que si hacemos este experimento en América Latina, la probabilidad es de 0.91, esto indica que quizá el sueldo estándar, que se obtuvo de la fuente bibliográfica y se corroboró con el gráfico, podría estar un poco por debajo de un supuesto sueldo estándar real.
+
+
+#### Probabilidad de que un desarrollador profesional de Estados Unidos o de América latina trabaje en una empresa que cuente con un buen proceso de incorporación
+
+A continuación se utilizará la variable ordinal "proceso de incorporación" que tiene 3 categorías para indicar si es que el proceso de incorporación de la empresa en donde trabajan los programadores profesionales tienen un buen proceso de incorporación, estas son: "Sí", "No" y "¿Cuál proceso?. Se tomará como una variable aleatoria tiene una distribución Bernoulli p, donde se considerará como éxito cuando un trabajador responde "Sí" a la pregunta si es que proceso de incorporación de su empresa es bueno y se tomará como fracaso cualquier otra respuesta (No o ¿Cuál proceso?).
+
+```{r}
+totalUSA_yes <- nrow(DF_USA[DF_USA$NEWOnboardGood == "Yes" & !is.na(DF_USA$NEWOnboardGood),])
+totalUSA <- nrow(DF_USA[!is.na(DF_USA$NEWOnboardGood),])
+totalLA_yes <- nrow(DF_LA[DF_LA$NEWOnboardGood == "Yes" & !is.na(DF_LA$NEWOnboardGood),])
+totalLA <- nrow(DF_LA[!is.na(DF_LA$NEWOnboardGood),])
+
+round(dbern(1, totalUSA_yes/totalUSA),2)
+round(dbern(1, totalLA_yes/totalLA),2)
+```
+Se puede apreciar que la probabilidad de que al escoger un programador en Estados Unidos o en América Latina la empresa donde trabaja tenga un buen proceso de incorporación es bastante similar. Se puede extener este experimento para aplicar una distribución binomial, y mostrar las probabilidades de obtener de 1 a 10 programadores cuya empresa tenga un buen proceso de incorporación al escogerlos de un grupo de 10.
+
+```{r}
+data.frame("n_éxito"=c(1:10), "prob" = round(dbinom(c(1:10), 10, totalUSA_yes/totalUSA),3))
+```
+Se puede ver que en Estados unidos lo más probable es que 5 programadores de los 10 elegidos trabajen en una empresa con un buen proceso de incorporación
+```{r}
+data.frame("n_éxito"=c(1:10), "prob" = round(dbinom(c(1:10), 10, totalLA_yes/totalLA),3))
+```
+Por otro lado, en América Latina, lo más probable sea que 4 de los 10 trabajen en una orgacicacion con un buen acoplamiento.
 
 ### Bibliografía
 
