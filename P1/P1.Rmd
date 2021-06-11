@@ -1017,7 +1017,7 @@ Luego de la revisión de los descriptores, se plantea la hipótesis de que el su
 
 #### Probabilidad de que un desarrollador profesional de Estados Unidos o de América latina tenga un sueldo anual "estándar"
 
-Anteriormente se definió utilizando fuentes bibliográficas y el gráfico original, una variable booleana que nos permite definir si un programador posee un sueldo anual "estándar" o no. Utilizando esta variable se puede definir una variable aleatoria discreta que se distribuye en una Bernoulli p. Cuando un programador gane un sueldo estándar, será considerado un exito, y cuando gane más del será un fracaso. Se calcula la probabilidad de éxito par ambas regiones:
+Anteriormente se definió utilizando fuentes bibliográficas y el gráfico original, una variable booleana que nos permite definir si un programador posee un sueldo anual "estándar" o no. Utilizando esta variable se puede definir una variable aleatoria discreta que se distribuye en una Bernoulli p. Cuando un programador gane un sueldo estándar, será considerado un éxito, y cuando gane más del será un fracaso. Se calcula la probabilidad de éxito par ambas regiones:
 
 ```{r}
 totalUSA <- nrow(DF_FT_USA)
@@ -1054,7 +1054,7 @@ Se puede ver que en Estados unidos lo más probable es que 5 programadores de lo
 ```{r}
 data.frame("n_éxito"=c(1:10), "prob" = round(dbinom(c(1:10), 10, totalLA_yes/totalLA),3))
 ```
-Por otro lado, en América Latina, lo más probable sea que 4 de los 10 trabajen en una orgacicacion con un buen acoplamiento.
+Por otro lado, en América Latina, lo más probable sea que 4 de los 10 trabajen en una organización con un buen acoplamiento.
 
 ### Bibliografía
 
