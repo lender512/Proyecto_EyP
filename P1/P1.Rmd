@@ -390,7 +390,7 @@ round(var(DF_LA$Age1stCode, na.rm = TRUE), 2)
 ```
 
 
-Luego del análisis de la variable, se llega a la hipótesis de que en Estados Unidos realizan su primer programa antes que en América Latina. Sin embargo, la diferencia es de apenas un poco más de un año, además en América Latina las edades están más concentradas a su media aritmétrica.
+Luego del análisis de la variable, se llega a la hipótesis de que en Estados Unidos realizan su primer programa antes que en América Latina. Sin embargo, la diferencia es de apenas un poco más de un año, además en América Latina las edades están más concentradas a su media.
 
 ##### ¿Cómo influye la región en la que los desarrolladores profesionales viven en la frecuencia con la que aprenden un nuevo lenguaje?
 
