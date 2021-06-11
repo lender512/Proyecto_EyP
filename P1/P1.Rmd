@@ -15,9 +15,9 @@ knitr::opts_chunk$set(warning=FALSE, comment=NA)
 
 ### Integrantes
 
--   Luis Berrospi *(líder)*
+-   Luis Berrospi 
 
--   Bryan Castillo
+-   Bryan Castillo *(líder)*
 
 -   Luis Robledo
 
@@ -881,11 +881,12 @@ DF_FT_USA_STD <- DF_FT_USA[DF_FT_USA$isStandard_usa == TRUE, ]
 
 DF_MIX <-data.frame(cbind(DF_MIX, isStandard_mix))
 
-hist(DF_FT_USA_STD$ConvertedComp[DF_FT_USA_STD$isStandard_usa == TRUE ], breaks = 15, probability = TRUE, main = "Histograma del salario anual USA", ylab = "Frecuencia", xlab = "Salario anual en dolares")
+hist(DF_FT_USA_STD$ConvertedComp[DF_FT_USA_STD$isStandard_usa == TRUE ], breaks = 15, probability = TRUE, main = "Histograma del salario anual Estados Unidos", ylab = "Frecuencia", xlab = "Salario anual en dolares")
 abline(v=mean(as.numeric(DF_FT_USA_STD$ConvertedComp), na.rm = TRUE), col = "red")
-hist(DF_FT_LA_STD$ConvertedComp, breaks = 15, probability = TRUE, main = "Histograma del salario anual Latinoamerica", ylab = "Frecuencia", xlab = "Salario anual en dolares")
+hist(DF_FT_LA_STD$ConvertedComp, breaks = 15, probability = TRUE, main = "Histograma del salario anual América Latina", ylab = "Frecuencia", xlab = "Salario anual en dolares")
 
 abline(v=mean(DF_FT_LA_STD$ConvertedComp, na.rm = TRUE), col = "blue")
+#legend(0,0.00005,legend=c("media EEUU", "media Latam"),col=c("red", "blue"),lwd=2)
 ```
 En Estados Unidos se observa una distribución normal respecto a la media, es decir que la mayoría de los programadores gana alrededor de 104737 dólares anuales. Por otro lado, en América Latina no existe una distribución muy atípica, pero sí hay más variación respecto a la media, a comparación de Estados Unidos.
 
@@ -945,6 +946,10 @@ Sin embargo, si se desea comparar la relación entre las dos regiones, se tiene 
 cor(x = DF_USA$Age,y = DF_USA$YearsCodePro, use = "pairwise.complete.obs")
 cor(x = DF_LA$Age,y = DF_LA$YearsCodePro, use = "pairwise.complete.obs")
 ```
+Gracias a la alta correlación, se pude determinar una función que permita "predecir" los años de experiencia en función de la edad de un programados:
+
+- Estados Unidos:   f(edad) = 0.81 × edad - 17.34
+- América Latina:   f(edad) = 0.78 × edad - 15.58
 
 Luego de analizar la variable con los indicadores, se puede dar la hipótesis de que la región no influye entre la relación de la edad y años programando profesionalmente, además esta es muy alta y sugeriría que los programadores profesionales comienzan a trabajar a una temprana edad lo que permite que ganen años de experiencia mientras aumenta su edad.
 
@@ -1039,7 +1044,7 @@ totalLA <- nrow(DF_LA[!is.na(DF_LA$NEWOnboardGood),])
 round(dbern(1, totalUSA_yes/totalUSA),2)
 round(dbern(1, totalLA_yes/totalLA),2)
 ```
-Se puede apreciar que la probabilidad de que al escoger un programador en Estados Unidos o en América Latina la empresa donde trabaja tenga un buen proceso de incorporación es bastante similar. Se puede extener este experimento para aplicar una distribución binomial, y mostrar las probabilidades de obtener de 1 a 10 programadores cuya empresa tenga un buen proceso de incorporación al escogerlos de un grupo de 10.
+Se puede apreciar que la probabilidad de que al escoger un programador en Estados Unidos o en América Latina la empresa donde trabaja tenga un buen proceso de incorporación es bastante similar. Se puede extender este experimento para aplicar una distribución binomial, y mostrar las probabilidades de obtener de 1 a 10 programadores cuya empresa tenga un buen proceso de incorporación al escogerlos de un grupo de 10.
 
 ```{r}
 data.frame("n_éxito"=c(1:10), "prob" = round(dbinom(c(1:10), 10, totalUSA_yes/totalUSA),3))
