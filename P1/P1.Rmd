@@ -934,7 +934,14 @@ abline(lm(DF_USA$YearsCodePro ~ DF_USA$Age), col = "red")
 abline(lm(DF_LA$YearsCodePro ~ DF_LA$Age), col = "blue")
 ```
 
-Se decidió utilizar un diagrama de dispersión con colores porque permite observar la correlación entre dos variables y además permite diferenciar con colores variables categóricas. En el gráfico se puede observar que existe una fuerte relación entre la edad y los años de experiencia y que la pendiente es similar entre las regiones. Se puede utilizar la covarianza para medir el grado de asociaron que existen entre las variables y se puede ver que es positiva y hay asociación, las dos variables crecen en la misma dirección.
+Se decidió utilizar un diagrama de dispersión con colores porque permite observar la correlación entre dos variables y además permite diferenciar con colores variables categóricas. En el gráfico se puede observar que existe una fuerte relación entre la edad y los años de experiencia y que la pendiente es similar entre las regiones. Las funciones que corresponden a las regresiones lineales son las siguientes:
+
+- Estados Unidos:   f(edad) = 0.81 × edad - 17.34
+- América Latina:   f(edad) = 0.78 × edad - 15.58
+
+Se puede utilizar la covarianza para medir el grado de asociaron que existen entre las variables y se puede ver que es positiva y hay asociación, las dos variables crecen en la misma dirección.
+
+
 
 ```{r}
 cov(y = DF_USA$Age,x = DF_USA$YearsCodePro, use = "pairwise.complete.obs")
@@ -947,10 +954,7 @@ Sin embargo, si se desea comparar la relación entre las dos regiones, se tiene 
 cor(x = DF_USA$Age,y = DF_USA$YearsCodePro, use = "pairwise.complete.obs")
 cor(x = DF_LA$Age,y = DF_LA$YearsCodePro, use = "pairwise.complete.obs")
 ```
-Gracias a la alta correlación, se pude determinar una función que permita "predecir" los años de experiencia en función de la edad de un programados:
-
-- Estados Unidos:   f(edad) = 0.81 × edad - 17.34
-- América Latina:   f(edad) = 0.78 × edad - 15.58
+Gracias a la alta correlación, se pude determinar las funciones definidas anteriormente pueden dar cierta garantía y "predecir" cuantos años de experiencia laboral podría tener alguien cierta edad.
 
 Luego de analizar la variable con los indicadores, se puede dar la hipótesis de que la región no influye entre la relación de la edad y años programando profesionalmente, además esta es muy alta y sugeriría que los programadores profesionales comienzan a trabajar a una temprana edad lo que permite que ganen años de experiencia mientras aumenta su edad.
 
@@ -989,7 +993,7 @@ cor(x = DF_LA_FREE$Age,y = DF_LA_FREE$ConvertedComp, use = "pairwise.complete.ob
 ```
 
 
-Luego del análisis de los indicadores, se puede sugerir la hipótesis de que la edad de los programadores a tiempo parcial en Estados Unidos no está muy relacionada con su sueldo anual. Por otro lado, en América latina el valor cercano a 0.6 de la covarianza indica que hay una correlación moderada y que la edad si influye en la remuneración anual de los programadores profesionales que trabajan a tiempo parcial.
+Luego del análisis de los indicadores, se puede sugerir la hipótesis de que la edad de los programadores a tiempo parcial en Estados Unidos no relacionada con su sueldo anual. Por otro lado, en América latina el valor cercano a 0.6 de la covarianza indica que hay una correlación moderada y que la edad si influye en la remuneración anual de los programadores profesionales que trabajan a tiempo parcial.
 
 ##### ¿Cuál es la diferencia que exise entre regiones de la relación entre los años de experiencia y el sueldo de los programadores que traban en empresas pequeñas?
 
@@ -1022,11 +1026,11 @@ Como se desea identificar una diferencia se hará uso, una vez más, de la corre
 cor(x = DF_USA_FREE$YearsCodePro,y = DF_USA_FREE$ConvertedComp, use = "pairwise.complete.obs")
 cor(x = DF_LA_FREE$YearsCodePro,y = DF_LA_FREE$ConvertedComp, use = "pairwise.complete.obs")
 ```
-Luego de la revisión de los descriptores, se plantea la hipótesis de que el sueldo tiene poco que ver con la edad de los que trabajan en empresas pequeñas en Estados Unidos, mientras que en América latina, la edad de los que trabajan para estas empresas están mucho más relacionadas con el dinero que ganan anualmente.
+Luego de la revisión de los descriptores, se plantea la hipótesis de que, si bien las correlaciones no son muy altas, el sueldo aparentemente tiene poco que ver con la edad de los que trabajan en empresas pequeñas en Estados Unidos, mientras que en América latina aparentemente, la edad de los que trabajan para estas empresas están mucho más relacionadas con el dinero que ganan anualmente.
 
 ### Modelos de variable aleatoria para variables de interés
 
-#### Probabilidad de que un desarrollador profesional de Estados Unidos o de América latina tenga un sueldo anual "estándar"
+#### ¿Cual es la probabilidad de que un desarrollador profesional de Estados Unidos o de América latina tenga un sueldo anual "estándar"?
 
 Anteriormente se definió utilizando fuentes bibliográficas y el gráfico original, una variable booleana que nos permite definir si un programador posee un sueldo anual "estándar" o no. Utilizando esta variable se puede definir una variable aleatoria discreta que se distribuye en una Bernoulli p. Cuando un programador gane un sueldo estándar, será considerado un éxito, y cuando gane más del será un fracaso. Se calcula la probabilidad de éxito par ambas regiones:
 
@@ -1043,7 +1047,7 @@ round(dbern(1, totalLA_std/totalLA),2)
 Se puede observar que la probabilidad de que al elegir un programador profesional en Estados Unidos este gane un sueldo considerado estándar es de  0.84. Mientras que si hacemos este experimento en América Latina, la probabilidad es de 0.91, esto indica que quizá el sueldo estándar, que se obtuvo de la fuente bibliográfica y se corroboró con el gráfico, podría estar un poco por debajo de un supuesto sueldo estándar real.
 
 
-#### Probabilidad de que un desarrollador profesional de Estados Unidos o de América latina trabaje en una empresa que cuente con un buen proceso de incorporación
+#### ¿Cual es la probabilidad de que un desarrollador profesional de Estados Unidos o de América latina trabaje en una empresa que cuente con un buen proceso de incorporación?
 
 A continuación se utilizará la variable ordinal "proceso de incorporación" que tiene 3 categorías para indicar si es que el proceso de incorporación de la empresa en donde trabajan los programadores profesionales tienen un buen proceso de incorporación, estas son: "Sí", "No" y "¿Cuál proceso?. Se tomará como una variable aleatoria tiene una distribución Bernoulli p, donde se considerará como éxito cuando un trabajador responde "Sí" a la pregunta si es que proceso de incorporación de su empresa es bueno y se tomará como fracaso cualquier otra respuesta (No o ¿Cuál proceso?).
 
