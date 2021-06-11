@@ -969,7 +969,12 @@ abline(lm(DF_USA_FREE$ConvertedComp ~ DF_USA_FREE$Age), col = "red")
 abline(lm(DF_LA_FREE$ConvertedComp ~ DF_LA_FREE$Age), col = "blue")
 ```
 
-Al igual que en el anterior caso, se optó por utilizar un diagrama de dispersión con colores para diferenciar la variable categórica de la región. Se puede apreciar en el cuadro que ambas variables parecen tener cierta relación, para verificar esto se analizara el valor de la covarianza. Se puede ver que ambas son positivas, sin embargo, el valor de la covarianza de Estados Unidos es mucho mayor que la de América Latina.
+Al igual que en el anterior caso, se optó por utilizar un diagrama de dispersión con colores para diferenciar la variable categórica de la región. Las funciones de las regresiones que resultan en la remuneración anual son las siguientes:
+
+- Estados Unidos:   f(edad) = 1313 × edad + 47529
+- América Latina:   f(edad) = 983.5 × edad - 8830.5
+
+Se puede apreciar en el cuadro que ambas variables parecen tener cierta relación, para verificar esto se analizara el valor de la covarianza. Se puede ver que ambas son positivas, sin embargo, el valor de la covarianza de Estados Unidos es mucho mayor que la de América Latina.
 
 ```{r}
 cov(x = DF_USA_FREE$Age,y = DF_USA_FREE$ConvertedComp, use = "pairwise.complete.obs")
@@ -982,6 +987,7 @@ Para poder comparar ambas relaciones, pues ya se ha analizado que el sueldo de l
 cor(x = DF_USA_FREE$Age,y = DF_USA_FREE$ConvertedComp, use = "pairwise.complete.obs")
 cor(x = DF_LA_FREE$Age,y = DF_LA_FREE$ConvertedComp, use = "pairwise.complete.obs")
 ```
+
 
 Luego del análisis de los indicadores, se puede sugerir la hipótesis de que la edad de los programadores a tiempo parcial en Estados Unidos no está muy relacionada con su sueldo anual. Por otro lado, en América latina el valor cercano a 0.6 de la covarianza indica que hay una correlación moderada y que la edad si influye en la remuneración anual de los programadores profesionales que trabajan a tiempo parcial.
 
@@ -999,7 +1005,12 @@ points(x = DF_LA_FREE$YearsCodePro, y = DF_LA_FREE$ConvertedComp, col = "blue", 
 abline(lm(DF_USA_FREE$ConvertedComp ~ DF_USA_FREE$YearsCodePro), col = "red")
 abline(lm(DF_LA_FREE$ConvertedComp ~ DF_LA_FREE$YearsCodePro), col = "blue")
 ```
-Se decidió utilizar un diagrama de dispersión por colores por los motivos ya mencionados anteriormente. Se puede observar en el diagrama que la regresión lineal tiene pendiente positiva en ambos casos. Se recurre a las covarianzas para ver el grado de asociación en las variables y se ve que en ambos casos es positiva, lo que indicaría que las variables crecen en la misma dirección. 
+Se decidió utilizar un diagrama de dispersión por colores por los motivos ya mencionados anteriormente. Se puede observar en el diagrama que la regresión lineal tiene pendiente positiva en ambos casos. Las funciones de la regresiones lineales son las siguientes:
+
+- Estados Unidos:   f(años) = 1319 × años + 80777
+- América Latina:   f(años) = 1222 × años - 12018
+
+Se recurre a las covarianzas para ver el grado de asociación en las variables y se ve que en ambos casos es positiva, lo que indicaría que las variables crecen en la misma dirección. 
 
 ```{r}
 cov(x = DF_USA_FREE$YearsCodePro,y = DF_USA_FREE$ConvertedComp, use = "pairwise.complete.obs")
