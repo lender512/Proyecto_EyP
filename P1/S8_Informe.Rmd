@@ -324,13 +324,13 @@ ic <- function(x, p) {
 }
 ```
 
-Se procederá a usar la función anterior para encontrar los intervalos de confianza de la media de la edad de los programadores profesionales de las dos regiones con un nivel de confianza del 90%
+Se procederá a usar la función anterior para encontrar los intervalos de confianza de la media de la edad de los programadores profesionales de las dos regiones con un nivel de confianza del 90%.
 
 ```{r}
 ic(DF_LA$Age, 0.9)
 ic(DF_USA$Age, 0.9)
 ```
-Como se puede observar, los 2 intervalos obtenidos son excluyentes, por lo que podemos respaldar la conclusión anterior y decir que, efectivamente, los desarrolladores profesionales de Estados Unidos, en promedio, son mayores que los de América Latina. Esto se puede deber, a que el desarrollo tecnológico está mas avanzado en el país del norte, por lo que se empezó a estudiar carreras relacionadas con la computación mucho antes que en América Latina.
+Como se puede observar, los 2 intervalos obtenidos son excluyentes, por lo que podemos respaldar la hipótesis anterior y decir que, efectivamente, los desarrolladores profesionales de Estados Unidos, en promedio, son mayores que los de América Latina. Esto se puede deber, a que el desarrollo tecnológico está mas avanzado en el país del norte, por lo que se empezó a estudiar carreras relacionadas con la computación mucho antes que en América Latina.
 
 ### Preguntas sobre situación educativa
 
@@ -418,17 +418,17 @@ Con el objetivo de saber la dispersión de los valores respecto a la media aritm
 round(var(DF_USA$Age1stCode, na.rm = TRUE),2)
 round(var(DF_LA$Age1stCode, na.rm = TRUE), 2)
 ```
-Luego del análisis de la variable, se llega a la hipótesis de que en Estados Unidos realizan su primer programa antes que en América Latina. Sin embargo, la diferencia es de apenas un poco más de un año. Además en América Latina las edades están más concentradas a su media.
+Luego del análisis de la variable, se llega a la hipótesis de que en Estados Unidos realizan su primer programa antes que en América Latina. Sin embargo, la diferencia es de apenas un poco más de un año. Además en América Latina las edades en las que desarrollaron su primer programa están más próximas a la media.
 
 ##### Intervalo de confianza
 
-//TODO: Introducir por que utilizamos intervalo de confianza
+Para poder conocer el rango en el cual se cuenta la edad verdadera en la que desarrollaron su primer programa aplicamos un intervalo de confianza en las dos regiones con un nivel de confianza del 90%.
 
 ```{r}
 ic(DF_LA$Age1stCode, 0.9)
 ic(DF_USA$Age1stCode, 0.9)
 ```
-//TODO: EXPLICAR RESULADO, RELACIONARLO CON LA CONCLUSION ANTERIOR (La pueden cambiar un poco si lo consideran necesario, consultarme antes por si acaso) DAR POSIBLE JUSTIFICACION
+De acuerdo con los resultados presentados, los 2 intervalos de confianza son excluyentes, por ende, podemos respaldar la hipótesis anterior, afirmando que la edad en la que desarrollaron su primer programa, en promedio, es menor en Estados Unidos que en América Latina. Esto puede ser el resultado de un mayor desarrollo tecnológico en Estados Unidos, por lo que la necesidad, motivación por desarrollar un programa surgió antes en la población de dicho país que en América Latina.
 
 #### ¿Cómo influye la región en la que los desarrolladores profesionales viven en la frecuencia con la que aprenden un nuevo lenguaje?
 
