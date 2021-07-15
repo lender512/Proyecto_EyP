@@ -977,13 +977,13 @@ A partir del análisis, se plantea la hipótesis de que existe una abismal difer
 
 ##### Intervalo de confianza
 
-//TODO: Introducir por que utilizamos intervalo de confianza
+A continuación se hará uso de la función ic para hallar los intervalos de confianza de la remunaración anual media que reciben los programadores por cada región, a un nivel de confianza del 90%. Esto ayudará a reforzar la conclusión anterior sobre la diferencia existente entre ambas regiones respecto a la compensación anual promedio.
 
 ```{r}
 ic(DF_FT_LA_STD$ConvertedComp, 0.9)
 ic(DF_FT_USA_STD$ConvertedComp, 0.9)
 ```
-//TODO: EXPLICAR RESULADO, RELACIONARLO CON LA CONCLUSION ANTERIOR (La pueden cambiar un poco si lo consideran necesario, consultarme antes por si acaso)
+Como se observa ambos intervalos son excluyentes lo que refuerza aún más la conclusión que se llegó anteriormente, que la compensación anual promedio de los programadores de Estados Unidos es mucho mayor al sueldo anual promedio que se recibe en América Latina. Esto puede ser causado por múltiples factores, tales como: el costo de vida y el valor de las profesiones tecnológicas. Ya que en Estados Unidos el costo de vida es mayor por lo tanto el sueldo mínimo también lo es. Asimismo, la diferencia abismal también esta influida por el hecho de que el mercado tecnológico en Estados Unidos esta mucho más desarrollado y valorado, lo que genera que las carreras relacionadas a la programación o que requieran de ella, sean mejor remuneradas.
 
 ### Preguntas que involucran relaciones entre variables
 
