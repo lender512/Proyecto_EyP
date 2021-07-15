@@ -735,14 +735,13 @@ round(sd(DF_USA$WorkWeekHrs[DF_USA$Employment == "Employed full-time"], na.rm = 
 ```
 ##### Intervalo de confianza
 
-//TODO: Introducir por que utilizamos intervalo de confianza
+En este caso el intervalo confianza permite describir la variabilidad entre la medida obtenida en el estudio y la medida real para las horas trabajadas semanalmente por un programdor de Estados Unidos y America Latina con un nivel de confianza del 90%.
 
 ```{r}
 ic(DF_LA$WorkWeekHrs[DF_LA$Employment == "Employed full-time"], 0.9)
 ic(DF_USA$WorkWeekHrs[DF_USA$Employment == "Employed full-time"], 0.9)
 ```
-//TODO: EXPLICAR RESULADO, RELACIONARLO CON LA CONCLUSION ANTERIOR (La pueden cambiar un poco si lo consideran necesario, consultarme antes por si acaso)
-
+Según los resultados, los 2 intervalos de confianza obtenidos son incluyentes, por lo que podemos respaldar la hipoteisis, ya que ambas regiones tienen valores similares. Esto puede ser debido a la mayoria de las empresas siguen el mismo formato de trabajo.
 
 ##### Variable: Frecuencia de horas extra en el trabajo
 
