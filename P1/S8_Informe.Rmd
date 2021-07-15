@@ -640,13 +640,14 @@ A partir del análisis y las comparaciones, se llega a la hipótesis de que sí 
 
 ##### Intervalo de confianza
 
-//TODO: Introducir por que utilizamos intervalo de confianza
+Para poder conocer el rango de la cantidad de años programando profesionalmente por cada desarrollador con mayor precisión, aplicamos un intervalo de confianza en las dos regiones con un nivel de confianza del 90%.
 
 ```{r}
 ic(DF_LA$YearsCodePro, 0.9)
 ic(DF_USA$YearsCodePro, 0.9)
 ```
-//TODO: EXPLICAR RESULADO, RELACIONARLO CON LA CONCLUSION ANTERIOR (La pueden cambiar un poco si lo consideran necesario, consultarme antes por si acaso)
+
+En base a los resultados obtenidos, los 2 intervalos de confianza son excluyentes, por lo que podemos corroborar nuestra hipótesis anterior. Existe una diferencia entre Estados Unidos y América Latina en cuanto a los años programando profesionalmente, ya que en promedio, los desarrolladores de Estados Unidos llevan aproximadamente programando profesionalmente 2 años más que los desarrolladores de America Latina. Esto se puede deber a que en Estados Unidos hay una mayor cantidad de empresas o industrias líderes en desarrollo de software a nivel mundial, por que se ofrecen mayores oportunidades laborales, y los desarrolladores pueden conseguir un trabajo formal antes que los desarrolladores de America Latina.
 
 #### ¿Cómo influye la región en la que los desarrolladores profesionales viven en su situación de búsqueda laboral?
 
