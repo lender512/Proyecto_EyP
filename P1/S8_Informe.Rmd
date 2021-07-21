@@ -67,6 +67,10 @@ Para lograr los objetivos, se plantean las siguientes preguntas de investigació
 
 -   ¿Cuál es la diferencia entre el género y las edades de los desarrolladores profesionales según la región en la que viven?
 
+    -   ¿La media de las edades en Estados Unidos es mayor que la de América Latina? (Prueba de hipótesis)
+    
+    -   ¿La media de las edades en Estados Unidos está por encima de una media de los programadores profesionales a nivel global mientras que la de América Latina está por debajo? (Prueba de hipótesis)
+
 -   ¿Cómo influye la región en la que viven los desarrolladores profesionales en su educación?
 
     -   ¿Como influencia la región en la que habitan los desarrolladores profesionales en su grado educativo?
@@ -95,6 +99,8 @@ Para lograr los objetivos, se plantean las siguientes preguntas de investigació
     
     -   ¿Cuál es la diferencia que existe entre regiones de la relación entre los años de experiencia y el sueldo de los programadores que traban en empresas pequeñas?
     
+        -   ¿La media del sueldo anual en Estados Unidos está por encima de la media del sueldo anual de los programadores profesionales a nivel global mientras que la de América Latina está por debajo? (Prueba de hipótesis)
+    
 -   Preguntas que involucran análisis de variables aleatorias
 
     -   ¿Cuál es la probabilidad de que un desarrollador profesional de Estados Unidos o de América latina trabaje en una empresa que cuente con un buen proceso de incorporación?
@@ -108,7 +114,7 @@ Para lograr los objetivos, se plantean las siguientes preguntas de investigació
 
 -   **Muestra:** Programadores profesionales que usan constantemente el foro "Stack Overflow".
 
--   **Muestreo:** Por conveniencia.
+-   **Muestreo:** Por conveniencia, pues estamos considerando solo a los programadores profesionales que utilizan Stack Overflow y han respondido su encuesta y no es aleatorio.
 
 -   **Base de Datos:** La base de datos es el resultado de la Stack Overflow Developer Survey 2020, esta encuesta busca saber de qué forma aprende cualquier persona que sabe programar, qué herramientas usa y cómo se relaciona con el foro. La base de datos cuenta con cerca de 65000 observaciones totales y 61 variables, pero para este trabajo, delimitamos las observaciones según lo que realmente necesitábamos.
 
