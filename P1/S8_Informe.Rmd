@@ -338,20 +338,23 @@ ic(DF_USA$Age, 0.9)
 ```
 Como se puede observar, los 2 intervalos obtenidos son excluyentes, por lo que podemos respaldar la hipótesis anterior y decir que, efectivamente, los desarrolladores profesionales de Estados Unidos, en promedio, son mayores que los de América Latina. Esto se puede deber, a que el desarrollo tecnológico está mas avanzado en el país del norte, por lo que se empezó a estudiar carreras relacionadas con la computación mucho antes que en América Latina.
 
-
 ##### Prueba de hipótesis de diferencia de medias
-hipotesis: la media de estados es mayor que la de america latina
-h0: la difrencia de medias entre estados unidos y america latina es 0 o negativo
-  Musa - Mlat <= 0
-h1: la difeencia de medias entre estados unidos y america latina es positiva
-  Musa - Mlat > 0
+Ahora, para verificar que la diferencia de medias es real y que además, la media de Estados Unidos es mayor que la de América Latina segun las sospechas que tenemos, también se puede realizar una prueba de hipótesis de diferencia de medias, con las siguientes hipótesis:
+
+$H_0:$ La diferencia de medias de edades entre Estados unidos y América Latina es 0 o negativa
+
+$$H_0: x_{usa}-x_{latam} \le 0$$
+
+$H_a:$ La diferencia de medias de edades entre Estados unidos y América Latina es positiva
+
+$$H_a: x_{usa}-x_{latam} \gt 0$$
+
+Usaremos una prueba t de cola superior pues queremos verificar que la diferencia de medias no sea negativa o 0 y no conocemos la desviación estándar. El $\mu$ de nuestra prueba sería 0 pues queremos distinguir los positivos y los negativos y usaremos la opción alternative greater pues en nuestra hipótesis alternativa queremos que al restar la media de edades de Estados Unidos con la de América Latina resulte un numero positivo, pues esto significa que la media de Estados Unidos es mayor que la de América Latina
+
 ```{r}
 t.test(DF_USA$Age, DF_LA$Age, mu = 0, conf.level = 0.9, alternative="greater")
 ```
-```{r}
-2.2e-16 <= 1-0.9
-```
-Rechazamos la hipótesis nula porque el p valor es menor que la confianza. 0 esta fuera del rango de intervalo de confianza, por lo que está en la zona de rechazo.
+Luego de realizar la prueba t, podemos observar que el p valor de 2.2e-16 es mucho menor que nuestra significancia de 0.1, además nuestro $mu$ no está dentro del intervalo de confianza resultante, por lo que podemos rechazar la hipótesis nula que indica que la media de Estados Unidos es menor que la de América latina
 
 ##### Prueba de hipótesis de media
 
