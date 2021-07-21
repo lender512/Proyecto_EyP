@@ -130,6 +130,8 @@ df <- df[!(df$Age == "10" &  !is.na(df$Age)),]
 df <- df[!(df$Age == "99" &  !is.na(df$Age)),]
 ```
 
+
+
 **Limpieza de datos:**
 
 Se cargó la base de datos original y se procedió a revisar los datos de las personas en las regiones que nos interesan. Se pudo observar que las personas que marcaron que tenían la edad de 1, 10 y 99 años, tenían otros datos irreales, como cantidad de horas trabajadas semanalmente muy altas, o les faltaba una cantidad importante de datos. Por estos motivos consideramos que eran datos inválidos y fueron eliminados del data frame. A lo largo del trabajo, se reconocerá la existencia de más datos erróneos; sin embargo, ya no se eliminarán las observaciones completas, simplemente se les asignará NA para que no afecte la representatividad de otras variables. Cuando esto suceda, se comentará antes del análisis de las variables.
@@ -165,6 +167,7 @@ colnames(DF_MIX)[which(names(DF_MIX) == "Country")] <- "Region"
 
 Se crearon dos *data frames*: DF_USA para guardar los datos de los programadores profesionales de Estados Unidos con 9454 observaciones y DF_LA para los datos de los de América Latina con 3032 observaciones. El estudio original contenía 61 variables, entre las cuales se encontraban múltiples relacionadas con el uso del foro y que no resultaban interesantes para este estudio, respecto a las demás variables, se decidió seleccionar 15 que consideramos claves para describir la situación educativa y laboral de los programadores profesionales y contestar las preguntas de investigación. Por último, se decidió crear un tercer *data frame*, DF_MIX que represente la unión de los dos anteriores con una variable más, "Región" para distinguirlos entre los que son de Estados Unidos y de América Latina, con el objetivo de simplificar el cálculo a nivel de código de algunos descriptores en el futuro.
 
+
 ## Integridad de los datos
 
 **Datos Faltantes(%):**
@@ -180,6 +183,9 @@ round(sum(is.na(DF_MIX))/(nrow(DF_MIX)*ncol(DF_MIX))*100, 2)
 ```
 
 Se puede ver que existe un gran porcentaje de observaciones incompletas (40.69%), sin embargo, a estas no les faltan muchos datos, pues solo tenemos 11.31% de datos faltantes. Por este motivo no se eliminarán las observaciones incompletas pues reduciría la representatividad de la muestra, así que lo que se hará será no considerar los datos NA para los indicadores en los que estos estén presentes.
+
+## Parametros del estudio:
+
 
 ## **Tabla descriptores**
 
@@ -331,6 +337,30 @@ ic(DF_LA$Age, 0.9)
 ic(DF_USA$Age, 0.9)
 ```
 Como se puede observar, los 2 intervalos obtenidos son excluyentes, por lo que podemos respaldar la hipótesis anterior y decir que, efectivamente, los desarrolladores profesionales de Estados Unidos, en promedio, son mayores que los de América Latina. Esto se puede deber, a que el desarrollo tecnológico está mas avanzado en el país del norte, por lo que se empezó a estudiar carreras relacionadas con la computación mucho antes que en América Latina.
+
+
+##### Prueba de hipótesis de diferencia de medias
+hipotesis: la media de estados es mayor que la de america latina
+h0: la difrencia de medias entre estados unidos y america latina es 0 o negativo
+  Musa - Mlat <= 0
+h1: la difeencia de medias entre estados unidos y america latina es positiva
+  Musa - Mlat > 0
+```{r}
+t.test(DF_USA$Age, DF_LA$Age, mu = 0, conf.level = 0.9, alternative="greater")
+```
+```{r}
+2.2e-16 <= 1-0.9
+```
+Rechazamos la hipótesis nula porque el p valor es menor que la confianza. 0 esta fuera del rango de intervalo de confianza, por lo que está en la zona de rechazo.
+
+##### Prueba de hipótesis de media
+
+```{r}
+t.test(DF_LA$Age, mu = 32, conf.level = 0.90, alternative="less")
+
+t.test(DF_USA$Age, mu = 32, conf.level = 0.90, alternative="greater")
+```
+
 
 ### Preguntas sobre situación educativa
 
@@ -984,6 +1014,14 @@ ic(DF_FT_LA_STD$ConvertedComp, 0.9)
 ic(DF_FT_USA_STD$ConvertedComp, 0.9)
 ```
 Como se observa ambos intervalos son excluyentes lo que refuerza aún más la conclusión que se llegó anteriormente, que la compensación anual promedio de los programadores de Estados Unidos es mucho mayor al sueldo anual promedio que se recibe en América Latina. Esto puede ser causado por múltiples factores, tales como: el costo de vida y el valor de las profesiones tecnológicas. Ya que en Estados Unidos el costo de vida es mayor por lo tanto el sueldo mínimo también lo es. Asimismo, la diferencia abismal también esta influida por el hecho de que el mercado tecnológico en Estados Unidos esta mucho más desarrollado y valorado, lo que genera que las carreras relacionadas a la programación o que requieran de ella, sean mejor remuneradas.
+
+##### Prueba de hipótesis de media
+
+```{r}
+
+```
+
+
 
 ### Preguntas que involucran relaciones entre variables
 
