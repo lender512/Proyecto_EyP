@@ -6,6 +6,7 @@ Las diferencias en el aspecto educativo y laboral entre programadores de Estados
 author: G8: Luis Berrospi, Bryan Castillo, Luis Robledo, Jorge Collazos, Nincol Quiroz 
 date: 11-06-2021
 
+
 Introducción
 ========================================================
 
@@ -32,19 +33,28 @@ Variables
 ========================================================
 <img src="table.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" height="700px" style="display: block; margin: auto;" />
 
-Patrones destacados
+Parámetros del estudio
 ========================================================
-Se mostrarán los patrones más destacados que encontramos en nuestro estudio al responder las preguntas de investigación
+- Nivel de confianza: 90%
+- Tamaño de muestra: 12486 observaciones (3032 América latina, 9454 Estados Unidos)
+- Precisión: 
 
-¿Cuál es la diferencia entre el género de los desarrolladores profesionales según la región en la que viven?
-========================================
-
-Variable: Género
+Intervalo de confianza
 ========================================================
-class: slide
-<img src="Prestancion-figure/unnamed-chunk-2-1.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" style="display: block; margin: auto;" />
-- Brecha de género de más de 70 puntos porcentuales en ambas regiones
-- **Hipótesis**: sin importar la región en la que viven, la gran mayoría de desarrolladores profesionales son hombres.
+Se utilizará la distribución t de student
+
+```r
+ic <- function(x, p) {
+  m <- mean(x, na.rm = TRUE)
+  a <- 1- p
+  n <- sum(!is.na(x))
+  s <- sd(x[!is.na(x)])
+  
+  izq <- m - qt(a/2, n-1, lower.tail = FALSE)*s/sqrt(n)
+  der <- m + qt(a/2, n-1, lower.tail = FALSE)*s/sqrt(n)
+  return (cat("(",izq, ", ", der, ")\n"))
+}
+```
 
 ¿Cuál es la diferencia entre la edad de los desarrolladores profesionales según la región en la que viven?
 ========================================================
@@ -58,80 +68,285 @@ Variable: Edad
 - Mediana América Latina: 32
 - **Hipótesis**: Los desarrolladores de Estados Unidos tienen más años que los de América Latina, sin embargo, son solo unos 3 años más.
 
+Intervalo de confianza
+========================================================
+Intervalos excluyentes
 
-¿Existe diferencia entre los años que llevan programando de manera profesional los desarrolladores de Estados Unidos y los de América Latina?
+```r
+ic(DF_LA$Age, 0.9)
+```
+
+```
+( 29.88362 ,  30.41433 )
+```
+
+```r
+ic(DF_USA$Age, 0.9)
+```
+
+```
+( 34.13334 ,  34.51723 )
+```
+
+
+Prueba de hipótesis de diferencia de medias
 ========================================================
 
-Variable: Años programando profesionalmente
-========================================================
-<img src="Prestancion-figure/unnamed-chunk-4-1.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" style="display: block; margin: auto;" />
-- Diferencia en 3er cuartil de 4 años
-- Mediana EEUU: 8 - Mediana América latina: 6
-- **Hipótesis**: Si existe, pero esta es pequeña, ronda los 2 años
+$H_{0}:$ La diferencia de medias de edades entre Estados unidos y América Latina es 0 o negativa
 
-¿Existe diferencia entre la relación que hay entre estás dos variables anteriores?
+$$H_{0}: x_{usa}-x_{latam} \le 0$$
+
+$H_a:$ La diferencia de medias de edades entre Estados unidos y América Latina es positiva
+
+$$H_a: x_{usa}-x_{latam} \gt 0$$
+
+Prueba T Comparación de medias
 ========================================================
 
-Relación: edad y años programando profesionalmente
-========================================================
-<img src="Prestancion-figure/unnamed-chunk-5-1.png" title="plot of chunk unnamed-chunk-5" alt="plot of chunk unnamed-chunk-5" style="display: block; margin: auto;" />
-- Correlación EEUU: 0.87 - Correlación América Latina: 0.84
-- **Hipótesis**: En ambos casos la correlación es alta, la región no influye.
+```r
+t.test(DF_USA$Age, DF_LA$Age, mu = 0, conf.level = 0.9, alternative="greater")
+```
 
-Predicción
-========================================================
-- La alta correlación permite realizar una predicción. Obtenemos los años de experiencia en el ámbito laboral en función de la edad
-- Estados Unidos:   f(edad) = 0.81 × edad - 17.34
-- América Latina:   f(edad) = 0.78 × edad - 15.58
-- Se podría decir que un programador de 35 años debería tener 11 años de experiencia en Estados Unidos y un poco menos de 12 en América latina.
-- Lógicamente tendrá cierto margen de error.
+```
 
-¿Cómo influye la región en la que los desarrolladores profesionales viven en la frecuencia con la que aprenden un nuevo lenguaje?
+	Welch Two Sample t-test
+
+data:  DF_USA$Age and DF_LA$Age
+t = 20.982, df = 4894.9, p-value < 2.2e-16
+alternative hypothesis: true difference in means is greater than 0
+90 percent confidence interval:
+ 3.921193      Inf
+sample estimates:
+mean of x mean of y 
+ 34.32528  30.14897 
+```
+Rechazamos la hipótesis nula
+
+¿La media de las edades en Estados Unidos está por encima de una media de los programadores profesionales a nivel global mientras que la de América Latina está por debajo?
 ========================================================
-Variable: Frecuencia de aprendizaje de un nuevo lenguaje
+
+Prueba de hipótesis para la media de edad Estados Unidos
 ========================================================
-<img src="Prestancion-figure/unnamed-chunk-6-1.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" style="display: block; margin: auto;" />
-- Moda EEUU: Una vez al año - Moda Latam: Cada pocos meses
-- **Hipótesis**: Los programadores de América Latina aprenden nuevos lenguajes con mayor frecuencia, por lo que se podría decir que saben utilizar un mayor numero de lenguajes
+
+
+Prueba T Estados Unidos
+========================================================
+
+```r
+t.test(DF_USA$Age, mu = 32, conf.level = 0.90, alternative="greater")
+```
+
+```
+
+	One Sample t-test
+
+data:  DF_USA$Age
+t = 19.929, df = 7458, p-value < 2.2e-16
+alternative hypothesis: true mean is greater than 32
+90 percent confidence interval:
+ 34.17574      Inf
+sample estimates:
+mean of x 
+ 34.32528 
+```
+
+
+Prueba de hipótesis para la media de edad América Latina
+========================================================
+
+Prueba T América latina
+========================================================
+
+```r
+t.test(DF_LA$Age, mu = 32, conf.level = 0.90, alternative="less")
+```
+
+```
+
+	One Sample t-test
+
+data:  DF_LA$Age
+t = -11.479, df = 2286, p-value < 2.2e-16
+alternative hypothesis: true mean is less than 32
+90 percent confidence interval:
+     -Inf 30.35569
+sample estimates:
+mean of x 
+ 30.14897 
+```
+
 
 ¿Existe una relación entre la remuneración anual total y la región en la que los desarrolladores viven?
 ========================================================
+
 Variable: Remuneración anual en dólares
 ========================================================
-<img src="Prestancion-figure/unnamed-chunk-7-1.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" style="display: block; margin: auto;" /><img src="Prestancion-figure/unnamed-chunk-7-2.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" style="display: block; margin: auto;" />
 
-Filtrado de datos
+Estados Unidos
 ========================================================
-- No hay evidencia suficiente para eliminar los datos "atípicos"
-- Se considerará un rango de sueldo "estándar" según fuentes bibliográficas con los sueldos de empleados tiempo completo y revisando que concuerde con el gráfico original.
-- Sueldo estándar en Estados Unidos: por debajo de 171000 USD
-- Sueldo estándar en América Latina: por debajo de 42000 USD
 
-Remuneración anual en dólares con sueldo estándar 
-========================================================
-<img src="Prestancion-figure/unnamed-chunk-8-1.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" style="display: block; margin: auto;" /><img src="Prestancion-figure/unnamed-chunk-8-2.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" style="display: block; margin: auto;" />
+<img src="Prestancion-figure/unnamed-chunk-8-1.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" style="display: block; margin: auto;" />
+
+América Latina
+=================================
+
+<img src="Prestancion-figure/unnamed-chunk-9-1.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" style="display: block; margin: auto;" />
+
 
 =================================
 - mediana Estados Unidos: 104000 USD
 - mediana América Latina: 16488 USD
 - **Hipótesis**: Para un sueldo estándar, hay una relación muy fuerte. La mediana del sueldo de los programadores de Estados Unidos representa el 630.76% del de los de América Latina
 
-¿Cuál es la probabilidad de que un desarrollador profesional de Estados Unidos o de América latina tenga un sueldo anual "estándar"?
+Intervalo de confianza
 =========================================
-- Distribución Bernoulli
-- Éxito: Tiene sueldo estándar
-- Fracaso: No tiene un sueldo estándar
+Intervalos excluyentes
+- América Latina
 
-
-- Probabilidad de éxito en Estados Unidos: 
-
+```r
+ic(DF_FT_LA_STD$ConvertedComp, 0.9)
 ```
-[1] 0.84
-```
-- Probabilidad de éxito en América Latina: 
 
 ```
-[1] 0.91
+( 17640.48 ,  18427.86 )
 ```
+- Estados Unidos
+
+```r
+ic(DF_FT_USA_STD$ConvertedComp, 0.9)
+```
+
+```
+( 104002 ,  105473.7 )
+```
+
+¿La media del sueldo anual en Estados Unidos está por encima de la media del sueldo anual de los programadores profesionales a nivel global mientras que la de América Latina está por debajo?
+=========================================
+
+Prueba de hipótesis para la media del sueldo anual Estados Unidos
+========================================================
+
+Prueba T
+========================================================
+
+Prueba de hipótesis para la media del sueldo anual América Latina
+========================================================
+
+Prueba T
+========================================================
+
+
+¿Existe diferencia entre la relación que hay entre la edad de los desarrolladores profesionales y los años que llevan programando profesionalmente?
+========================================================
+
+Edad vs Años programando profesionalmente
+========================================================
+
+<img src="Prestancion-figure/unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" style="display: block; margin: auto;" />
+
+Correlación
+======================
+- Estados Unidos
+
+```r
+cor(y = DF_USA$Age,x = DF_USA$YearsCodePro, use = "pairwise.complete.obs")
+```
+
+```
+[1] 0.8703693
+```
+- América Latina
+
+```r
+cor(y = DF_LA$Age,x = DF_LA$YearsCodePro, use = "pairwise.complete.obs")
+```
+
+```
+[1] 0.8382195
+```
+
+Verificación de Estados Unidos
+======================
+
+<img src="usa.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" height="700px" style="display: block; margin: auto;" />
+
+Resultados
+========================
+- Explica cerca del 75% de las observaciones
+- p valores de las variables menor que la significancia de 0.1, por lo que rechazamos hipótesis nula:
+$$H_0: \text{El coeficiente es 0}$$
+- p valor obtenida de la prueba F de Fisher menor que nuestra significancia, por lo que rechazamos hipótesis nula:
+$$H_0: \text{El modelo no explica nada}$$
+
+Análisis de graficas del modelo
+=====================
+<img src="Prestancion-figure/unnamed-chunk-15-1.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" style="display: block; margin: auto;" />
+
+=====================
+<img src="Prestancion-figure/unnamed-chunk-16-1.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" style="display: block; margin: auto;" />
+
+=====================
+<img src="Prestancion-figure/unnamed-chunk-17-1.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" style="display: block; margin: auto;" />
+
+=====================
+<img src="Prestancion-figure/unnamed-chunk-18-1.png" title="plot of chunk unnamed-chunk-18" alt="plot of chunk unnamed-chunk-18" style="display: block; margin: auto;" />
+
+
+====================
+Podemos ver que hay ciertos valores que tienen un peso excesivo en nuestro modelo y lo alteran, estos son los siguientes:
+<img src="Prestancion-figure/unnamed-chunk-19-1.png" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" style="display: block; margin: auto;" />
+
+
+Verificación de América Latina
+======================
+
+<img src="lat.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" height="700px" style="display: block; margin: auto;" />
+
+Resultados
+========================
+- Explica cerca del 70% de las observaciones
+- p valores de las variables menor que la significancia de 0.1, por lo que rechazamos hipótesis nula:
+$$H_0: \text{El coeficiente es 0}$$
+- p valor obtenida de la prueba F de Fisher menor que nuestra significancia, por lo que rechazamos hipótesis nula:
+$$H_0: \text{El modelo no explica nada}$$
+
+Análisis de graficas del modelo
+=====================
+<img src="Prestancion-figure/unnamed-chunk-20-1.png" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" style="display: block; margin: auto;" />
+
+=====================
+<img src="Prestancion-figure/unnamed-chunk-21-1.png" title="plot of chunk unnamed-chunk-21" alt="plot of chunk unnamed-chunk-21" style="display: block; margin: auto;" />
+
+=====================
+<img src="Prestancion-figure/unnamed-chunk-22-1.png" title="plot of chunk unnamed-chunk-22" alt="plot of chunk unnamed-chunk-22" style="display: block; margin: auto;" />
+
+=====================
+<img src="Prestancion-figure/unnamed-chunk-23-1.png" title="plot of chunk unnamed-chunk-23" alt="plot of chunk unnamed-chunk-23" style="display: block; margin: auto;" />
+
+
+====================
+Podemos ver que hay ciertos valores que tienen un peso excesivo en nuestro modelo y lo alteran, estos son los siguientes:
+<img src="Prestancion-figure/unnamed-chunk-24-1.png" title="plot of chunk unnamed-chunk-24" alt="plot of chunk unnamed-chunk-24" style="display: block; margin: auto;" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

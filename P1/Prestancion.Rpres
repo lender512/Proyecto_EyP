@@ -1,10 +1,49 @@
 
+```{r include=FALSE, paged.print=FALSE, results=FALSE}
+#install.packages("countrycode")
+#install.packages("modeest")
+library(readr)
+library(dplyr)
+library(countrycode)
+library(ggplot2)
+library(modeest)
+library(Rlab)
 
+df <- read_csv("survey_results_public.csv")
+df <- df[!(df$Age == "1" &  !is.na(df$Age)),]
+df <- df[!(df$Age == "10" &  !is.na(df$Age)),]
+df <- df[!(df$Age == "99" &  !is.na(df$Age)),]
+DFF <- select(df, MainBranch, Country,Gender,Age, ConvertedComp, YearsCodePro ,EdLevel,Employment, JobSat, OrgSize, WorkWeekHrs, NEWOvertime, NEWOnboardGood, JobSeek, NEWLearn, LanguageWorkedWith, Age1stCode)
+
+DFF$YearsCodePro[DFF$YearsCodePro == "Less than 1 year"] <- NA
+DFF$YearsCodePro[DFF$YearsCodePro == "More than 50 years"] <- NA
+
+
+DFF$Age1stCode[DFF$Age1stCode == "Older than 85"] <- NA
+DFF$Age1stCode[DFF$Age1stCode == "Younger than 5 years"] <- NA
+
+DFF$YearsCodePro <- as.double(DFF$YearsCodePro)
+DFF$Age1stCode <- as.double(DFF$Age1stCode)
+
+DF_USA <- DFF[DFF$Country == "United States" & !is.na(DFF$Country) & DFF$MainBranch == "I am a developer by profession" & !is.na(DFF$MainBranch), ][3:17]
+DF_LA <- cbind(region = as.character(countrycode(sourcevar = DFF$Country,
+                            origin = "country.name",
+                            destination = "region")), DFF)
+DF_LA <- DF_LA[DF_LA$region == "Latin America & Caribbean" & !is.na(DF_LA$region) & DFF$MainBranch == "I am a developer by profession" & !is.na(DFF$MainBranch), ][, 4:18]
+DF_MIX <- cbind(region = as.character(countrycode(sourcevar = DFF$Country,
+                            origin = "country.name",
+                            destination = "region")), DFF)
+DF_MIX <- DF_MIX[((DF_MIX$region == "Latin America & Caribbean" & !is.na(DF_MIX$region)) | (DF_MIX$Country == "United States" & !is.na(DF_MIX$Country))) &  DF_MIX$MainBranch == "I am a developer by profession" & !is.na(DF_MIX$MainBranch), ][, 3:18]
+DF_MIX$Country[DF_MIX$Country != "United States"] <- "América Latina"
+DF_MIX$Country[DF_MIX$Country == "United States"] <- "Estados Unidos"
+colnames(DF_MIX)[which(names(DF_MIX) == "Country")] <- "Region"
+```
 
 Las diferencias en el aspecto educativo y laboral entre programadores de Estados Unidos y de América Latina en 2020
 ========================================================
 author: G8: Luis Berrospi, Bryan Castillo, Luis Robledo, Jorge Collazos, Nincol Quiroz 
 date: 11-06-2021
+
 
 Introducción
 ========================================================
@@ -30,100 +69,29 @@ Marco teórico
 
 Variables
 ========================================================
-```{r echo=FALSE, out.height="700px", fig.align="center"}
-library(readr)
-library(dplyr)
-library(countrycode)
-library(ggplot2)
-library(modeest)
-library(png)
-library(knitr)
-library(Rlab)
+<img src="table.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" height="700px" style="display: block; margin: auto;" />
 
-df <- read_csv("survey_results_public.csv")
-df <- df[!(df$Age == "1" &  !is.na(df$Age)),]
-df <- df[!(df$Age == "10" &  !is.na(df$Age)),]
-df <- df[!(df$Age == "99" &  !is.na(df$Age)),]
-
-DFF <- select(df, MainBranch, Country,Gender,Age, ConvertedComp, YearsCodePro ,EdLevel,Employment, JobSat, OrgSize, WorkWeekHrs, NEWOvertime, NEWOnboardGood, JobSeek, NEWLearn, LanguageWorkedWith, Age1stCode)
-
-DFF$YearsCodePro[DFF$YearsCodePro == "Less than 1 year"] <- NA
-DFF$YearsCodePro[DFF$YearsCodePro == "More than 50 years"] <- NA
-
-
-DFF$Age1stCode[DFF$Age1stCode == "Older than 85"] <- NA
-DFF$Age1stCode[DFF$Age1stCode == "Younger than 5 years"] <- NA
-
-DFF$YearsCodePro <- as.double(DFF$YearsCodePro)
-DFF$Age1stCode <- as.double(DFF$Age1stCode)
-
-DF_USA <- DFF[DFF$Country == "United States" & !is.na(DFF$Country) & DFF$MainBranch == "I am a developer by profession" & !is.na(DFF$MainBranch), ][3:17]
-DF_LA <- cbind(region = as.character(countrycode(sourcevar = DFF$Country,
-                            origin = "country.name",
-                            destination = "region")), DFF)
-DF_LA <- DF_LA[DF_LA$region == "Latin America & Caribbean" & !is.na(DF_LA$region) & DFF$MainBranch == "I am a developer by profession" & !is.na(DFF$MainBranch), ][, 4:18]
-DF_MIX <- cbind(region = as.character(countrycode(sourcevar = DFF$Country,
-                            origin = "country.name",
-                            destination = "region")), DFF)
-DF_MIX <- DF_MIX[((DF_MIX$region == "Latin America & Caribbean" & !is.na(DF_MIX$region)) | (DF_MIX$Country == "United States" & !is.na(DF_MIX$Country))) &  DF_MIX$MainBranch == "I am a developer by profession" & !is.na(DF_MIX$MainBranch), ][, 3:18]
-DF_MIX$Country[DF_MIX$Country != "United States"] <- "América Latina"
-DF_MIX$Country[DF_MIX$Country == "United States"] <- "Estados Unidos"
-colnames(DF_MIX)[which(names(DF_MIX) == "Country")] <- "Region"
-
-include_graphics("table.png")
-```
-
-Patrones destacados
+Parámetros del estudio
 ========================================================
-Se mostrarán los patrones más destacados que encontramos en nuestro estudio al responder las preguntas de investigación
+- Nivel de confianza: 90%
+- Tamaño de muestra: 12486 observaciones (3032 América latina, 9454 Estados Unidos)
+- Precisión: 
 
-¿Cuál es la diferencia entre el género de los desarrolladores profesionales según la región en la que viven?
-========================================
-
-Variable: Género
+Intervalo de confianza
 ========================================================
-class: slide
-```{r echo=FALSE, warning=FALSE, fig.align="center", fig.height=5, fig.width=10}
-
-temp = DF_USA$Gender[!is.na(DF_USA$Gender)]
-gender_vec_USA <- vector()
-gender_vec_LA <- vector()
-for (pal in temp) {
-  for (sub_pal in strsplit(pal, ";")) {
-    gender_vec_USA <- c(gender_vec_USA, sub_pal)
-  }
+Se utilizará la distribución t de student
+```{r}
+ic <- function(x, p) {
+  m <- mean(x, na.rm = TRUE)
+  a <- 1- p
+  n <- sum(!is.na(x))
+  s <- sd(x[!is.na(x)])
+  
+  izq <- m - qt(a/2, n-1, lower.tail = FALSE)*s/sqrt(n)
+  der <- m + qt(a/2, n-1, lower.tail = FALSE)*s/sqrt(n)
+  return (cat("(",izq, ", ", der, ")\n"))
 }
-temp = DF_LA$Gender[!is.na(DF_LA$Gender)]
-gender_vec <- vector()
-for (pal in temp) {
-  for (sub_pal in strsplit(pal, ";")) {
-    gender_vec_LA <- c(gender_vec_LA, sub_pal)
-  }
-}
-
-layout(matrix(c(1,2,3,3), ncol=2, byrow=TRUE), heights=c(2, 0.5))
-par(mai=rep(0.3, 4))
-
-temp = table(gender_vec_USA)
-man <- round(temp[1]/length(gender_vec_USA)*100,2)
-other <- round(temp[2]/length(gender_vec_USA)*100,2)
-woman <- round(temp[3]/length(gender_vec_USA)*100,2)
-pie(table(gender_vec_USA), main = "Estados Unidos", labels = c(paste(man, "%", sep = ""), paste(other, "%", sep = ""), paste(woman, "%", sep = "")), col = c("skyblue","orange","red"))
-temp = table(gender_vec_LA)
-
-man <- round(temp[1]/length(gender_vec_LA)*100,2)
-other <- round(temp[2]/length(gender_vec_LA)*100,2)
-woman <- round(temp[3]/length(gender_vec_LA)*100,2)
-pie(table(gender_vec_LA), main = "América Latina", labels = c(paste(man, "%", sep = ""), paste(other, "%", sep = ""), paste(woman, "%", sep = "")), col = c("skyblue","orange","red"))
-par(mai=c(0,0,0,0))
-plot.new()
-legend(x="center", ncol=3,legend=c("Hombre","Otros","Mujer"),
-       fill=c("skyblue","orange","red"))
-
-
 ```
-- Brecha de género de más de 70 puntos porcentuales en ambas regiones
-- **Hipótesis**: sin importar la región en la que viven, la gran mayoría de desarrolladores profesionales son hombres.
 
 ¿Cuál es la diferencia entre la edad de los desarrolladores profesionales según la región en la que viven?
 ========================================================
@@ -132,7 +100,8 @@ legend(x="center", ncol=3,legend=c("Hombre","Otros","Mujer"),
 Variable: Edad
 ========================================================
 
-```{r echo=FALSE, warning=FALSE, fig.align="center", fig.height=5, fig.width=12}
+```{r echo=FALSE, fig.width=11, fig.height=5, message=TRUE, warning=FALSE, comment=NA, fig.align="center"}
+
 boxplot(DF_MIX$Age~DF_MIX$Region, na.rm= T, xlab = "Edad", ylab = "Región", notch=TRUE, horizontal = TRUE, main='Edad de programadores por región')
 abline(v=mean(DF_USA$Age, na.rm = TRUE), col = "red", lwd=2)
 abline(v=mean(DF_LA$Age, na.rm = TRUE), col = "blue",lwd=2)
@@ -142,110 +111,70 @@ legend(60,1.7,legend=c("media EEUU", "media Latam"),col=c("red", "blue"),lwd=2)
 - Mediana América Latina: 32
 - **Hipótesis**: Los desarrolladores de Estados Unidos tienen más años que los de América Latina, sin embargo, son solo unos 3 años más.
 
-
-¿Existe diferencia entre los años que llevan programando de manera profesional los desarrolladores de Estados Unidos y los de América Latina?
+Intervalo de confianza
 ========================================================
-
-Variable: Años programando profesionalmente
-========================================================
-```{r echo=FALSE, warning=FALSE, fig.align="center", fig.height=5, fig.width=12}
-DF_MIX$YearsCodePro[(DF_MIX$YearsCodePro > DF_MIX$Age) & !is.na(DF_MIX$YearsCodePro) & !is.na(DF_MIX$Age)]  <- NA
-DF_LA$YearsCodePro[(DF_LA$YearsCodePro > DF_LA$Age) & !is.na(DF_LA$YearsCodePro) & !is.na(DF_LA$Age)]  <- NA
-DF_USA$YearsCodePro[(DF_USA$YearsCodePro > DF_USA$Age) & !is.na(DF_USA$YearsCodePro) & !is.na(DF_USA$Age)]  <- NA
-
-boxplot(as.numeric(DF_MIX$YearsCodePro)~DF_MIX$Region, na.rm= TRUE, ylab = "Región", xlab = "Años", notch = TRUE, horizontal = TRUE, main='Años programando profesionalmente por región')
-abline(v=mean(as.numeric(DF_USA$YearsCodePro), na.rm = TRUE), col = "red")
-abline(v=mean(as.numeric(DF_LA$YearsCodePro), na.rm = TRUE), col = "blue")
-legend(25,1.7,legend=c("media EEUU", "media Latam"),col=c("red", "blue"),lwd=2)
-
+Intervalos excluyentes
+```{r}
+ic(DF_LA$Age, 0.9)
+ic(DF_USA$Age, 0.9)
 ```
-- Diferencia en 3er cuartil de 4 años
-- Mediana EEUU: 8 - Mediana América latina: 6
-- **Hipótesis**: Si existe, pero esta es pequeña, ronda los 2 años
 
-¿Existe diferencia entre la relación que hay entre estás dos variables anteriores?
+
+Prueba de hipótesis de diferencia de medias
 ========================================================
 
-Relación: edad y años programando profesionalmente
-========================================================
-```{r, echo=FALSE, fig.align="center", fig.height=5, fig.width=9}
-plot(x = DF_USA$Age, y = DF_USA$YearsCodePro, col = "red", cex = 0.6, xlab = "Edad", ylab = "Años programando profesionalmente", main = "Edad vs Años programando profesionalmente")
-points(x = DF_LA$Age, y = DF_LA$YearsCodePro, col = "blue", cex = 0.6)
-legend(15, 40, legend = c("EEUU", "Latam"), fill=c("red", "blue"))
+$H_{0}:$ La diferencia de medias de edades entre Estados unidos y América Latina es 0 o negativa
 
-abline(lm(DF_USA$YearsCodePro ~ DF_USA$Age), col = "red")
-abline(lm(DF_LA$YearsCodePro ~ DF_LA$Age), col = "blue")
+$$H_{0}: x_{usa}-x_{latam} \le 0$$
+
+$H_a:$ La diferencia de medias de edades entre Estados unidos y América Latina es positiva
+
+$$H_a: x_{usa}-x_{latam} \gt 0$$
+
+Prueba T Comparación de medias
+========================================================
+```{r}
+t.test(DF_USA$Age, DF_LA$Age, mu = 0, conf.level = 0.9, alternative="greater")
 ```
-- Correlación EEUU: 0.87 - Correlación América Latina: 0.84
-- **Hipótesis**: En ambos casos la correlación es alta, la región no influye.
+Rechazamos la hipótesis nula
 
-Predicción
+¿La media de las edades en Estados Unidos está por encima de una media de los programadores profesionales a nivel global mientras que la de América Latina está por debajo?
 ========================================================
-- La alta correlación permite realizar una predicción. Obtenemos los años de experiencia en el ámbito laboral en función de la edad
-- Estados Unidos:   f(edad) = 0.81 × edad - 17.34
-- América Latina:   f(edad) = 0.78 × edad - 15.58
-- Se podría decir que un programador de 35 años debería tener 11 años de experiencia en Estados Unidos y un poco menos de 12 en América latina.
-- Lógicamente tendrá cierto margen de error.
 
-¿Cómo influye la región en la que los desarrolladores profesionales viven en la frecuencia con la que aprenden un nuevo lenguaje?
+Prueba de hipótesis para la media de edad Estados Unidos
 ========================================================
-Variable: Frecuencia de aprendizaje de un nuevo lenguaje
+
+
+Prueba T Estados Unidos
 ========================================================
-```{r echo=FALSE, fig.align="center", fig.height=5, fig.width=12}
-#usa
-temp = DF_USA$NEWLearn[!is.na(DF_USA$NEWLearn)]
-
-tiemponames <- c("Pocos meses", "Una vez al año", "Pocos años", "Una por década")
-
-tabla_NEWLearn_USA_F = table(temp)
-tabla_NEWLearn_USA_FR = prop.table(tabla_NEWLearn_USA_F)
-tabla_NEWLearn_USA_FR <- tabla_NEWLearn_USA_FR[c(1, 3, 4, 2)]
-tabla_NEWLearn_USA_P = data.frame(tiemponames, as.vector(tabla_NEWLearn_USA_F), as.vector(tabla_NEWLearn_USA_FR))
-
-names(tabla_NEWLearn_USA_P) <- c('Frecuencia de aprendizaje Estados Unidos', 'Frecuencia de aprendizaje', 'Frecuencia Relativa')
-
-par(mfrow=c(1, 2))
-
-barplot(tabla_NEWLearn_USA_FR, names.arg=tiemponames, xlab = 'Frecuencia de aprendizaje', ylab = 'Frecuencias Relativas', main="Estados Unidos", col=c("skyblue","orange","red","beige"), ylim = c(0,0.5), cex.names = 0.9, las =0.7)
-#LA
-temp2 = DF_LA$NEWLearn[!is.na(DF_LA$NEWLearn)]
-tabla_NEWLearn_LA_F= table(temp2)
-tabla_NEWLearn_LA_FR = prop.table(tabla_NEWLearn_LA_F)
-tabla_NEWLearn_LA_FR <- tabla_NEWLearn_LA_FR[c(1, 3, 4, 2)]
-tabla_NEWLearn_LA_P = data.frame(tiemponames, as.vector(tabla_NEWLearn_LA_F), as.vector(tabla_NEWLearn_LA_FR))
-
-names(tabla_NEWLearn_LA_P) <- c('Frecuencia de aprendizaje América Latina', 'Frecuencia', 'Frecuencia Relativa')
-
-barplot(tabla_NEWLearn_LA_FR, names.arg=tiemponames, xlab = 'Frecuencia de aprendizaje', ylab = 'Frecuencias Relativas', main="América Latina", col=c("skyblue","orange","red","beige"), ylim = c(0,0.5), cex.names = 0.9, las =0.7)
+```{r}
+t.test(DF_USA$Age, mu = 32, conf.level = 0.90, alternative="greater")
 ```
-- Moda EEUU: Una vez al año - Moda Latam: Cada pocos meses
-- **Hipótesis**: Los programadores de América Latina aprenden nuevos lenguajes con mayor frecuencia, por lo que se podría decir que saben utilizar un mayor numero de lenguajes
+
+
+Prueba de hipótesis para la media de edad América Latina
+========================================================
+
+Prueba T América latina
+========================================================
+```{r}
+t.test(DF_LA$Age, mu = 32, conf.level = 0.90, alternative="less")
+```
+
 
 ¿Existe una relación entre la remuneración anual total y la región en la que los desarrolladores viven?
 ========================================================
+
 Variable: Remuneración anual en dólares
 ========================================================
-```{r echo=FALSE, fig.align="center", fig.height=4, fig.width=12}
+
+Estados Unidos
+========================================================
+
+```{r echo=FALSE, fig.align="center", fig.width=11, fig.height=8}
 DF_TEMP_LA <-DF_LA[DF_LA$Employment == "Employed full-time" & !is.na(DF_LA$Employment),]
 DF_TEMP_USA <-DF_USA[DF_USA$Employment == "Employed full-time" & !is.na(DF_USA$Employment),]
 
-
-hist(DF_TEMP_USA$ConvertedComp, breaks = 30, freq = FALSE, main = "Histograma del salario anual Estados Unidos", ylab = "Frecuencia", xlab = "Salario anual en dólares")
-abline(v=mean(as.numeric(DF_USA$ConvertedComp), na.rm = TRUE), col = "red")
-hist(DF_TEMP_LA$ConvertedComp, breaks = 30, freq = FALSE, main = "Histograma del salario anual América Latina", ylab = "Frecuencia", xlab = "Salario anual en dólares")
-abline(v=mean(as.numeric(DF_LA$ConvertedComp), na.rm = TRUE), col = "blue")
-```
-
-Filtrado de datos
-========================================================
-- No hay evidencia suficiente para eliminar los datos "atípicos"
-- Se considerará un rango de sueldo "estándar" según fuentes bibliográficas con los sueldos de empleados tiempo completo y revisando que concuerde con el gráfico original.
-- Sueldo estándar en Estados Unidos: por debajo de 171000 USD
-- Sueldo estándar en América Latina: por debajo de 42000 USD
-
-Remuneración anual en dólares con sueldo estándar 
-========================================================
-```{r echo=FALSE, fig.align="center", fig.height=4, fig.width=12}
 DF_TEMP2_USA <- DF_TEMP_USA$ConvertedComp
 DF_TEMP2_LA <- DF_TEMP_LA$ConvertedComp
 DF_TEMP2_MIX <- DF_MIX$ConvertedComp
@@ -299,38 +228,190 @@ DF_FT_USA <-data.frame(cbind(DF_TEMP_USA, isStandard_usa))
 DF_FT_USA_STD <- DF_FT_USA[DF_FT_USA$isStandard_usa == TRUE, ]
 
 DF_MIX <-data.frame(cbind(DF_MIX, isStandard_mix))
-
 hist(DF_FT_USA_STD$ConvertedComp[DF_FT_USA_STD$isStandard_usa == TRUE ], breaks = 15, probability = TRUE, main = "Histograma del salario anual Estados Unidos", ylab = "Frecuencia", xlab = "Salario anual en dolares")
-#abline(v=mean(as.numeric(DF_FT_USA_STD$ConvertedComp), na.rm = TRUE), col = "red")
+abline(v=mean(as.numeric(DF_FT_USA_STD$ConvertedComp), na.rm = TRUE), col = "red")
+```
+
+América Latina
+=================================
+
+```{r echo=FALSE, fig.align="center", fig.width=11, fig.height=8}
 hist(DF_FT_LA_STD$ConvertedComp, breaks = 15, probability = TRUE, main = "Histograma del salario anual América Latina", ylab = "Frecuencia", xlab = "Salario anual en dolares")
 
-#abline(v=mean(DF_FT_LA_STD$ConvertedComp, na.rm = TRUE), col = "blue")
+abline(v=mean(DF_FT_LA_STD$ConvertedComp, na.rm = TRUE), col = "blue")
 ```
+
 
 =================================
 - mediana Estados Unidos: 104000 USD
 - mediana América Latina: 16488 USD
 - **Hipótesis**: Para un sueldo estándar, hay una relación muy fuerte. La mediana del sueldo de los programadores de Estados Unidos representa el 630.76% del de los de América Latina
 
-¿Cuál es la probabilidad de que un desarrollador profesional de Estados Unidos o de América latina tenga un sueldo anual "estándar"?
+Intervalo de confianza
 =========================================
-- Distribución Bernoulli
-- Éxito: Tiene sueldo estándar
-- Fracaso: No tiene un sueldo estándar
+Intervalos excluyentes
+- América Latina
+```{r}
+ic(DF_FT_LA_STD$ConvertedComp, 0.9)
+```
+- Estados Unidos
+```{r}
+ic(DF_FT_USA_STD$ConvertedComp, 0.9)
+```
 
-```{r include=FALSE}
-totalUSA <- nrow(DF_FT_USA)
-totalUSA_std <- nrow(DF_FT_USA[DF_FT_USA$isStandard_usa == TRUE,])
-totalLA <- nrow(DF_FT_LA)
-totalLA_std <- nrow(DF_FT_LA[DF_FT_LA$isStandard_la == TRUE,])
+¿La media del sueldo anual en Estados Unidos está por encima de la media del sueldo anual de los programadores profesionales a nivel global mientras que la de América Latina está por debajo?
+=========================================
+
+Prueba de hipótesis para la media del sueldo anual Estados Unidos
+========================================================
+
+Prueba T
+========================================================
+
+Prueba de hipótesis para la media del sueldo anual América Latina
+========================================================
+
+Prueba T
+========================================================
+
+
+¿Existe diferencia entre la relación que hay entre la edad de los desarrolladores profesionales y los años que llevan programando profesionalmente?
+========================================================
+
+Edad vs Años programando profesionalmente
+========================================================
+
+```{r echo=FALSE, fig.align="center", fig.width=11, fig.height=8}
+plot(x = DF_USA$Age, y = DF_USA$YearsCodePro, col = "red", cex = 0.8, xlab = "Edad", ylab = "Años programando profesionalmente", main = "Edad vs Años programando profesionalmente")
+points(x = DF_LA$Age, y = DF_LA$YearsCodePro, col = "blue", cex = 0.8)
+legend(15, 40, legend = c("EEUU", "Latam"), fill=c("red", "blue"))
+
+lmUSA <- lm(DF_USA$YearsCodePro ~ DF_USA$Age)
+lmLAT <- lm(DF_LA$YearsCodePro ~ DF_LA$Age)
+
+abline(lmUSA, col = "red")
+abline(lmLAT, col = "blue" )
 ```
-- Probabilidad de éxito en Estados Unidos: 
-```{r echo=FALSE}
-round(dbern(1, totalUSA_std/totalUSA),2)
+
+Correlación
+======================
+- Estados Unidos
+```{r}
+cor(y = DF_USA$Age,x = DF_USA$YearsCodePro, use = "pairwise.complete.obs")
 ```
-- Probabilidad de éxito en América Latina: 
-```{r echo=FALSE}
-round(dbern(1, totalLA_std/totalLA),2) 
+- América Latina
+```{r}
+cor(y = DF_LA$Age,x = DF_LA$YearsCodePro, use = "pairwise.complete.obs")
 ```
+
+Verificación de Estados Unidos
+======================
+
+<img src="usa.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" height="700px" style="display: block; margin: auto;" />
+
+Resultados
+========================
+- Explica cerca del 75% de las observaciones
+- p valores de las variables menor que la significancia de 0.1, por lo que rechazamos hipótesis nula:
+$$H_0: \text{El coeficiente es 0}$$
+- p valor obtenida de la prueba F de Fisher menor que nuestra significancia, por lo que rechazamos hipótesis nula:
+$$H_0: \text{El modelo no explica nada}$$
+
+Análisis de graficas del modelo
+=====================
+```{r echo=FALSE, fig.align="center", fig.width=11, fig.height=8}
+plot(lmUSA, which=1)
+```
+
+=====================
+```{r echo=FALSE, fig.align="center", fig.width=11, fig.height=8}
+plot(lmUSA, which=2)
+```
+
+=====================
+```{r echo=FALSE, fig.align="center", fig.width=11, fig.height=8}
+plot(lmUSA, which=3)
+```
+
+=====================
+```{r echo=FALSE, fig.align="center", fig.width=11, fig.height=8}
+plot(lmUSA, which=5)
+```
+
+
+====================
+Podemos ver que hay ciertos valores que tienen un peso excesivo en nuestro modelo y lo alteran, estos son los siguientes:
+```{r echo=FALSE, fig.align="center", fig.width=11, fig.height=8}
+
+n_data <- rep("black", nrow(DF_LA))
+n_data[c(7309, 4552, 2540)] <- "red"
+plot(x = DF_USA$Age, y = DF_USA$YearsCodePro, col = n_data, cex = 0.8, xlab = "Edad", ylab = "Años programando profesionalmente", main = "Estados Unidos")
+```
+
+
+Verificación de América Latina
+======================
+
+<img src="lat.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" height="700px" style="display: block; margin: auto;" />
+
+Resultados
+========================
+- Explica cerca del 70% de las observaciones
+- p valores de las variables menor que la significancia de 0.1, por lo que rechazamos hipótesis nula:
+$$H_0: \text{El coeficiente es 0}$$
+- p valor obtenida de la prueba F de Fisher menor que nuestra significancia, por lo que rechazamos hipótesis nula:
+$$H_0: \text{El modelo no explica nada}$$
+
+Análisis de graficas del modelo
+=====================
+```{r echo=FALSE, fig.align="center", fig.width=11, fig.height=8}
+plot(lmLAT, which=1)
+```
+
+=====================
+```{r echo=FALSE, fig.align="center", fig.width=11, fig.height=8}
+plot(lmLAT, which=2)
+```
+
+=====================
+```{r echo=FALSE, fig.align="center", fig.width=11, fig.height=8}
+plot(lmLAT, which=3)
+```
+
+=====================
+```{r echo=FALSE, fig.align="center", fig.width=11, fig.height=8}
+plot(lmLAT, which=5)
+```
+
+
+====================
+Podemos ver que hay ciertos valores que tienen un peso excesivo en nuestro modelo y lo alteran, estos son los siguientes:
+```{r echo=FALSE, fig.align="center", fig.width=11, fig.height=8}
+
+n_data <- rep("black", nrow(DF_LA))
+n_data[c(859, 2233, 476)] <- "red"
+plot(x = DF_LA$Age, y = DF_LA$YearsCodePro, col = n_data, cex = 0.8, xlab = "Edad", ylab = "Años programando profesionalmente", main = "América Latina")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

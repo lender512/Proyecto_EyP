@@ -1043,9 +1043,15 @@ plot(x = DF_USA$Age, y = DF_USA$YearsCodePro, col = "red", cex = 0.6, xlab = "Ed
 points(x = DF_LA$Age, y = DF_LA$YearsCodePro, col = "blue", cex = 0.6)
 legend(15, 40, legend = c("EEUU", "Latam"), fill=c("red", "blue"))
 
-abline(lm(DF_USA$YearsCodePro ~ DF_USA$Age), col = "red")
-abline(lm(DF_LA$YearsCodePro ~ DF_LA$Age), col = "blue")
+lmUSA <- lm(DF_USA$YearsCodePro ~ DF_USA$Age)
+lmLAT <- lm(DF_LA$YearsCodePro ~ DF_LA$Age)
+
+abline(lmUSA, col = "red")
+abline(lmLAT, col = "blue" )
 ```
+
+
+
 
 Se decidió utilizar un diagrama de dispersión con colores porque permite observar la correlación entre dos variables y además permite diferenciar con colores variables categóricas. En el gráfico se puede observar que existe una fuerte relación entre la edad y los años de experiencia, y que la pendiente es similar entre las regiones. Se puede utilizar la covarianza para medir el grado de asociación que existen entre las variables y se puede ver que es positiva y hay asociación. Las dos variables crecen en la misma dirección.
 
@@ -1064,6 +1070,53 @@ Gracias a la alta correlación, se pude determinar una función que permita "pre
 
 - Estados Unidos:   f(edad) = 0.81 × edad - 17.34
 - América Latina:   f(edad) = 0.78 × edad - 15.58
+
+
+Para comprobar esto, podemos utilizar el comando summary para cada modelo lineal y revisar la validez del modelo
+*Estados Unidos*
+```{r}
+summary(lmUSA)
+```
+Se puede observar que el modelo planteado explica cerca del 75% de las observaciones. Además, el p valor tanto del intercepto como del de la edad salio menor que la significancia utilizada en el proyecto de 0.1, por lo que rechezamos la hipótesis nula siguiente:
+$$H_0: \text{El coeficiente es 0}$$
+Además, el p-valor de la prueba F de Fisher es también menor que la significancia de 0.1, por lo que básicamente se rechaza la hipótesis nula:
+$$H_0: \text{El modelo no explica nada}$$
+Como se rechazaron las dos hipótesis, se podria decir que el modelo de cierta forma explica la variable años programando profesionalmente en funcion de la edad del los programadores en el caso de Estados Unidos
+
+Ahora podemos analizar las gráficas de la estructuras de los residuos y su distribución utilizando la función plot con el modelo como parámetro
+```{r}
+plot(lmUSA)
+```
+Podemos ver que hay ciertos valores atípicos que tienen un peso excesivo en nuestro modelo y lo alteran, estos son los siguientes:
+```{r}
+
+n_data <- rep("black", nrow(DF_LA))
+n_data[c(7309, 4552, 2540)] <- "red"
+plot(x = DF_USA$Age, y = DF_USA$YearsCodePro, col = n_data, cex = 0.8, xlab = "Edad", ylab = "Años programando profesionalmente", main = "Estados Unidos")
+```
+
+*América Latina*
+```{r}
+summary(lmLAT)
+```
+En el caso de América Latina vemos que el modelo planteado explica un poco menos que el de Estados Unidos, sin embargo tambien explica un gran porcenta, el 70%. Vemos que de igual manera rechazamos la hipotesis nula del coeficiente gracias al p valor obtenido.
+
+$$H_0: \text{El coeficiente es 0}$$
+Y tambien rechazamos la hipotesis nula del modelo gracias al p valor de la prueba F
+
+Además, el p-valor de la prueba F de Fisher es también menor que la significancia de 0.1, por lo que básicamente se rechaza la hipótesis nula:
+$$H_0: \text{El modelo no explica nada}$$
+Ahora podemos analizar las gráficas de la estructuras de los residuos y su distribución utilizando la función plot con el modelo como parámetro
+```{r}
+plot(lmLAT)
+```
+Podemos ver que hay ciertos valores que tienen un peso excesivo en nuestro modelo y lo alteran, estos son los siguientes:
+```{r}
+
+n_data <- rep("black", nrow(DF_LA))
+n_data[c(859, 2233, 476)] <- "red"
+plot(x = DF_LA$Age, y = DF_LA$YearsCodePro, col = n_data, cex = 0.8, xlab = "Edad", ylab = "Años programando profesionalmente", main = "América Latina")
+```
 
 Luego de analizar la variable con los indicadores, se puede dar la hipótesis de que la región no influye entre la relación de la edad y años programando profesionalmente, además esta es muy alta y sugeriría que los programadores profesionales comienzan a trabajar a una temprana edad, lo que permite que ganen años de experiencia mientras aumenta su edad.
 
