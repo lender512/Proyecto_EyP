@@ -37,7 +37,7 @@ Parámetros del estudio
 ========================================================
 - Nivel de confianza: 90%
 - Tamaño de muestra: 12486 observaciones (3032 América latina, 9454 Estados Unidos)
-- Precisión: 
+- Precisión: ±0.4%
 
 Intervalo de confianza
 ========================================================
@@ -128,6 +128,14 @@ Rechazamos la hipótesis nula
 Prueba de hipótesis para la media de edad Estados Unidos
 ========================================================
 
+$H_0:$ El promedio de la edad de los desarrolladores de Estados Unidos es menor o igual a la media global.
+
+$$H_0: \mu_{usa} \le 32$$
+
+$H_a:$  El promedio de la edad de los desarrolladores de Estados Unidos es mayor a la media global.
+
+$$H_a: \mu_{usa} \gt 32$$
+
 
 Prueba T Estados Unidos
 ========================================================
@@ -175,6 +183,13 @@ mean of x
  30.14897 
 ```
 
+$H_0:$ El promedio de la edad de los desarrolladores de Latinoamérica es mayor o igual a la media global.
+
+$$H_0: \mu_{la} \ge 32$$
+
+$H_a:$  El promedio de la edad de los desarrolladores de Latinoamérica es menor a la media global.
+
+$$H_a: \mu_{la} \lt 32$$
 
 ¿Existe una relación entre la remuneración anual total y la región en la que los desarrolladores viven?
 ========================================================
@@ -220,21 +235,73 @@ ic(DF_FT_USA_STD$ConvertedComp, 0.9)
 ( 104002 ,  105473.7 )
 ```
 
-¿La media del sueldo anual en Estados Unidos está por encima de la media del sueldo anual de los programadores profesionales a nivel global mientras que la de América Latina está por debajo?
+¿La media del sueldo anual en Estados Unidos está por encima de la media del sueldo anual a nivel global, mientras que la de América Latina está por debajo?
 =========================================
 
 Prueba de hipótesis para la media del sueldo anual Estados Unidos
 ========================================================
 
+$H_0:$ El salario promedio anual de Estados Unidos es menor o igual a la media global.
+
+$$H_0: \mu_{usa} \le 56550$$
+
+$H_a:$ El salario promedio anual de Estados Unidos es mayor a la media global.
+
+$$H_a: \mu_{usa} \gt 56550$$
+
 Prueba T
 ========================================================
+
+
+```r
+t.test(DF_FT_USA_STD$ConvertedComp, mu = 56550, conf.level = 0.90, alternative = "greater")
+```
+
+```
+
+	One Sample t-test
+
+data:  DF_FT_USA_STD$ConvertedComp
+t = 107.73, df = 5481, p-value < 2.2e-16
+alternative hypothesis: true mean is greater than 56550
+90 percent confidence interval:
+ 104164.5      Inf
+sample estimates:
+mean of x 
+ 104737.8 
+```
 
 Prueba de hipótesis para la media del sueldo anual América Latina
 ========================================================
 
+$H_0:$ El salario promedio anual de Latinoamérica es mayor o  igual a la media global.
+
+$$H_0: \mu_{la} \ge 56550$$
+
+$H_a:$ El salario promedio anual de Latinoamérica es menor a la media global.
+
+$$H_a: \mu_{la} \lt 56550$$
+
 Prueba T
 ========================================================
 
+```r
+t.test(DF_FT_LA_STD$ConvertedComp, mu = 56550, conf.level = 0.90, alternative = "less")
+```
+
+```
+
+	One Sample t-test
+
+data:  DF_FT_LA_STD$ConvertedComp
+t = -161.01, df = 1617, p-value < 2.2e-16
+alternative hypothesis: true mean is less than 56550
+90 percent confidence interval:
+     -Inf 18340.86
+sample estimates:
+mean of x 
+ 18034.17 
+```
 
 ¿Existe diferencia entre la relación que hay entre la edad de los desarrolladores profesionales y los años que llevan programando profesionalmente?
 ========================================================
@@ -242,7 +309,7 @@ Prueba T
 Edad vs Años programando profesionalmente
 ========================================================
 
-<img src="Prestancion-figure/unnamed-chunk-12-1.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" style="display: block; margin: auto;" />
+<img src="Prestancion-figure/unnamed-chunk-14-1.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" style="display: block; margin: auto;" />
 
 Correlación
 ======================
@@ -280,21 +347,21 @@ $$H_0: \text{El modelo no explica nada}$$
 
 Análisis de graficas del modelo
 =====================
-<img src="Prestancion-figure/unnamed-chunk-15-1.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" style="display: block; margin: auto;" />
-
-=====================
-<img src="Prestancion-figure/unnamed-chunk-16-1.png" title="plot of chunk unnamed-chunk-16" alt="plot of chunk unnamed-chunk-16" style="display: block; margin: auto;" />
-
-=====================
 <img src="Prestancion-figure/unnamed-chunk-17-1.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" style="display: block; margin: auto;" />
 
 =====================
 <img src="Prestancion-figure/unnamed-chunk-18-1.png" title="plot of chunk unnamed-chunk-18" alt="plot of chunk unnamed-chunk-18" style="display: block; margin: auto;" />
 
+=====================
+<img src="Prestancion-figure/unnamed-chunk-19-1.png" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" style="display: block; margin: auto;" />
+
+=====================
+<img src="Prestancion-figure/unnamed-chunk-20-1.png" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" style="display: block; margin: auto;" />
+
 
 ====================
 Podemos ver que hay ciertos valores que tienen un peso excesivo en nuestro modelo y lo alteran, estos son los siguientes:
-<img src="Prestancion-figure/unnamed-chunk-19-1.png" title="plot of chunk unnamed-chunk-19" alt="plot of chunk unnamed-chunk-19" style="display: block; margin: auto;" />
+<img src="Prestancion-figure/unnamed-chunk-21-1.png" title="plot of chunk unnamed-chunk-21" alt="plot of chunk unnamed-chunk-21" style="display: block; margin: auto;" />
 
 
 Verificación de América Latina
@@ -312,21 +379,21 @@ $$H_0: \text{El modelo no explica nada}$$
 
 Análisis de graficas del modelo
 =====================
-<img src="Prestancion-figure/unnamed-chunk-20-1.png" title="plot of chunk unnamed-chunk-20" alt="plot of chunk unnamed-chunk-20" style="display: block; margin: auto;" />
-
-=====================
-<img src="Prestancion-figure/unnamed-chunk-21-1.png" title="plot of chunk unnamed-chunk-21" alt="plot of chunk unnamed-chunk-21" style="display: block; margin: auto;" />
-
-=====================
 <img src="Prestancion-figure/unnamed-chunk-22-1.png" title="plot of chunk unnamed-chunk-22" alt="plot of chunk unnamed-chunk-22" style="display: block; margin: auto;" />
 
 =====================
 <img src="Prestancion-figure/unnamed-chunk-23-1.png" title="plot of chunk unnamed-chunk-23" alt="plot of chunk unnamed-chunk-23" style="display: block; margin: auto;" />
 
+=====================
+<img src="Prestancion-figure/unnamed-chunk-24-1.png" title="plot of chunk unnamed-chunk-24" alt="plot of chunk unnamed-chunk-24" style="display: block; margin: auto;" />
+
+=====================
+<img src="Prestancion-figure/unnamed-chunk-25-1.png" title="plot of chunk unnamed-chunk-25" alt="plot of chunk unnamed-chunk-25" style="display: block; margin: auto;" />
+
 
 ====================
 Podemos ver que hay ciertos valores que tienen un peso excesivo en nuestro modelo y lo alteran, estos son los siguientes:
-<img src="Prestancion-figure/unnamed-chunk-24-1.png" title="plot of chunk unnamed-chunk-24" alt="plot of chunk unnamed-chunk-24" style="display: block; margin: auto;" />
+<img src="Prestancion-figure/unnamed-chunk-26-1.png" title="plot of chunk unnamed-chunk-26" alt="plot of chunk unnamed-chunk-26" style="display: block; margin: auto;" />
 
 
 

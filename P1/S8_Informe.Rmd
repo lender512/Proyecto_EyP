@@ -191,7 +191,11 @@ round(sum(is.na(DF_MIX))/(nrow(DF_MIX)*ncol(DF_MIX))*100, 2)
 Se puede ver que existe un gran porcentaje de observaciones incompletas (40.69%), sin embargo, a estas no les faltan muchos datos, pues solo tenemos 11.31% de datos faltantes. Por este motivo no se eliminarán las observaciones incompletas pues reduciría la representatividad de la muestra, así que lo que se hará será no considerar los datos NA para los indicadores en los que estos estén presentes.
 
 ## Parametros del estudio:
+Tamaño de la muestra: 12486 (3032 observaciones de Latinoamérica y 9454 de Estados Unidos).
 
+Nivel de confianza: Se hará uso de un nivel de confianza del 90% debido a que el estudio que utilizamos es relativamente trivial, es decir los datos recogidos no son de importancia vital como un estudio médico, por lo que asumimos este nivel de confianza.
+
+Precisión: La presición se calcula a través del nivel de confianza y el tamaño de la muestra que estamos usando, y resulta ±0.4%.
 
 ## **Tabla descriptores**
 
@@ -363,12 +367,48 @@ t.test(DF_USA$Age, DF_LA$Age, mu = 0, conf.level = 0.9, alternative="greater")
 Luego de realizar la prueba t, podemos observar que el p valor de 2.2e-16 es mucho menor que nuestra significancia de 0.1, además nuestro $mu$ no está dentro del intervalo de confianza resultante, por lo que podemos rechazar la hipótesis nula que indica que la media de Estados Unidos es menor que la de América latina
 
 ##### Prueba de hipótesis de media
+Para verificar la relación de la media de edades de cada región con el promedio mundial, usaremos como supuesto 32 años, dato obtenido de la página SFL Newsroom.
+
+Latinoamérica:
+
+Hipótesis planteadas:
+
+$H_0:$ El promedio de la edad de los desarrolladores de Latinoamérica es mayor o igual a la media global.
+
+$$H_0: \mu_{la} \ge 32$$
+
+$H_a:$  El promedio de la edad de los desarrolladores de Latinoamérica es menor a la media global.
+
+$$H_a: \mu_{la} \lt 32$$
+En primera instancia, para Latinoamérica haremos uso de una prueba t de cola inferior debido a que queremos verificar que el promedio de edades de programadores de Latinoamérica es mayor a la media global. Nuestra hipótesis alternativa señala que la media es menor a la mundial, por lo que usaremos la opción alternative less.
 
 ```{r}
 t.test(DF_LA$Age, mu = 32, conf.level = 0.90, alternative="less")
+```
+
+Después de la prueba t realizada se determina que el p-value(2.2e-16) es mucho menor que la significancia (0.1). Además, Nuestro $\mu$ no cae en el intervalo de confianza, por lo tanto se rechaza la hipótesis nula planteada: el promedio de la edad de los desarrolladores de Latinoamérica es mayor a la media global.
+
+Estados Unidos:
+
+Se plantean las siguientes hipótesis:
+
+$H_0:$ El promedio de la edad de los desarrolladores de Estados Unidos es menor o igual a la media global.
+
+$$H_0: \mu_{usa} \le 32$$
+
+$H_a:$  El promedio de la edad de los desarrolladores de Estados Unidos es mayor a la media global.
+
+$$H_a: \mu_{usa} \gt 32$$
+
+
+
+En cuanto los desarrolladores de Estados Unidos, se usará una prueba t de cola superior pues queremos comprobar que el promedio de edades es menor a la media global y no se conoce la varianza. Asimismo, la hipótesis alternativa señala que la media es mayor al promedio global, por ellos usaremos la opción alternative greater.
+
+```{r}
 
 t.test(DF_USA$Age, mu = 32, conf.level = 0.90, alternative="greater")
 ```
+Después de la prueba t realizada se determina que el p-value(2.2e-16) es mucho menor que la significancia (0.1). Además, Nuestro $\mu$ no cae en el intervalo de confianza, por lo tanto se rechaza la hipótesis nula planteada: el promedio de la edad de los desarrolladores de Estados Unidos es menor o igual a la media global.
 
 
 ### Preguntas sobre situación educativa
@@ -1025,10 +1065,43 @@ ic(DF_FT_USA_STD$ConvertedComp, 0.9)
 Como se observa ambos intervalos son excluyentes lo que refuerza aún más la conclusión que se llegó anteriormente, que la compensación anual promedio de los programadores de Estados Unidos es mucho mayor al sueldo anual promedio que se recibe en América Latina. Esto puede ser causado por múltiples factores, tales como: el costo de vida y el valor de las profesiones tecnológicas. Ya que en Estados Unidos el costo de vida es mayor por lo tanto el sueldo mínimo también lo es. Asimismo, la diferencia abismal también esta influida por el hecho de que el mercado tecnológico en Estados Unidos esta mucho más desarrollado y valorado, lo que genera que las carreras relacionadas a la programación o que requieran de ella, sean mejor remuneradas.
 
 ##### Prueba de hipótesis de media
+Esta prueba de hipótesis se realizará en base a un $\mu$ supuesto, dato obtenido de la página Statistica, El cuál señala que el salario promedio anual mundial de software developers es de $56550. 
 
+Para el caso de Estados Unidos se plantean las siguientes hipótesis:
+
+$H_0:$ El salario promedio anual de Estados Unidos es menor o igual a la media global.
+
+$$H_0: \mu_{usa} \le 56550$$
+
+$H_a:$ El salario promedio anual de Estados Unidos es mayor a la media global.
+
+$$H_a: \mu_{usa} \gt 56550$$
+
+
+
+Se hará uso de una prueba t de cola superior debido a que queremos verificar sí el $\mu$ de nuestra muestra es menor al promedio del mundo, y no se tiene información de la varianza. Asimismo,la hipótesis alternativa señala que la media de Estados Unidos es mayor a la global, por la tanto usaremos la opción alternative greater.
 ```{r}
-
+t.test(DF_FT_USA_STD$ConvertedComp, mu = 56550, conf.level = 0.90, alternative = "greater")
 ```
+Con la prueba t, podemos observar que el p-valor(2.2e-16) es mucho menor que nuestra significancia de 0.1, además que nuestro $\mu$ cae en una zona de rechazo, por lo tanto, podemos rechazar la hipótesis nula que señala que el salario promedio anual de Estados Unidos es menor a la media global.
+
+Para Latinoamérica se plantean las siguientes hipótesis:
+
+$H_0:$ El salario promedio anual de Latinoamérica es mayor o  igual a la media global.
+
+$$H_0: \mu_{la} \ge 56550$$
+
+$H_a:$ El salario promedio anual de Latinoamérica es menor a la media global.
+
+$$H_a: \mu_{la} \lt 56550$$
+
+
+Se hará uso de una prueba t de cola inferior debido a que queremos verificar sí el $\mu$ de nuestra muestra es mayor al promedio del mundo, y no se tiene información de la varianza. Asimismo,la hipótesis alternativa nos dice que la media de Latinoamérica es menor a la global, por la tanto usaremos la opción alternative less.
+```{r}
+t.test(DF_FT_LA_STD$ConvertedComp, mu = 56550, conf.level = 0.90, alternative = "less")
+```
+
+Con la prueba t, podemos afirmar que el p-valor(2.2e-16) es mucho menor que nuestra significancia de 0.1, además que nuestro $\mu$ cae en una zona de rechazo, por lo tanto, podemos rechazar la hipótesis nula que dice que el salario promedio anual de Latinoamérica es mayor a la media global.
 
 
 
