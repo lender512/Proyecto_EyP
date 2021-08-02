@@ -129,6 +129,7 @@ library(countrycode)
 library(ggplot2)
 library(modeest)
 library(Rlab)
+library(FinCal)
 
 df <- read_csv("survey_results_public.csv")
 df <- df[!(df$Age == "1" &  !is.na(df$Age)),]
@@ -191,11 +192,21 @@ round(sum(is.na(DF_MIX))/(nrow(DF_MIX)*ncol(DF_MIX))*100, 2)
 Se puede ver que existe un gran porcentaje de observaciones incompletas (40.69%), sin embargo, a estas no les faltan muchos datos, pues solo tenemos 11.31% de datos faltantes. Por este motivo no se eliminarán las observaciones incompletas pues reduciría la representatividad de la muestra, así que lo que se hará será no considerar los datos NA para los indicadores en los que estos estén presentes.
 
 ## Parametros del estudio:
-Tamaño de la muestra: 12486 (3032 observaciones de Latinoamérica y 9454 de Estados Unidos).
+Tamaño de la muestra: 12486 (3032 observaciones de América Latina y 9454 de Estados Unidos).
 
-Nivel de confianza: Se hará uso de un nivel de confianza del 90% debido a que el estudio que utilizamos es relativamente trivial, es decir los datos recogidos no son de importancia vital como un estudio médico, por lo que asumimos este nivel de confianza.
+Nivel de confianza: Para poder tener el nivel de confianza "ideal" se hallará el coeficiente de variación (este proceso se repetirá en cada variable que requiera un análisis de intervalos de confianza o pruebas de hipótesis), y de acuerdo a que tan dispersos esten los datos, decideremos que nivel deconfianza usamos.
 
-Precisión: La presición se calcula a través del nivel de confianza y el tamaño de la muestra que estamos usando, y resulta ±0.4%.
+Se seguirá el siguiente criterio para la elección del nivelde confianza:
+
+* Sí el coeficiente es (<0.15), se usará un nivel de confianza del 80% para asegurar una mayor precisión.
+
+* Sí el coeficientees (0.15-0.30) Se usará un nivel de confianza del 90% pues los datos estan medianamente dispersos.
+
+* Para un coeficiente de variación(0.30-0.35), se usará un nivel de confianza del 95% para asegurar que nuestro intervalo contenga la media de la variable que se esta trabajando.
+
+* Para un coeficiente de variación (>0.35) se usará un nivel de confianza del 99%.
+
+Precisión: La precisión variará en cada variable pues dependerá del nivel de confianza que usemos (se especificará en cada caso).
 
 ## **Tabla descriptores**
 
@@ -340,13 +351,29 @@ ic <- function(x, p) {
 }
 ```
 
+Calculo del coeficiente de variación para determinar el nivelde confianza para la variable "Edad":
+
+```{r}
+round(coefficient.variation(sd=sd(DF_LA$Age,na.rm = TRUE), avg = mean(DF_LA$Age, na.rm = TRUE)),2)
+round(coefficient.variation(sd=sd(DF_USA$Age,na.rm = TRUE), avg = mean(DF_USA$Age, na.rm = TRUE)),2)
+```
+
+De acuerdo al criterio planteado al inicio se hará uso de un nivel de confianza del 90%:
+
 Se procederá a usar la función anterior para encontrar los intervalos de confianza de la media de la edad de los programadores profesionales de las dos regiones con un nivel de confianza del 90%.
 
 ```{r}
 ic(DF_LA$Age, 0.9)
 ic(DF_USA$Age, 0.9)
 ```
-Como se puede observar, los 2 intervalos obtenidos son excluyentes, por lo que podemos respaldar la hipótesis anterior y decir que, efectivamente, los desarrolladores profesionales de Estados Unidos, en promedio, son mayores que los de América Latina. Esto se puede deber, a que el desarrollo tecnológico está mas avanzado en el país del norte, por lo que se empezó a estudiar carreras relacionadas con la computación mucho antes que en América Latina.
+La precisión que se obtiene esta dada por la longitud del intervalo (L ±|LimiteSuperior - LímiteInferior|). Esto se aplicará para cada varibale donde se haga un análisis de los intervalos de confianza.
+
+Precisión obtenida para ambas regiones:
+
+Latinoamérica:  ±0.53
+Estados Unidos: ±0.38
+
+Como se puede observar, los 2 intervalos obtenidos son excluyentes, por lo que podemos respaldar la hipótesis anterior y decir que, efectivamente, los desarrolladores profesionales de Estados Unidos, en promedio, son mayores que los de América Latina. Esto se puede deber, a que el desarrollo tecnológico está más avanzado en el país del norte, por lo que se empezó a estudiar carreras relacionadas con la computación mucho antes que en América Latina.
 
 ##### Prueba de hipótesis de diferencia de medias
 Ahora, para verificar que la diferencia de medias es real y que además, la media de Estados Unidos es mayor que la de América Latina segun las sospechas que tenemos, también se puede realizar una prueba de hipótesis de diferencia de medias, con las siguientes hipótesis:
@@ -501,12 +528,25 @@ Luego del análisis de la variable, se llega a la hipótesis de que en Estados U
 
 ##### Intervalo de confianza
 
-Para poder conocer el rango en el cual se cuenta la edad verdadera en la que desarrollaron su primer programa aplicamos un intervalo de confianza en las dos regiones con un nivel de confianza del 90%.
+Para la edad en que codearon su primer programa:
+```{r}
+round(coefficient.variation(sd=sd(DF_LA$Age1stCode,na.rm = TRUE), avg = mean(DF_LA$Age1stCode, na.rm = TRUE)),2)
+round(coefficient.variation(sd=sd(DF_USA$Age1stCode,na.rm = TRUE), avg = mean(DF_USA$Age1stCode, na.rm = TRUE)),2)
+```
+
+En base al criterio, para el caso de Latinoamérica se usará un nivel deconfianza del 90%, mientras que para USA un 99%:
+
+Para poder conocer el rango en el cual se cuenta la edad verdadera en la que desarrollaron su primer programa aplicamos un intervalo de confianza en las dos regiones con un nivel de confianza del 90% y 99%.
 
 ```{r}
 ic(DF_LA$Age1stCode, 0.9)
-ic(DF_USA$Age1stCode, 0.9)
+ic(DF_USA$Age1stCode, 0.99)
 ```
+Precisión obtenida para ambas regiones:
+
+Latinoamérica:  ±0.25
+Estados Unidos: ±0.29
+
 De acuerdo con los resultados presentados, los 2 intervalos de confianza son excluyentes, por ende, podemos respaldar la hipótesis anterior, afirmando que la edad en la que desarrollaron su primer programa, en promedio, es menor en Estados Unidos que en América Latina. Esto puede ser el resultado de un mayor desarrollo tecnológico en Estados Unidos, por lo que la necesidad, motivación por desarrollar un programa surgió antes en la población de dicho país que en América Latina.
 
 #### ¿Cómo influye la región en la que los desarrolladores profesionales viven en la frecuencia con la que aprenden un nuevo lenguaje?
@@ -719,14 +759,26 @@ A partir del análisis y las comparaciones, se llega a la hipótesis de que sí 
 
 ##### Intervalo de confianza
 
-Para poder conocer el rango de la cantidad de años programando profesionalmente por cada desarrollador con mayor precisión, aplicamos un intervalo de confianza en las dos regiones con un nivel de confianza del 90%.
+Cálculo del coeficiente de variación para determinar el nivelde confianza para la variable "Años codeando profesionalmente":
 
 ```{r}
-ic(DF_LA$YearsCodePro, 0.9)
-ic(DF_USA$YearsCodePro, 0.9)
+round(coefficient.variation(sd=sd(DF_LA$YearsCodePro,na.rm = TRUE), avg = mean(DF_LA$YearsCodePro, na.rm = TRUE)),2)
+round(coefficient.variation(sd=sd(DF_USA$YearsCodePro,na.rm = TRUE), avg = mean(DF_USA$YearsCodePro, na.rm = TRUE)),2)
 ```
 
-En base a los resultados obtenidos, los 2 intervalos de confianza son excluyentes, por lo que podemos corroborar nuestra hipótesis anterior. Existe una diferencia entre Estados Unidos y América Latina en cuanto a los años programando profesionalmente, ya que en promedio, los desarrolladores de Estados Unidos llevan aproximadamente programando profesionalmente 2 años más que los desarrolladores de America Latina. Esto se puede deber a que en Estados Unidos hay una mayor cantidad de empresas o industrias líderes en desarrollo de software a nivel mundial, por que se ofrecen mayores oportunidades laborales, y los desarrolladores pueden conseguir un trabajo formal antes que los desarrolladores de America Latina.
+En ambos casos al ser el coeficiente de variación mucho mayor a 0.3, se usará un nivel de confianza del 99%.
+Para poder conocer el rango de la cantidad de años programando profesionalmente por cada desarrollador con mayor precisión, aplicamos un intervalo de confianza en las dos regiones con un nivel de confianza del 99%.
+
+```{r}
+ic(DF_LA$YearsCodePro, 0.99)
+ic(DF_USA$YearsCodePro, 0.99)
+```
+Precisión obtenida para ambas regiones:
+
+Latinoamérica: ±0.72
+Estados Unidos: ±0.52
+
+En base a los resultados obtenidos, los 2 intervalos de confianza son excluyentes, por lo que podemos corroborar nuestra hipótesis anterior. Existe una diferencia entre Estados Unidos y América Latina en cuanto a los años programando profesionalmente, ya que, en promedio, los desarrolladores de Estados Unidos llevan aproximadamente programando profesionalmente 2 años más que los desarrolladores de América Latina. Esto se puede deber a que en Estados Unidos hay una mayor cantidad de empresas o industrias líderes en desarrollo de software a nivel mundial, porque se ofrecen mayores oportunidades laborales, y los desarrolladores pueden conseguir un trabajo formal antes que los desarrolladores de América Latina.
 
 #### ¿Cómo influye la región en la que los desarrolladores profesionales viven en su situación de búsqueda laboral?
 
@@ -814,13 +866,18 @@ round(sd(DF_USA$WorkWeekHrs[DF_USA$Employment == "Employed full-time"], na.rm = 
 ```
 ##### Intervalo de confianza
 
-En este caso el intervalo confianza permite describir la variabilidad entre la medida obtenida en el estudio y la medida real para las horas trabajadas semanalmente por un programdor de Estados Unidos y America Latina con un nivel de confianza del 90%.
+En este caso el intervalo confianza permite describir la variabilidad entre la medida obtenida en el estudio y la medida real para las horas trabajadas semanalmente por un programador de Estados Unidos y América Latina con un nivel de confianza del 80%, ya que los datos se encuentran bastante compactos, además que esto aumentará la precisión.
 
 ```{r}
-ic(DF_LA$WorkWeekHrs[DF_LA$Employment == "Employed full-time"], 0.9)
-ic(DF_USA$WorkWeekHrs[DF_USA$Employment == "Employed full-time"], 0.9)
+ic(DF_LA$WorkWeekHrs[DF_LA$Employment == "Employed full-time"], 0.8)
+ic(DF_USA$WorkWeekHrs[DF_USA$Employment == "Employed full-time"], 0.8)
 ```
-Según los resultados, los 2 intervalos de confianza obtenidos son incluyentes, por lo que podemos respaldar la hipoteisis, ya que ambas regiones tienen valores similares. Esto puede ser debido a la mayoria de las empresas siguen el mismo formato de trabajo.
+Precisión obtendida:
+
+Latinoamérica: ±0.24
+Estados Unidos: ±0.12
+
+Según los resultados, los 2 intervalos de confianza obtenidos son incluyentes, por lo que podemos respaldar la hipótesis, ya que ambas regiones tienen valores similares. Esto puede ser debido a la mayoría de las empresas siguen el mismo formato de trabajo.
 
 ##### Variable: Frecuencia de horas extra en el trabajo
 
@@ -1056,13 +1113,25 @@ A partir del análisis, se plantea la hipótesis de que existe una abismal difer
 
 ##### Intervalo de confianza
 
-A continuación se hará uso de la función ic para hallar los intervalos de confianza de la remunaración anual media que reciben los programadores por cada región, a un nivel de confianza del 90%. Esto ayudará a reforzar la conclusión anterior sobre la diferencia existente entre ambas regiones respecto a la compensación anual promedio.
+Cálculo del coeficiente de variación para determinar el nivelde confianza para la variable "Compensación anual total":
 
 ```{r}
-ic(DF_FT_LA_STD$ConvertedComp, 0.9)
-ic(DF_FT_USA_STD$ConvertedComp, 0.9)
+round(coefficient.variation(sd=sd(DF_FT_LA_STD$ConvertedComp,na.rm = TRUE), avg = mean(DF_FT_LA_STD$ConvertedComp, na.rm = TRUE)),2)
+round(coefficient.variation(sd=sd(DF_FT_USA_STD$ConvertedComp,na.rm = TRUE), avg = mean(DF_FT_USA_STD$ConvertedComp, na.rm = TRUE)),2)
 ```
-Como se observa ambos intervalos son excluyentes lo que refuerza aún más la conclusión que se llegó anteriormente, que la compensación anual promedio de los programadores de Estados Unidos es mucho mayor al sueldo anual promedio que se recibe en América Latina. Esto puede ser causado por múltiples factores, tales como: el costo de vida y el valor de las profesiones tecnológicas. Ya que en Estados Unidos el costo de vida es mayor por lo tanto el sueldo mínimo también lo es. Asimismo, la diferencia abismal también esta influida por el hecho de que el mercado tecnológico en Estados Unidos esta mucho más desarrollado y valorado, lo que genera que las carreras relacionadas a la programación o que requieran de ella, sean mejor remuneradas.
+
+A continuación, se hará uso de la función ic para hallar los intervalos de confianza de la remuneración anual media que reciben los programadores por cada región, a un nivel de confianza del 99% pues por el coeficiente de correlación podemos decir que hay una alta variabilidad. Esto ayudará a reforzar la conclusión anterior sobre la diferencia existente entre ambas regiones respecto a la compensación anual promedio.
+
+```{r}
+ic(DF_FT_LA_STD$ConvertedComp, 0.99)
+ic(DF_FT_USA_STD$ConvertedComp, 0.99)
+```
+Precisión obtendida:
+
+Latinoamérica: ±1233.78
+Estados Unidos: ±2305
+
+Como se observa ambos intervalos son excluyentes lo que refuerza aún más la conclusión que se llegó anteriormente, que la compensación anual promedio de los programadores de Estados Unidos es mucho mayor al sueldo anual promedio que se recibe en América Latina. Esto puede ser causado por múltiples factores, tales como: el costo de vida y el valor de las profesiones tecnológicas. Ya que en Estados Unidos el costo de vida es mayor por lo tanto el sueldo mínimo también lo es. Asimismo, la diferencia abismal también está influida por el hecho de que el mercado tecnológico en Estados Unidos está mucho más desarrollado y valorado, lo que genera que las carreras relacionadas a la programación o que requieran de ella, sean mejor remuneradas.
 
 ##### Prueba de hipótesis de media
 Esta prueba de hipótesis se realizará en base a un $\mu$ supuesto, dato obtenido de la página Statistica, El cuál señala que el salario promedio anual mundial de software developers es de $56550. 
