@@ -121,8 +121,10 @@ Para lograr los objetivos, se plantean las siguientes preguntas de investigació
     -   [Stack Overflow survey 2020 CSV y Cuestionario](https://insights.stackoverflow.com/survey/?_ga=2.142137586.1351526073.1621523165-1106211812.1621523165)
 
 ```{r include=FALSE, paged.print=FALSE, results=FALSE}
-#install.packages("countrycode")
-#install.packages("modeest")
+list.of.packages <- c("readr", "dplyr", "countrycode", "ggplot2", "modeest", "Rlab", "FinCal")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+if(length(new.packages)) install.packages(new.packages)
+
 library(readr)
 library(dplyr)
 library(countrycode)
@@ -361,7 +363,7 @@ ic <- function(x, p) {
 }
 ```
 
-Calculo del coeficiente de variación para determinar el nivelde confianza para la variable "Edad":
+Calculo del coeficiente de variación para determinar el nivel de confianza para la variable "Edad":
 
 ```{r}
 round(coefficient.variation(sd=sd(DF_LA$Age,na.rm = TRUE), avg = mean(DF_LA$Age, na.rm = TRUE)),2)
@@ -376,11 +378,11 @@ Se procederá a usar la función anterior para encontrar los intervalos de confi
 ic(DF_LA$Age, 0.9)
 ic(DF_USA$Age, 0.9)
 ```
-La precisión que se obtiene esta dada por la longitud del intervalo (L ±|LimiteSuperior - LímiteInferior|). Esto se aplicará para cada varibale donde se haga un análisis de los intervalos de confianza.
+La precisión que se obtiene esta dada por la longitud del intervalo (L ±|LimiteSuperior - LímiteInferior|). Esto se aplicará para cada variable donde se haga un análisis de los intervalos de confianza.
 
 Precisión obtenida para ambas regiones:
 
-Latinoamérica:  ±0.53
+América Latina: ±0.53
 Estados Unidos: ±0.38
 
 Como se puede observar, los 2 intervalos obtenidos son excluyentes, por lo que podemos respaldar la hipótesis anterior y decir que, efectivamente, los desarrolladores profesionales de Estados Unidos, en promedio, son mayores que los de América Latina. Esto se puede deber, a que el desarrollo tecnológico está más avanzado en el país del norte, por lo que se empezó a estudiar carreras relacionadas con la computación mucho antes que en América Latina.
@@ -1062,9 +1064,9 @@ A continuación, se hará uso de la función ic para hallar los intervalos de co
 ic(DF_FT_LA_STD$ConvertedComp, 0.99)
 ic(DF_FT_USA_STD$ConvertedComp, 0.99)
 ```
-Precisión obtendida:
+Precisión obtenida:
 
-Latinoamérica: ±1233.78
+América Latina: ±1233.78
 Estados Unidos: ±2305
 
 Como se observa ambos intervalos son excluyentes lo que refuerza aún más la conclusión que se llegó anteriormente, que la compensación anual promedio de los programadores de Estados Unidos es mucho mayor al sueldo anual promedio que se recibe en América Latina. Esto puede ser causado por múltiples factores, tales como: el costo de vida y el valor de las profesiones tecnológicas. Ya que en Estados Unidos el costo de vida es mayor por lo tanto el sueldo mínimo también lo es. Asimismo, la diferencia abismal también está influida por el hecho de que el mercado tecnológico en Estados Unidos está mucho más desarrollado y valorado, lo que genera que las carreras relacionadas a la programación o que requieran de ella, sean mejor remuneradas.
@@ -1290,9 +1292,7 @@ data.frame("n_éxito"=c(1:10), "prob" = round(dbinom(c(1:10), 10, totalLA_yes/to
 ```
 Por otro lado, en América Latina, lo más probable sea que 4 de los 10 trabajen en una organización con un buen acoplamiento.
 
-<<<<<<< HEAD
-### Conclusiones
-=======
+
 ##Conclusiones
 
 En base al previo análisis de variables, se puede corroborar que si existen diferencias tanto en el aspecto educativo y laboral entre programadores profesionales de América Latina y Estados Unidos.  
@@ -1302,8 +1302,6 @@ Una de las diferencias mas relevantes en el aspecto educativo es que existe un m
 Dentro del aspecto laboral, se puede concluir que existe mejor igualdad de oportunidades laborales en Estados Unidos, ya que la cantidad de programadores profesionales de sexo femenino es aproximadamente el doble en comparación con América Latina. Asimismo, el tamaño de la organización o empresa en la que laboran los programadores profesionales es mayor en Estados Unidos(10000 empleados o más) en comparación con América Latina (20 a 99 empleados). Este resultado es de esperarse ya que Estados Unidos cuenta con empresas tecnológicas y desarrolladoras de software líderes a nivel mundial como Mirosoft, Apple, Fcebook, entre otras, que a su vez cuentan con una gran cantidad de empleados.
 
 
---falta terminar---
->>>>>>> 73c81b9bfd2c6c49a1e79bbeeab6493e0d08cb1c
 
 
 
