@@ -62,7 +62,7 @@ Parámetros del estudio
 - Nivel de confianza: Se determinará para cada variable según su coeficiente de variación
 - Tamaño de muestra: 12486 observaciones (3032 América latina, 9454 Estados Unidos)
 - Precisión: Dependerá del nivel de confianza y del tamaño de la muestra
-- Para pruebas de hipotesis e intervalos se utilizará la distribución t de student pues no conocemos el valor de la desviación estándar y se usará el normal
+- Para pruebas de hipótesis e intervalos se utilizará la distribución t de student pues no conocemos el valor de la desviación estándar y se usará el normal
 
 
 ¿Cuál es la diferencia entre el género de los desarrolladores profesionales según la región en la que viven?
