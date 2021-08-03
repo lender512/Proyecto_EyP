@@ -45,7 +45,7 @@ knitr::opts_chunk$set(warning=FALSE, comment=NA)
 
 ## Introducción
 
-Son muchas las personas que se dedican profesionalmente a programar en todo el mundo. Sin embargo, las características de estas y el contexto en el que viven no son iguales. Se tiene la idea de que el lugar en el que habitan los programadores profesionales influye bastante tanto en su situación laboral como en la educativa por lo que decidimos realizar este análisis concentrándonos en lugares bastante distintos entre si en el aspecto socioeconómico: Latinoamérica y Estados Unidos.
+Son muchas las personas que se dedican profesionalmente a programar en todo el mundo. Sin embargo, las características de estas y el contexto en el que viven no son iguales. Se tiene la idea de que el lugar en el que habitan los programadores profesionales influye bastante tanto en su situación laboral como en la educativa por lo que decidimos realizar este análisis concentrándonos en lugares bastante distintos entre si en el aspecto socioeconómico: América Latina y Estados Unidos.
 
 ## Importancia del estudio
 
@@ -190,15 +190,15 @@ Se puede ver que existe un gran porcentaje de observaciones incompletas (40.69%)
 ## Parametros del estudio:
 Tamaño de la muestra: 12486 (3032 observaciones de América Latina y 9454 de Estados Unidos).
 
-Nivel de confianza: Para poder tener el nivel de confianza "ideal" se hallará el coeficiente de variación (este proceso se repetirá en cada variable que requiera un análisis de intervalos de confianza o pruebas de hipótesis), y de acuerdo a que tan dispersos esten los datos, decideremos que nivel deconfianza usamos.
+Nivel de confianza: Para poder tener el nivel de confianza "ideal" se hallará el coeficiente de variación (este proceso se repetirá en cada variable que requiera un análisis de intervalos de confianza o pruebas de hipótesis), y de acuerdo a que tan dispersos esten los datos, decidiremos que nivel deconfianza usamos.
 
-Se seguirá el siguiente criterio para la elección del nivelde confianza:
+Se seguirá el siguiente criterio para la elección del nivel de confianza:
 
 * Sí el coeficiente es (<0.15), se usará un nivel de confianza del 80% para asegurar una mayor precisión.
 
-* Sí el coeficientees (0.15-0.30) Se usará un nivel de confianza del 90% pues los datos estan medianamente dispersos.
+* Sí el coeficientes (0.15-0.30) Se usará un nivel de confianza del 90% pues los datos están medianamente dispersos.
 
-* Para un coeficiente de variación(0.30-0.35), se usará un nivel de confianza del 95% para asegurar que nuestro intervalo contenga la media de la variable que se esta trabajando.
+* Para un coeficiente de variación (0.30-0.35), se usará un nivel de confianza del 95% para asegurar que nuestro intervalo contenga la media de la variable que se esta trabajando.
 
 * Para un coeficiente de variación (>0.35) se usará un nivel de confianza del 99%.
 

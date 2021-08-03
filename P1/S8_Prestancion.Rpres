@@ -60,9 +60,13 @@ Son muchas las personas que se dedican profesionalmente a programar en todo el m
 Parámetros del estudio 
 ========================================================
 - Nivel de confianza: Se determinará para cada variable según su coeficiente de variación
+  - coeficiente es (<0.15): 80%
+  - coeficiente es (0.15-0.30): 90%
+  - coeficiente es (0.30-0.35): 95%
+  - coeficiente es (>0.35): 99%
 - Tamaño de muestra: 12486 observaciones (3032 América latina, 9454 Estados Unidos)
 - Precisión: Dependerá del nivel de confianza y del tamaño de la muestra
-- Para pruebas de hipótesis e intervalos se utilizará la distribución t de student pues no conocemos el valor de la desviación estándar y se usará el normal
+- Para pruebas de hipótesis e intervalos se utilizará la distribución t de student pues no conocemos el valor de la desviación estándar y se usará la muestral
 
 
 ¿Cuál es la diferencia entre el género de los desarrolladores profesionales según la región en la que viven?
@@ -126,7 +130,7 @@ abline(v=mean(DF_LA$Age, na.rm = TRUE), col = "blue",lwd=2)
 legend(60,1.7,legend=c("media EEUU", "media Latam"),col=c("red", "blue"),lwd=2)
 ```
 - Mediana EEUU: 32 y América Latina: 29 
-- **Hipótesis**: Los desarrolladores de Estados Unidos tienen más años que los de América Latina.
+- Los desarrolladores de Estados Unidos aparentemente tienen más años que los de América Latina.
 - Intervalos excluyentes
   - América Latina (29.88,  30.42) (±0.53)
   - Estados Unidos (34.13,  34.52) (±0.38)
@@ -336,7 +340,7 @@ Verificación de Estados Unidos
 ======================
 Luego de usar summary(lm):
 - Explica cerca del 75% de las observaciones
-- p valores de las variables menor que la significancia de 0.1, por lo que rechazamos hipótesis nula:
+- p valores de las variables fueron menores que la significancia de 0.1, por lo que rechazamos hipótesis nula:
 $$H_0: \text{El coeficiente es 0}$$
 - p valor obtenida de la prueba F de Fisher menor que nuestra significancia, por lo que rechazamos hipótesis nula:
 $$H_0: \text{El modelo no explica nada}$$
@@ -368,7 +372,7 @@ Verificación de América Latina
 ======================
 Luego de usar summary(lm):
 - Explica cerca del 70% de las observaciones
-- p valores de las variables menor que la significancia de 0.1, por lo que rechazamos hipótesis nula:
+- p valores de las variables fueron menores que la significancia de 0.1, por lo que rechazamos hipótesis nula:
 $$H_0: \text{El coeficiente es 0}$$
 - p valor obtenida de la prueba F de Fisher menor que nuestra significancia, por lo que rechazamos hipótesis nula:
 $$H_0: \text{El modelo no explica nada}$$
@@ -401,6 +405,9 @@ Predicción
 Conclusiones
 ====================
 
+- Al analizar la variable edad, encontramos que los programadores de  Estados Unidos son mayores  que los de América Latina. Además al comparar con los años que llevan programando profesionalmente, encontramos un modelo lineal que nos da la experiencia laboral respecto a las edades, esto nos dice que los programadores profesionales de estados Unidos cuentan con más experiencia laboral.
+
+- Con todos los resultados obtenidos se puede notar que existe una diferencia en ambos aspectos a favor de Estados Unidos, ya que cuenta con mejor igualdad de oportunidades, mejores sueldos y la mayoría trabajan en empresas mas grandes.
 
 
 
