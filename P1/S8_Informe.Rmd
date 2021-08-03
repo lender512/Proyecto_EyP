@@ -286,6 +286,28 @@ legend(x="center", ncol=3,legend=c("Hombre","Otros","Mujer"),
 
 Se decidió utilizar el gráfico de pie porque se cuenta con pocas categorías y las diferencias entre estas resaltan bastante. Se puede observar cómo, si bien la proporción de mujeres que se dedican en Estados Unidos es el doble que la proporción en América Latina, en ambas regiones la brecha de género es bastante grande, lo que lleva a la hipótesis(al analizar el indicador) de que la gran mayoría de los programadores profesionales son hombres, y que esto no depende la región en la que viven.
 
+Esta diferencia de proporciones se puede observar en el intervalo de confianza de la proporción de mujeres
+
+```{r}
+n <- length(gender_vec_USA)
+w <- sum(gender_vec_USA == "Woman")
+p <- w/n
+
+izq <- p + qt((0.1)/2, n-1)*sqrt(p*(1-p)/n)
+der <- p - qt((0.1)/2, n-1)*sqrt(p*(1-p)/n)
+cat("Estados Unidos: (",izq, ", ", der, ")\n")
+
+n <- length(gender_vec_LA)
+w <- sum(gender_vec_LA == "Woman")
+p <- w/n
+
+izq <- p + qt((0.1)/2, n-1)*sqrt(p*(1-p)/n)
+der <- p - qt((0.1)/2, n-1)*sqrt(p*(1-p)/n)
+cat("América Latina: (",izq, ", ", der, ")\n")
+```
+
+
+
 #### Variable: Edad
 
 A continuación, se analizará la variable edad, para identificar si es que hay diferencia entre las edades de las personas que se dedican profesionalmente a la programación en Estados Unidos y América Latina
@@ -1294,6 +1316,10 @@ Se puede ver que en Estados unidos lo más probable es que 5 programadores de lo
 data.frame("n_éxito"=c(1:10), "prob" = round(dbinom(c(1:10), 10, totalLA_yes/totalLA),3))
 ```
 Por otro lado, en América Latina, lo más probable sea que 4 de los 10 trabajen en una organización con un buen acoplamiento.
+
+### Conclusiones
+
+
 
 ### Bibliografía
 
