@@ -45,7 +45,7 @@ knitr::opts_chunk$set(warning=FALSE, comment=NA)
 
 ## Introducción
 
-Son muchas las personas que se dedican profesionalmente a programar en todo el mundo. Sin embargo, las características de estas y el contexto en el que viven no son iguales. Se tiene la idea de que el lugar en el que habitan los programadores profesionales influye bastante tanto en su situación laboral como en la educativa por lo que decidimos realizar este análisis concentrándonos en lugares bastante distintos entre si en el aspecto socioeconómico: América Latina y Estados Unidos.
+Son muchas las personas que se dedican profesionalmente a programar en todo el mundo. Sin embargo, las características de estas y el contexto en el que viven no son iguales. Se tiene la idea de que el lugar en el que habitan los programadores profesionales influye bastante tanto en su situación laboral como en la educativa por lo que decidimos realizar este análisis concentrándonos en lugares bastante distintos entre sí en el aspecto socioeconómico: América Latina y Estados Unidos.
 
 ## Importancia del estudio
 
@@ -398,7 +398,7 @@ $H_a:$ La diferencia de medias de edades entre Estados unidos y América Latina 
 
 $$H_a: x_{usa}-x_{latam} \gt 0$$
 
-Usaremos una prueba t de cola superior pues queremos verificar que la diferencia de medias no sea negativa o 0 y no conocemos la desviación estándar. El $\mu$ de nuestra prueba sería 0 pues queremos distinguir los positivos y los negativos y usaremos la opción alternative greater pues en nuestra hipótesis alternativa queremos que al restar la media de edades de Estados Unidos con la de América Latina resulte un numero positivo, pues esto significa que la media de Estados Unidos es mayor que la de América Latina
+Usaremos una prueba t de cola superior pues queremos verificar que la diferencia de medias no sea negativa o 0 y no conocemos la desviación estándar. El $\mu$ de nuestra prueba sería 0 pues queremos distinguir los positivos y los negativos y usaremos la opción alternative greater pues en nuestra hipótesis alternativa queremos que al restar la media de edades de Estados Unidos con la de América Latina resulte un número positivo, pues esto significa que la media de Estados Unidos es mayor que la de América Latina
 
 ```{r}
 t.test(DF_USA$Age, DF_LA$Age, mu = 0, conf.level = 0.9, alternative="greater")
@@ -811,7 +811,7 @@ horas_USA <- table(DF_USA$WorkWeekHrs)
 color = c("darkblue", "skyblue")
 y_LA_median <- mean(DF_LA$WorkWeekHrs, na.rm = TRUE)
 y_USA_median <- mean(DF_USA$WorkWeekHrs, na.rm = TRUE)
-x_general <- c("Latino América", "Estados Unidos")
+x_general <- c("Latinoamérica", "Estados Unidos")
 y_general <- c(y_LA_median, y_USA_median)
 DF_TEMP <-DF_MIX[DF_MIX$Employment == "Employed full-time" & !is.na(DF_MIX$Employment),]
 boxplot(DF_TEMP$WorkWeekHrs~DF_TEMP$Region, ylab = "Región", xlab = "Horas", main="Horas trabajadas por semana", notch = FALSE, horizontal = TRUE)
@@ -1144,13 +1144,10 @@ Sin embargo, si se desea comparar la relación entre las dos regiones, se tiene 
 cor(x = DF_USA$Age,y = DF_USA$YearsCodePro, use = "pairwise.complete.obs")
 cor(x = DF_LA$Age,y = DF_LA$YearsCodePro, use = "pairwise.complete.obs")
 ```
-Gracias a la alta correlación, se pude determinar una función que permita "predecir" los años de experiencia en función de la edad de un programados:
-
-- Estados Unidos:   f(edad) = 0.81 × edad - 17.34
-- América Latina:   f(edad) = 0.78 × edad - 15.58
 
 
-Para comprobar esto, podemos utilizar el comando summary para cada modelo lineal y revisar la validez del modelo
+
+Para comprobar el modelo, podemos utilizar el comando summary para cada modelo lineal y revisar la validez del modelo
 *Estados Unidos*
 ```{r}
 summary(lmUSA)
@@ -1176,7 +1173,7 @@ plot(x = DF_USA$Age, y = DF_USA$YearsCodePro, col = n_data, cex = 0.8, xlab = "E
 ```{r}
 summary(lmLAT)
 ```
-En el caso de América Latina vemos que el modelo planteado explica un poco menos que el de Estados Unidos, sin embargo tambien explica un gran porcenta, el 70%. Vemos que de igual manera rechazamos la hipotesis nula del coeficiente gracias al p valor obtenido.
+En el caso de América Latina vemos que el modelo planteado explica un poco menos que el de Estados Unidos, sin embargo también explica un gran porcentaje, el 70%. Vemos que de igual manera rechazamos la hipótesis nula del coeficiente gracias al p valor obtenido. Es importante que el coeficiente del modelo no sea 0, pues esto significaría que para cualquier valor de la variable independiente, la variable dependiente seria siempre la misma, o sea, el modelo se vería como una linea horizontal, lo que indicaría que la variable independiente no influye nada en la dependiente
 
 $$H_0: \text{El coeficiente es 0}$$
 Y tambien rechazamos la hipotesis nula del modelo gracias al p valor de la prueba F
@@ -1194,7 +1191,12 @@ n_data[c(859, 2233, 476)] <- "red"
 plot(x = DF_LA$Age, y = DF_LA$YearsCodePro, col = n_data, cex = 0.8, xlab = "Edad", ylab = "Años programando profesionalmente", main = "América Latina")
 ```
 
-Luego de analizar la variable con los indicadores, se puede dar la hipótesis de que la región no influye entre la relación de la edad y años programando profesionalmente, además esta es muy alta y sugeriría que los programadores profesionales comienzan a trabajar a una temprana edad, lo que permite que ganen años de experiencia mientras aumenta su edad.
+Luego de analizar la variable con los indicadores, se puede dar la hipótesis de que la región no influye entre la relación de la edad y años programando profesionalmente, además esta es muy alta y sugeriría que los programadores profesionales comienzan a trabajar a una temprana edad, lo que permite que ganen años de experiencia mientras aumenta su edad. Gracias a la alta correlación y al análisis anterior, se pude determinar una función que permita "predecir" los años de experiencia en función de la edad de un programados:
+
+  - Estados Unidos: $$f_{(edad)} = 0.81 \times edad - 17.34$$
+  - América Latina: $$f_{(edad)} = 0.78 \times edad - 15.58$$
+  
+Se podría decir que un programador de 35 años en promedio debería tener 11 años de experiencia en Estados Unidos, mientras que en América Latina, poco menos de 12.
 
 #### ¿Cuál es la diferencia entre regiones de la relación que existe entre la edad y la remuneración anual de los programadores profesionales que trabajan tiempo parcial?
 
@@ -1210,7 +1212,7 @@ abline(lm(DF_USA_FREE$ConvertedComp ~ DF_USA_FREE$Age), col = "red")
 abline(lm(DF_LA_FREE$ConvertedComp ~ DF_LA_FREE$Age), col = "blue")
 ```
 
-Al igual que en el anterior caso, se optó por utilizar un diagrama de dispersión con colores para diferenciar la variable categórica de la región. Se puede apreciar en el cuadro que ambas variables parecen tener cierta relación. Para verificar esto se analizara el valor de la covarianza. Se puede ver que ambas son positivas, sin embargo, el valor de la covarianza de Estados Unidos es mucho mayor que la de América Latina.
+Al igual que en el anterior caso, se optó por utilizar un diagrama de dispersión con colores para diferenciar la variable categórica de la región. Se consideró la variable independiente a la edad, debido a que ....... Se puede apreciar en el cuadro que ambas variables parecen tener cierta relación. Para verificar esto se analizara el valor de la covarianza. Se puede ver que ambas son positivas, sin embargo, el valor de la covarianza de Estados Unidos es mucho mayor que la de América Latina.
 
 ```{r}
 cov(x = DF_USA_FREE$Age,y = DF_USA_FREE$ConvertedComp, use = "pairwise.complete.obs")
@@ -1225,6 +1227,15 @@ cor(x = DF_LA_FREE$Age,y = DF_LA_FREE$ConvertedComp, use = "pairwise.complete.ob
 ```
 
 Luego del análisis de los indicadores, se puede sugerir la hipótesis de que la edad de los programadores a tiempo parcial en Estados Unidos no está muy relacionada con su sueldo anual. Por otro lado, en América latina el valor cercano a 0.6 de la covarianza indica que hay una correlación moderada y que la edad si influye en la remuneración anual de los programadores profesionales que trabajan a tiempo parcial.
+
+
+```{r}
+summary(lm(DF_USA_FREE$ConvertedComp ~ DF_USA_FREE$Age))
+summary(lm(DF_LA_FREE$ConvertedComp ~ DF_LA_FREE$Age))
+
+plot(lm(DF_USA_FREE$ConvertedComp ~ DF_USA_FREE$Age))
+plot(lm(DF_LA_FREE$ConvertedComp ~ DF_LA_FREE$Age))
+```
 
 #### ¿Cuál es la diferencia que exise entre regiones de la relación entre los años de experiencia y el sueldo de los programadores que traban en empresas pequeñas?
 
@@ -1251,6 +1262,19 @@ cor(x = DF_USA_FREE$YearsCodePro,y = DF_USA_FREE$ConvertedComp, use = "pairwise.
 cor(x = DF_LA_FREE$YearsCodePro,y = DF_LA_FREE$ConvertedComp, use = "pairwise.complete.obs")
 ```
 Luego de la revisión de los descriptores, se plantea la hipótesis de que el sueldo tiene poco que ver con la edad de los que trabajan en empresas pequeñas en Estados Unidos, mientras que en América latina, la edad de los que trabajan para estas empresas están mucho más relacionadas con el dinero que ganan anualmente.
+
+
+
+```{r}
+summary(lm(DF_USA_FREE$ConvertedComp ~ DF_USA_FREE$YearsCodePro))
+summary(lm(DF_LA_FREE$ConvertedComp ~ DF_LA_FREE$YearsCodePro))
+
+
+plot(lm(DF_USA_FREE$ConvertedComp ~ DF_USA_FREE$YearsCodePro))
+plot(lm(DF_LA_FREE$ConvertedComp ~ DF_LA_FREE$YearsCodePro))
+```
+
+
 
 ### Modelos de variable aleatoria para variables de interés
 
